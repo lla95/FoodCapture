@@ -22,5 +22,9 @@ public class MainActivity extends Activity {
 	public void testGitHub(){
 		System.out.println("testing add");	
 	}
+	
+	public void checkAgain(){
+		System.out.println("testing");
+	}
 
 }
