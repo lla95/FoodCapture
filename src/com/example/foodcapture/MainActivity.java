@@ -19,4 +19,8 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	public void myFunction(){
+		System.out.println("testing");
+	}
+
 }
