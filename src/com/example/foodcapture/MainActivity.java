@@ -23,4 +23,9 @@ public class MainActivity extends Activity {
 		System.out.println("testing");
 	}
 
+
+	public void onCreate()
+	{ 
+		
+	}
 }
