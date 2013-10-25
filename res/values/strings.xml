@@ -6,6 +6,13 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_moments">MomentsActivity</string>
     <string name="title_activity_moment_information">MomentInformation</string>
-	<string name="action_add_moment">add moment</string>
-	<string name="action_delete_moment">delete moment</string>
+    <string name="action_add_moment">add moment</string>
+    <string name="action_delete_moment">delete moment</string>
+    <string name="action_moment_title">Capture the Moment</string>
+    <string name="action_save_moment">save moment</string>
+    
+    <string name="title_activity_edit_moment">EditMoment</string>
+    
+    <string name="food_title_color">#ca5869</string>  
+ 
 </resources>

@@ -1,0 +1,300 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".EditMoment" >
+
+    
+    <TableLayout 
+	    android:id="@+id/TableLayout1"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_alignParentLeft="true"
+	    android:stretchColumns="1">
+	    
+   <TableRow
+        android:id="@+id/tableRowPictureTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        style="@style/EditMomentRow">
+        
+       <TextView
+            android:id="@+id/pictureTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Capture the Moment"
+            android:layout_span="2"
+            style="@style/EditMomentFont"
+            android:layout_weight="1"/>
+       
+    </TableRow>
+    
+    <TableRow
+        android:id="@+id/tableRowPicture"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="#e9e2d8">
+                   
+	    <RelativeLayout 
+	        android:id="@+id/pictureLayout"
+	        android:layout_width="300dp"
+	        android:layout_height="300dp"
+	        android:background="#1e1e1e"
+	        android:layout_span="2">
+	        
+	        <ImageView
+	            android:id="@+id/pictureImageView"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_marginLeft="20dp"
+	            android:layout_marginRight="20dp"
+	            android:layout_marginTop="20dp"
+	            android:layout_marginBottom="10dp"> 
+            </ImageView>
+	        
+	        <TextView 
+	            android:id="@+id/dateTextView"
+	            android:layout_width="wrap_content"
+            	android:layout_height="match_parent"/>
+	    </RelativeLayout>
+    </TableRow>
+    	    
+	<TableRow
+     android:id="@+id/tableRowCameraControls"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent" 
+     style="@style/EditMomentRow">
+   	    <RelativeLayout 
+	        android:id="@+id/pictureLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:gravity="center"
+	        android:layout_weight="1">
+		    
+		  	<ImageView 
+	        android:id="@+id/cameraImageView"
+	        android:layout_width="72dp"
+	        android:layout_height="72dp"
+	        android:src="@drawable/android_camera"
+	        android:gravity="center"/>
+		     
+		    <Button
+		        android:id="@+id/takePictureButton"	
+		        android:layout_width="wrap_content"
+		        android:layout_height="72dp"		   
+		        android:text="Take Picture"
+		        android:layout_toRightOf="@id/cameraImageView"
+		        android:gravity="center_horizontal|center_vertical"
+		        android:padding="10dp"
+		        android:background="@drawable/custom_button"/>
+	    </RelativeLayout>
+    </TableRow>
+    
+    <TableRow
+        android:id="@+id/tableRowFood"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        style="@style/EditMomentRow">
+
+        <TextView
+            android:id="@+id/foodTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Food"
+            style="@style/EditMomentFont"/>
+
+        <EditText
+            android:id="@+id/foodEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            style="@style/EditMomentFontInput.Food">
+            
+            <requestFocus />
+        </EditText>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRowQuality"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        style="@style/EditMomentRow">
+
+        <TextView
+            android:id="@+id/qualityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Quality"
+            style="@style/EditMomentFont"/>
+
+        <LinearLayout 
+            android:id="@+id/qualityRatingLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"     
+            android:layout_margin="12dp">
+            
+             <ImageView 
+		         android:id="@+id/firstStar"
+		         android:layout_width="@dimen/quality_icon_size"
+		         android:layout_height="@dimen/quality_icon_size"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/secondStar"
+		         android:layout_width="@dimen/quality_icon_size"
+		         android:layout_height="@dimen/quality_icon_size"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/thirdStar"
+		         android:layout_width="@dimen/quality_icon_size"
+		         android:layout_height="@dimen/quality_icon_size"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/fourthStar"
+		         android:layout_width="@dimen/quality_icon_size"
+		         android:layout_height="@dimen/quality_icon_size"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+	        
+	         <ImageView 
+		         android:id="@+id/fifthStar"
+		         android:layout_width="@dimen/quality_icon_size"
+		         android:layout_height="@dimen/quality_icon_size"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+            
+        </LinearLayout>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRowPrice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/EditMomentRow" >
+
+        <TextView
+            android:id="@+id/priceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Price"
+            style="@style/EditMomentFont"/>
+
+        <LinearLayout 
+            android:id="@+id/priceRatingLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="12dp">
+            
+             <ImageView 
+		         android:id="@+id/firstDollar"
+		         android:layout_width="@dimen/price_icon_size"
+		         android:layout_height="@dimen/price_icon_size"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/secondDollar"
+		         android:layout_width="@dimen/price_icon_size"
+		         android:layout_height="@dimen/price_icon_size"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/thirdDollar"
+		         android:layout_width="@dimen/price_icon_size"
+		         android:layout_height="@dimen/price_icon_size"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/fourthDollar"
+		         android:layout_width="@dimen/price_icon_size"
+		         android:layout_height="@dimen/price_icon_size"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+	        
+	         <ImageView 
+		         android:id="@+id/fifthDollar"
+		         android:layout_width="@dimen/price_icon_size"
+		         android:layout_height="@dimen/price_icon_size"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+            
+        </LinearLayout>
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRowDescription"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/EditMomentRow" >
+
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Description"
+            style="@style/EditMomentFont"/>"
+
+        <EditText
+            android:id="@+id/descriptionEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="5"
+            android:gravity="top|left"
+            android:layout_weight="1"
+            style="@style/EditMomentFontInput.Description"/>
+        
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRowRestaurant"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/EditMomentRow" >
+
+        <TextView
+            android:id="@+id/restaurantTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Restaurant"
+            style="@style/EditMomentFont"/>
+
+        <EditText
+            android:id="@+id/restaurantEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/EditMomentFontInput" />
+
+    </TableRow>
+    <TableRow
+        android:id="@+id/tableRowLocation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/EditMomentRow" >
+
+        <TextView
+            android:id="@+id/locationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Location"
+            style="@style/EditMomentFont"/>
+    </TableRow>
+    </TableLayout>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="PictureRectangle">
+    	<item name="android:padding">500dp</item>
+    	<item name="android:width">800dp</item>
+    </style>
+    
+    <style name="EditMomentFont">
+        <item name="android:textSize">48sp</item>
+        <item name="android:textColor">#7f7874</item>
+        <item name="android:background">#e1d6c8</item>
+        <item name="android:gravity">center</item>
+    </style>
+    
+    <style name="EditMomentFontInput">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">#414242</item>      
+         
+    </style>
+    <style name="EditMomentFontInput.Food">
+        <item name="android:textColor">#ca5869</item>
+    </style>
+    <style name="EditMomentFontInput.Description">
+        <item name="android:textSize">32sp</item>    
+    </style>
+    
+    <style name="EditMomentRow">
+        <item name="android:layout_marginTop">8dip</item>
+        <item name="android:background">#e9e2d8</item>   
+    </style>
+    
+    <style name="QualityRatingIcons">
+        <item name="android:layout_marginRight">20sp</item>
+    </style>
+    
+    <style name="PriceRatingIcons">
+        <item name="android:layout_marginRight">15sp</item>
+    </style>
+   	
+</resources>

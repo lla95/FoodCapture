@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="#e9e2d8"
+    android:orientation="horizontal"
+    android:layout_marginBottom="20dp">
+	
+    <RelativeLayout
+        android:id="@+id/pictureLayout"
+        android:layout_height="match_parent"
+       	android:layout_width="0dp"
+       	android:layout_weight="0.4"
+       	android:background="#1e1e1e">
+       	
+        <ImageView 
+            android:id="@+id/pictureThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="10dp"/>
+        
+        <TextView
+            android:id="@+id/restaurantTextView"
+            android:layout_below="@id/pictureThumbnail"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" @ Restaurant"
+            android:textColor="#ffffff"
+            android:textSize="18sp"/>
+        "
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/momentInfoLayout"
+        android:layout_height="match_parent"
+       	android:layout_width="0dp"
+       	android:layout_weight="0.6">
+       	
+        <TextView 
+            android:id="@+id/foodTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample Food"
+            android:layout_marginLeft="35dp"
+            android:textSize="48sp"
+            android:textColor="#ca5868"/>
+       
+        <TextView
+            android:id="@+id/qualityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quality"
+            android:layout_below="@id/foodTextView"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_alignLeft="@id/foodTextView"
+            android:textSize="24sp"
+            android:textColor="#696969"/>
+        
+        <LinearLayout 
+            android:id="@+id/qualityRatingLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"  
+            android:layout_height="wrap_content"   
+            android:layout_marginTop="95dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/qualityTextView">
+            
+             <ImageView 
+		         android:id="@+id/firstStar"
+		         android:layout_width="@dimen/quality_icon_size_medium"
+		         android:layout_height="@dimen/quality_icon_size_medium"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/secondStar"
+		         android:layout_width="@dimen/quality_icon_size_medium"
+		         android:layout_height="@dimen/quality_icon_size_medium"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/thirdStar"
+		         android:layout_width="@dimen/quality_icon_size_medium"
+		         android:layout_height="@dimen/quality_icon_size_medium"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/fourthStar"
+		         android:layout_width="@dimen/quality_icon_size_medium"
+		         android:layout_height="@dimen/quality_icon_size_medium"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+	        
+	         <ImageView 
+		         android:id="@+id/fifthStar"
+		         android:layout_width="@dimen/quality_icon_size_medium"
+		         android:layout_height="@dimen/quality_icon_size_medium"
+		         android:src="@drawable/quality_icon_default"
+		         style="@style/QualityRatingIcons"/>
+            
+        </LinearLayout>
+        <TextView       
+            android:id="@+id/priceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Price"
+            android:layout_below="@id/qualityTextView"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="35dp"
+            android:layout_alignLeft="@id/foodTextView"
+            android:textSize="24sp"
+            android:textColor="#696969"/>
+        
+        <LinearLayout 
+            android:id="@+id/priceRatingLayout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="170dp"
+            android:layout_toRightOf="@id/priceTextView"
+            android:layout_alignLeft="@id/qualityRatingLayout">
+            
+             <ImageView 
+		         android:id="@+id/firstDollar"
+		         android:layout_width="@dimen/price_icon_size_medium"
+		         android:layout_height="@dimen/price_icon_size_medium"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/secondDollar"
+		         android:layout_width="@dimen/price_icon_size_medium"
+		         android:layout_height="@dimen/price_icon_size_medium"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/thirdDollar"
+		         android:layout_width="@dimen/price_icon_size_medium"
+		         android:layout_height="@dimen/price_icon_size_medium"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+	        
+	        <ImageView 
+		         android:id="@+id/fourthDollar"
+		         android:layout_width="@dimen/price_icon_size_medium"
+		         android:layout_height="@dimen/price_icon_size_medium"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+	        
+	         <ImageView 
+		         android:id="@+id/fifthDollar"
+		         android:layout_width="@dimen/price_icon_size_medium"
+		         android:layout_height="@dimen/price_icon_size_medium"
+		         android:src="@drawable/price_icon_default"
+		         style="@style/PriceRatingIcons"/>
+            
+        </LinearLayout>
+        
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sample text. Sample text. Sample text"
+            android:maxLines="1" 
+            android:layout_alignParentBottom="true"
+            android:layout_alignLeft="@id/foodTextView"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="24sp"
+            android:textColor="#54514f"/>
+ 
+    </RelativeLayout>
+"
+
+</LinearLayout>

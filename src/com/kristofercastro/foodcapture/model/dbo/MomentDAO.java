@@ -62,9 +62,10 @@ public class MomentDAO{
 		return db.insert(MomentTable.TABLE_NAME, null, values);
 	}
 
-	public void deleteMoment(long id){
-		String deleteQuery = "DELETE FROM " + MomentTable.TABLE_NAME + " where " + MomentTable.COL_ID + "='" + id + "'";
-		db.rawQuery(deleteQuery, null);
+	public boolean deleteMoment(long id){
+		//String deleteQuery = "DELETE FROM " + MomentTable.TABLE_NAME + " where " + "_id=" + id + "";
+		//db.rawQuery(deleteQuery, null);
+		return db.delete(MomentTable.TABLE_NAME, MomentTable.COL_ID + "=" + id, null) > 0;
 	}
 	
 	public ArrayList<Moment> getAllMoments(){
@@ -86,6 +87,9 @@ public class MomentDAO{
 				MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
 				MenuItem menuItem = menuItemDAO.getMenuItem(cursor.getLong(4));
 				moment.setMenuItem(menuItem);
+				
+				moment.setDescription(cursor.getString(5));
+				momentsList.add(moment);
 			}while(cursor.moveToNext());
 		}
 		
