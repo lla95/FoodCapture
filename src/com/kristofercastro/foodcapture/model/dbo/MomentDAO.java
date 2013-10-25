@@ -42,7 +42,7 @@ public class MomentDAO{
 		boolean restaurantExists = false;
 		
 		// find the restaurant if it exists.
-		ArrayList<Restaurant> restaurantList = restaurantDAO.getAllRestaurants();
+		ArrayList<Restaurant> restaurantList = restaurantDAO.retrieveAll();
 		for(Restaurant restaurant : restaurantList){
 			if (restaurant.getName().equalsIgnoreCase(restaurantName)){
 				restaurantID = restaurant.getId();
@@ -50,7 +50,7 @@ public class MomentDAO{
 			}
 		}
 		if ( !restaurantExists )
-			restaurantID = restaurantDAO.createRestaurant(moment.getRestaurant());
+			restaurantID = restaurantDAO.create(moment.getRestaurant());
 		
 		MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
 		long menuItemID = menuItemDAO.create(moment.getMenuItem());
@@ -81,7 +81,7 @@ public class MomentDAO{
 				moment.setQualityRating(cursor.getInt(2));
 				
 				RestaurantDAO restaurantDAO = new RestaurantDAO(dbHelper);
-				Restaurant restaurant = restaurantDAO.getRestaurant(cursor.getLong(3));
+				Restaurant restaurant = restaurantDAO.retrieve(cursor.getLong(3));
 				moment.setRestaurant(restaurant);
 				
 				MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
@@ -115,7 +115,7 @@ public class MomentDAO{
 			moment.setQualityRating(cursor.getInt(2));
 			
 			RestaurantDAO restaurantDAO = new RestaurantDAO(dbHelper);
-			Restaurant restaurant = restaurantDAO.getRestaurant(cursor.getLong(3));
+			Restaurant restaurant = restaurantDAO.retrieve(cursor.getLong(3));
 			moment.setRestaurant(restaurant);
 			
 			MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
