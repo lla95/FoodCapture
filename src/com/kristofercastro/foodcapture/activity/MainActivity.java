@@ -31,34 +31,15 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	ArrayList<Moment> momentsList;
-/*	
-	TextView foodTextView;
-	TextView qualityTextView;
-	TextView priceTextView;
-	TextView descriptionTextView;
-	TextView restaurantTextView;*/
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-/*		
-		foodTextView = (TextView)this.findViewById(R.id.foodTextView);
-		qualityTextView = (TextView)this.findViewById(R.id.qualityTextView);
-		priceTextView = (TextView)this.findViewById(R.id.priceTextView);
-		descriptionTextView = (TextView) this.findViewById(R.id.descriptionTextView);
-		restaurantTextView = (TextView) this.findViewById(R.id.restaurantTextView);
-
-		changeFontLaneNarrow(descriptionTextView);
-		changeFontTitillium(foodTextView);
-		changeFontTitillium(qualityTextView);
-		changeFontTitillium(priceTextView);
-		changeFontTitillium(restaurantTextView);*/
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -129,7 +110,6 @@ public class MainActivity extends Activity {
 				               // User cancelled the dialog
 				           }
 				       });
-					// 3. Get the AlertDialog from create()
 					AlertDialog dialog = builder.create();
 					dialog.show();
 					return false;
@@ -143,12 +123,12 @@ public class MainActivity extends Activity {
 	
 	private void displayRatings(Moment moment, View momentRow) {
 		LinearLayout qRatingsLayout = (LinearLayout) momentRow.findViewById(R.id.qualityRatingLayout);
-		for (int i = 0; i < qRatingsLayout.getChildCount()- moment.getQualityRating(); i++){
+		for (int i = 0; i < moment.getQualityRating(); i++){
 			ImageView ratingIcon = (ImageView) qRatingsLayout.getChildAt(i);
 			ratingIcon.setImageResource(R.drawable.quality_icon_selected);
 		}
 		LinearLayout pRatingsLayout = (LinearLayout) momentRow.findViewById(R.id.priceRatingLayout);
-		for (int i = 0; i < pRatingsLayout.getChildCount()- moment.getPriceRating(); i++){
+		for (int i = 0; i < moment.getPriceRating(); i++){
 			ImageView ratingIcon = (ImageView) pRatingsLayout.getChildAt(i);
 			ratingIcon.setImageResource(R.drawable.price_icon_selected);
 		}

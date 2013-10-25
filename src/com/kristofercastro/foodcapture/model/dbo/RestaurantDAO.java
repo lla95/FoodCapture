@@ -55,8 +55,7 @@ public class RestaurantDAO{
 	
 	public void deleteRestaurant(long id){
 		String deleteQuery = "DELETE FROM " + RestaurantTable.TABLE_NAME + " where " + RestaurantTable.COL_ID + "='" + id + "'";
-		db.execSQL(deleteQuery);
-				
+		db.execSQL(deleteQuery);				
 	}
 	
 	public int updateRestaurant(Restaurant restaurant){

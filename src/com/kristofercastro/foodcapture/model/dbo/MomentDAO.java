@@ -53,7 +53,7 @@ public class MomentDAO{
 			restaurantID = restaurantDAO.createRestaurant(moment.getRestaurant());
 		
 		MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
-		long menuItemID = menuItemDAO.createMenuItem(moment.getMenuItem());
+		long menuItemID = menuItemDAO.create(moment.getMenuItem());
 		
 		// add the id's of the foreign keys from Restaurant and Menu Item DB Tables
 		values.put(MomentTable.COL_RESTAURANT_ID, restaurantID);
@@ -85,7 +85,7 @@ public class MomentDAO{
 				moment.setRestaurant(restaurant);
 				
 				MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
-				MenuItem menuItem = menuItemDAO.getMenuItem(cursor.getLong(4));
+				MenuItem menuItem = menuItemDAO.retrieve(cursor.getLong(4));
 				moment.setMenuItem(menuItem);
 				
 				moment.setDescription(cursor.getString(5));
@@ -119,7 +119,7 @@ public class MomentDAO{
 			moment.setRestaurant(restaurant);
 			
 			MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
-			MenuItem menuItem = menuItemDAO.getMenuItem(cursor.getLong(4));
+			MenuItem menuItem = menuItemDAO.retrieve(cursor.getLong(4));
 			moment.setMenuItem(menuItem);
 		}
 		
