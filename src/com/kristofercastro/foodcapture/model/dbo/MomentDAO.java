@@ -17,17 +17,16 @@ import com.kristofercastro.foodcapture.model.dbo.DBHelper.MomentTable;
  * @author Kristofer Castro
  * @date 10/23/2013
  */
-public class MomentDAO{
-
-	SQLiteDatabase db;
+public class MomentDAO extends DataAccessObject<Moment>{
 	SQLiteOpenHelper dbHelper;
 
 	public MomentDAO(SQLiteOpenHelper dbHelper){
 		this.db = dbHelper.getWritableDatabase();
 		this.dbHelper = dbHelper;
 	}
-	
-	public long createMoment(Moment moment){
+
+	@Override
+	public long create(Moment moment) {
 		ContentValues values = new ContentValues();
 		
 		// put the values belonging to the moment
@@ -62,13 +61,45 @@ public class MomentDAO{
 		return db.insert(MomentTable.TABLE_NAME, null, values);
 	}
 
-	public boolean deleteMoment(long id){
-		//String deleteQuery = "DELETE FROM " + MomentTable.TABLE_NAME + " where " + "_id=" + id + "";
-		//db.rawQuery(deleteQuery, null);
+	@Override
+	public boolean delete(long id) {
 		return db.delete(MomentTable.TABLE_NAME, MomentTable.COL_ID + "=" + id, null) > 0;
 	}
-	
-	public ArrayList<Moment> getAllMoments(){
+
+	@Override
+	public int update(Moment moment) {
+		ContentValues values = new ContentValues();
+		values.put(MomentTable.COL_PRICE_RATING, moment.getPriceRating());
+		values.put(MomentTable.COL_QUALITY_RATING, moment.getQualityRating());
+		values.put(MomentTable.COL_DESCRIPTION, moment.getDescription());
+		return db.update(MomentTable.TABLE_NAME, values, MomentTable.COL_ID + "=" + moment.getId(), null);
+	}
+
+	@Override
+	public Moment retrieve(long id) {
+		String selectQuery = "SELECT * FROM " + MomentTable.TABLE_NAME + " WHERE " + MomentTable.COL_ID +"='" + id + "'";
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		Moment moment = null;
+		if (cursor.moveToFirst()){
+			moment = new Moment();
+			moment.setId(cursor.getLong(0));
+			moment.setPriceRating(cursor.getInt(1));
+			moment.setQualityRating(cursor.getInt(2));
+			
+			RestaurantDAO restaurantDAO = new RestaurantDAO(dbHelper);
+			Restaurant restaurant = restaurantDAO.retrieve(cursor.getLong(3));
+			moment.setRestaurant(restaurant);
+			
+			MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
+			MenuItem menuItem = menuItemDAO.retrieve(cursor.getLong(4));
+			moment.setMenuItem(menuItem);
+		}
+		
+		return moment;
+	}
+
+	@Override
+	public ArrayList<Moment> retrieveAll() {
 		ArrayList<Moment> momentsList = new ArrayList<Moment>();
 		String selectQuery = "SELECT * FROM " + MomentTable.TABLE_NAME;
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -94,35 +125,5 @@ public class MomentDAO{
 		}
 		
 		return momentsList;
-	}
-	
-	public int updateMoment(Moment moment){
-		ContentValues values = new ContentValues();
-		values.put(MomentTable.COL_PRICE_RATING, moment.getPriceRating());
-		values.put(MomentTable.COL_QUALITY_RATING, moment.getQualityRating());
-		values.put(MomentTable.COL_DESCRIPTION, moment.getDescription());
-		return db.update(MomentTable.TABLE_NAME, values, MomentTable.COL_ID + "=" + moment.getId(), null);
-	}
-
-	public Moment getMoment(long id) {
-		String selectQuery = "SELECT * FROM " + MomentTable.TABLE_NAME + " WHERE " + MomentTable.COL_ID +"='" + id + "'";
-		Cursor cursor = db.rawQuery(selectQuery, null);
-		Moment moment = null;
-		if (cursor.moveToFirst()){
-			moment = new Moment();
-			moment.setId(cursor.getLong(0));
-			moment.setPriceRating(cursor.getInt(1));
-			moment.setQualityRating(cursor.getInt(2));
-			
-			RestaurantDAO restaurantDAO = new RestaurantDAO(dbHelper);
-			Restaurant restaurant = restaurantDAO.retrieve(cursor.getLong(3));
-			moment.setRestaurant(restaurant);
-			
-			MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
-			MenuItem menuItem = menuItemDAO.retrieve(cursor.getLong(4));
-			moment.setMenuItem(menuItem);
-		}
-		
-		return moment;
 	}
 }

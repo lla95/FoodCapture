@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
 	 */
 	private void displayAllMoments(){
 		MomentDAO momentDAO = new MomentDAO(new DBHelper(this));
-		momentsList = momentDAO.getAllMoments();
+		momentsList = momentDAO.retrieveAll();
 		clearMoments();
         LinearLayout item = (LinearLayout) findViewById(R.id.momentsListLayout);
 		for (Moment moment : momentsList){
@@ -160,7 +160,7 @@ public class MainActivity extends Activity {
 	
 	private Boolean deleteMoment(long momentID){
 		MomentDAO momentDAO = new MomentDAO(new DBHelper(this));
-		return momentDAO.deleteMoment(momentID);
+		return momentDAO.delete(momentID);
 	}
 	
 	private void clearMoments(){

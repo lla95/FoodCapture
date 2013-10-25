@@ -296,7 +296,7 @@ public class EditMoment extends Activity {
 		moment.setDescription(descriptionEditText.getText().toString());
 		
 		MomentDAO momentDAO = new MomentDAO(new DBHelper(this));
-		return momentDAO.createMoment(moment);
+		return momentDAO.create(moment);
 	}
 
 	private boolean validateInput() {
@@ -365,7 +365,6 @@ public class EditMoment extends Activity {
 			return Uri.fromFile(mediaFile);
 		}		
 	};
-	
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){

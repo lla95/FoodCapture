@@ -17,15 +17,14 @@ import android.database.sqlite.SQLiteOpenHelper;
  * @author Kristofer Castro
  * @date 10/23/2013
  */
-public class MenuItemDAO extends DataAccessObject {
-	SQLiteDatabase db;
+public class MenuItemDAO extends DataAccessObject<MenuItem> {
 	
 	public MenuItemDAO(SQLiteOpenHelper dbHelper){
 		this.db = dbHelper.getWritableDatabase();
 	}
 
 	@Override
-	public long create(Object dbo) 
+	public long create(MenuItem dbo) 
 	{	
 		MenuItem menuItem = (MenuItem) dbo;
 		ContentValues values = new ContentValues();
@@ -42,8 +41,7 @@ public class MenuItemDAO extends DataAccessObject {
 	}
 
 	@Override
-	public int update(Object dbo) {
-		MenuItem menuItem = (MenuItem) dbo;	
+	public int update(MenuItem menuItem) {
 		ContentValues values = new ContentValues();
 		values.put(MenuItemTable.COL_NAME, menuItem.getName());
 		values.put(MenuItemTable.COL_IMAGE_PATH, menuItem.getImagePath());
