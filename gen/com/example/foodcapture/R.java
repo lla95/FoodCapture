@@ -96,17 +96,27 @@ public final class R {
         public static final int moments=0x7f070003;
     }
     public static final class string {
-        public static final int action_add_moment=0x7f060005;
-        public static final int action_delete_moment=0x7f060006;
-        public static final int action_moment_title=0x7f060007;
-        public static final int action_save_moment=0x7f060008;
+        public static final int action_add_moment=0x7f060004;
+        public static final int action_delete_moment=0x7f060005;
+        public static final int action_moment_title=0x7f060006;
+        public static final int action_save_moment=0x7f060007;
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
-        public static final int food_title_color=0x7f06000a;
-        public static final int hello_world=0x7f060002;
-        public static final int title_activity_edit_moment=0x7f060009;
-        public static final int title_activity_moment_information=0x7f060004;
-        public static final int title_activity_moments=0x7f060003;
+        public static final int food_title_color=0x7f060012;
+        /**  Used in Edit/Add/View moment 
+         */
+        public static final int label_capture_moment=0x7f060008;
+        public static final int label_description=0x7f06000c;
+        public static final int label_food=0x7f060009;
+        public static final int label_food_quality=0x7f06000a;
+        public static final int label_location=0x7f06000e;
+        public static final int label_picture_restaurant=0x7f06000f;
+        public static final int label_price=0x7f06000b;
+        public static final int label_restaurant=0x7f06000d;
+        public static final int text_take_picture_button=0x7f060010;
+        public static final int title_activity_edit_moment=0x7f060011;
+        public static final int title_activity_moment_information=0x7f060003;
+        public static final int title_activity_moments=0x7f060002;
     }
     public static final class style {
         /** 

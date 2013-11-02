@@ -27,10 +27,9 @@
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" @ Restaurant"
+            android:text="@string/label_picture_restaurant"
             android:textColor="#ffffff"
             android:textSize="18sp"/>
-        "
     </RelativeLayout>
     
     <RelativeLayout
@@ -52,7 +51,7 @@
             android:id="@+id/qualityTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Quality"
+            android:text="@string/label_food_quality"
             android:layout_below="@id/foodTextView"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
@@ -109,7 +108,7 @@
             android:id="@+id/priceTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Price"
+            android:text="@string/label_price"
             android:layout_below="@id/qualityTextView"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="35dp"
