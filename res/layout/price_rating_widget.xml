@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >	
+    
+	<TextView       
+	    android:id="@+id/priceTextView"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:text="@string/label_price"
+	    android:textSize="24sp"
+	    android:textColor="#696969"/>
+        
+    <LinearLayout 
+        android:id="@+id/priceRatingLayout"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/priceTextView"
+        android:layout_marginLeft="30dp">
+        
+         <ImageView 
+	       android:id="@+id/firstDollar"
+	       android:layout_width="@dimen/price_icon_size_medium"
+	       android:layout_height="@dimen/price_icon_size_medium"
+	       android:src="@drawable/price_icon_default"
+	       style="@style/PriceRatingIcons"/>
+	     
+	     <ImageView 
+	       android:id="@+id/secondDollar"
+	       android:layout_width="@dimen/price_icon_size_medium"
+	       android:layout_height="@dimen/price_icon_size_medium"
+	       android:src="@drawable/price_icon_default"
+	       style="@style/PriceRatingIcons"/>
+	     
+	     <ImageView 
+	       android:id="@+id/thirdDollar"
+	       android:layout_width="@dimen/price_icon_size_medium"
+	       android:layout_height="@dimen/price_icon_size_medium"
+	       android:src="@drawable/price_icon_default"
+	       style="@style/PriceRatingIcons"/>
+	     
+	     <ImageView 
+	       android:id="@+id/fourthDollar"
+	       android:layout_width="@dimen/price_icon_size_medium"
+	       android:layout_height="@dimen/price_icon_size_medium"
+	       android:src="@drawable/price_icon_default"
+	       style="@style/PriceRatingIcons"/>
+	     
+	      <ImageView 
+	       android:id="@+id/fifthDollar"
+	       android:layout_width="@dimen/price_icon_size_medium"
+	       android:layout_height="@dimen/price_icon_size_medium"
+	       android:src="@drawable/price_icon_default"
+	       style="@style/PriceRatingIcons"/>    
+    </LinearLayout>
+</RelativeLayout>

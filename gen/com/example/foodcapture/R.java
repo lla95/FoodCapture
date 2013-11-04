@@ -88,6 +88,8 @@ public final class R {
         public static final int activity_moment_information=0x7f030002;
         public static final int activity_moments=0x7f030003;
         public static final int menu_item_row=0x7f030004;
+        public static final int price_rating_widget=0x7f030005;
+        public static final int quality_rating_widget=0x7f030006;
     }
     public static final class menu {
         public static final int edit_moment=0x7f070000;
