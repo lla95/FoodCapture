@@ -3,7 +3,7 @@ package com.kristofercastro.foodcapture.activity;
 import java.net.URL;
 import java.util.ArrayList;
 
-import com.example.foodcapture.R;
+import com.kristofercastro.foodcapture.R;
 import com.kristofercastro.foodcapture.activity.Utility.CustomFonts;
 import com.kristofercastro.foodcapture.model.Moment;
 import com.kristofercastro.foodcapture.model.dbo.DBHelper;

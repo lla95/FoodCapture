@@ -1,8 +1,8 @@
 package com.kristofercastro.foodcapture.activity;
 
-import com.example.foodcapture.R;
-import com.example.foodcapture.R.layout;
-import com.example.foodcapture.R.menu;
+import com.kristofercastro.foodcapture.R;
+import com.kristofercastro.foodcapture.R.layout;
+import com.kristofercastro.foodcapture.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;

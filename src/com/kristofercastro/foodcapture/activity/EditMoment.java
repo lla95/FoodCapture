@@ -7,15 +7,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.example.foodcapture.R;
-import com.example.foodcapture.R.layout;
-import com.example.foodcapture.R.menu;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.kristofercastro.foodcapture.R;
+import com.kristofercastro.foodcapture.R.layout;
+import com.kristofercastro.foodcapture.R.menu;
 import com.kristofercastro.foodcapture.activity.Utility.CustomFonts;
 import com.kristofercastro.foodcapture.model.*;
 import com.kristofercastro.foodcapture.model.dbo.DBHelper;
 import com.kristofercastro.foodcapture.model.dbo.MomentDAO;
 
 
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -23,6 +31,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -39,7 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class EditMoment extends Activity {
+public class EditMoment extends Activity implements LocationListener{
 
 	int qualityRating = 0;
 	int priceRating = 0;
@@ -93,6 +102,10 @@ public class EditMoment extends Activity {
 	// date
 	TextView dateTextView;
 	
+	// map
+	private GoogleMap mMap;
+	LocationManager mLocManager;
+	Location mLocation;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +134,56 @@ public class EditMoment extends Activity {
 		cameraImageView.setOnClickListener(cameraButtonOnClickHandler);
 		changeFont();
 		initializeIcons();
+		
+		setupLocManager();
+		mMap =  ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		setUpMapIfNeeded();
+		
+	}
+
+	private void setupLocManager() {
+		mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.NO_REQUIREMENT);
+		criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
+		String bestProvider = mLocManager.getBestProvider(criteria, true);	
+		mLocation = mLocManager.getLastKnownLocation(bestProvider);
+		//Log.i("MyCameraApp", + mLocation.getLatitude() + " : " +  mLocation.getLongitude());
+	}
+
+	private void setUpMapIfNeeded() {
+		if (mMap == null){
+			mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+                    .getMap();
+		}
+		
+		if (mMap != null){
+			mMap.setMyLocationEnabled(true);
+			GoogleMapOptions options = new GoogleMapOptions();
+			
+			options.mapType(GoogleMap.MAP_TYPE_NORMAL)
+				.compassEnabled(false)
+				.rotateGesturesEnabled(false)
+				.tiltGesturesEnabled(false);
+			drawMarker(mLocation);
+		}
+	}
+
+	/**
+	 * Draws the current location.
+	 * @param mLocation2
+	 */
+	private void drawMarker(Location location) {
+		mMap.clear();
+		LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
+		MarkerOptions markerOptions = new MarkerOptions();
+		markerOptions.position(currentPosition)
+		.snippet("Lat:" + location.getLatitude() + "Lng:"+ location.getLongitude())
+		.icon(BitmapDescriptorFactory.defaultMarker((BitmapDescriptorFactory.HUE_AZURE)))
+		.title("ME");
+		mMap.addMarker(markerOptions);
+		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition,15));
+
 	}
 
 	/**
@@ -389,6 +452,12 @@ public class EditMoment extends Activity {
 	 */
 	private void handleCameraPhoto(){
 		pictureImageView.setImageBitmap(this.thumbImage);
+	}
+
+	@Override
+	public void onLocationChanged(Location arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
