@@ -69,6 +69,7 @@ public class MainActivity extends Activity {
         	TextView descriptionTextView = (TextView) momentRow.findViewById(R.id.descriptionTextView);
         	TextView qualityTextView = (TextView) momentRow.findViewById(R.id.qualityTextView);
         	TextView priceTextView = (TextView) momentRow.findViewById(R.id.priceTextView);
+        	TextView dateTextView = (TextView) momentRow.findViewById(R.id.dateTimeTextView);
         	ImageView foodThumbnail = (ImageView) momentRow.findViewById(R.id.pictureThumbnail);
         	
         	changeFontLaneNarrow(descriptionTextView);
@@ -87,7 +88,7 @@ public class MainActivity extends Activity {
         	restaurantTextView.setText("@ " + moment.getRestaurant().getName());
         	foodTextView.setText(moment.getMenuItem().getName());
         	descriptionTextView.setText(moment.getDescription());
-   	
+        	dateTextView.setText(moment.getDate());
         	item.addView(momentRow);
         	
         	// delete functionality

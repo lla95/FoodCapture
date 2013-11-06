@@ -20,16 +20,27 @@
             android:layout_height="200dp"
             android:layout_margin="10dp"/>
         
-        <TextView
-            android:id="@+id/restaurantTextView"
+        <TextView 
+            android:id="@+id/dateTimeTextView"
             android:layout_below="@id/pictureThumbnail"
             android:layout_marginTop="15dp"
+            android:layout_alignLeft="@id/restaurantTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#8e8e8e"
+            android:textSize="12sp"/>
+        
+        <TextView
+            android:id="@+id/restaurantTextView"
+            android:layout_below="@id/dateTimeTextView"
+            android:layout_marginTop="5dp"
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_picture_restaurant"
             android:textColor="#ffffff"
             android:textSize="18sp"/>
+        
     </RelativeLayout>
     
     <LinearLayout

@@ -199,12 +199,13 @@ containing a value of this type.
     }
     public static final class id {
         public static final int TableLayout1=0x7f050005;
-        public static final int action_add_moment=0x7f050030;
-        public static final int action_delete_moment=0x7f050031;
-        public static final int action_save_moment=0x7f05002f;
-        public static final int action_settings=0x7f050032;
+        public static final int action_add_moment=0x7f050031;
+        public static final int action_delete_moment=0x7f050032;
+        public static final int action_save_moment=0x7f050030;
+        public static final int action_settings=0x7f050033;
         public static final int cameraImageView=0x7f05000d;
         public static final int dateTextView=0x7f05000b;
+        public static final int dateTimeTextView=0x7f05002d;
         public static final int descriptionEditText=0x7f050024;
         public static final int descriptionTextView=0x7f050023;
         public static final int fifthDollar=0x7f050021;
@@ -218,8 +219,8 @@ containing a value of this type.
         public static final int hybrid=0x7f050004;
         public static final int locationTextView=0x7f050029;
         public static final int map=0x7f05002a;
-        public static final int momentInfoLayout=0x7f05002d;
-        public static final int moment_picture_rectangle=0x7f05002e;
+        public static final int momentInfoLayout=0x7f05002e;
+        public static final int moment_picture_rectangle=0x7f05002f;
         public static final int momentsListLayout=0x7f05002b;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;

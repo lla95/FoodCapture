@@ -178,9 +178,9 @@ public class EditMoment extends Activity implements LocationListener{
 		LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(currentPosition)
-		.snippet("Lat:" + location.getLatitude() + "Lng:"+ location.getLongitude())
+		.snippet("Lat: " + location.getLatitude() + "Lng: "+ location.getLongitude())
 		.icon(BitmapDescriptorFactory.defaultMarker((BitmapDescriptorFactory.HUE_AZURE)))
-		.title("ME");
+		.title("Current Location");
 		mMap.addMarker(markerOptions);
 		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition,15));
 
@@ -348,6 +348,8 @@ public class EditMoment extends Activity implements LocationListener{
 		com.kristofercastro.foodcapture.model.Restaurant
 			restaurant = new com.kristofercastro.foodcapture.model.Restaurant();
 		restaurant.setName(restaurantEditText.getText().toString());
+		restaurant.setLatitude((float) mLocation.getLatitude());
+		restaurant.setLongitude((float) mLocation.getLongitude());
 		
 		// create our moment object
 		com.kristofercastro.foodcapture.model.Moment
@@ -357,7 +359,7 @@ public class EditMoment extends Activity implements LocationListener{
 		moment.setPriceRating(priceRating);
 		moment.setQualityRating(qualityRating);
 		moment.setDescription(descriptionEditText.getText().toString());
-		
+		moment.setDate(Utility.getCurrentDate());
 		MomentDAO momentDAO = new MomentDAO(new DBHelper(this));
 		return momentDAO.create(moment);
 	}
@@ -435,7 +437,6 @@ public class EditMoment extends Activity implements LocationListener{
 		if ( requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE ){
 			if ( resultCode == RESULT_OK ){
 				//if ( data == null) return;
-				thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(this.fileUri.getPath()),  THUMBSIZE_WIDTH, THUMBSIZE_HEIGHT);
 				handleCameraPhoto();
 			}else if ( resultCode == RESULT_CANCELED){
 				// cancelled the image capture
@@ -448,10 +449,62 @@ public class EditMoment extends Activity implements LocationListener{
 	}
 	
 	/**
+	 * This method is taken from developer.android.com/training/displaying-bitmaps.html
+	 * @param options
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return
+	 */
+	public static int calculateInSampleSize(
+        BitmapFactory.Options options, int reqWidth, int reqHeight) {
+	    // Raw height and width of image
+	    final int height = options.outHeight;
+	    final int width = options.outWidth;
+	    int inSampleSize = 1;
+	
+	    if (height > reqHeight || width > reqWidth) {
+	
+	        final int halfHeight = height / 2;
+	        final int halfWidth = width / 2;
+	
+	        // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+	        // height and width larger than the requested height and width.
+	        while ((halfHeight / inSampleSize) > reqHeight
+	                && (halfWidth / inSampleSize) > reqWidth) {
+	            inSampleSize *= 2;
+	        }
+	    }
+	    return inSampleSize;
+	}
+	
+	/**
+	 * This method is taken from developer.android.com/training/displaying-bitmaps.html
+	 * @param options
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return
+	 */
+	public static Bitmap decodeSampledBitmapFromFile(String path,
+	        int reqWidth, int reqHeight) {
+
+	    // First decode with inJustDecodeBounds=true to check dimensions
+	    final BitmapFactory.Options options = new BitmapFactory.Options();
+	    options.inJustDecodeBounds = true;
+	    BitmapFactory.decodeFile(path, options);
+
+	    // Calculate inSampleSize
+	    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+	    // Decode bitmap with inSampleSize set
+	    options.inJustDecodeBounds = false;
+	    return BitmapFactory.decodeFile(path, options);
+	}
+	
+	/**
 	 * Display the image in the preview image view.
 	 */
 	private void handleCameraPhoto(){
-		pictureImageView.setImageBitmap(this.thumbImage);
+		pictureImageView.setImageBitmap(decodeSampledBitmapFromFile(this.fileUri.getPath(), THUMBSIZE_WIDTH, THUMBSIZE_HEIGHT));
 	}
 
 	@Override

@@ -11,14 +11,24 @@ public class Moment {
 	int priceRating;
 	int qualityRating;
 	String description;
+	String date;
 	
-	public Moment(int id, int priceRating, int qualityRating, Restaurant restaurant, MenuItem menuItem, String description){
+	public Moment(int id, int priceRating, int qualityRating, Restaurant restaurant, MenuItem menuItem, String description, String date){
 		this.id = id;
 		this.priceRating = priceRating;
 		this.qualityRating = qualityRating;
 		this.restaurant = restaurant;
 		this.menuItem = menuItem;
 		this.description = description;
+		this.date = date;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 	public Moment() {

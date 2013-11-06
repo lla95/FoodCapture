@@ -33,6 +33,7 @@ public class MomentDAO extends DataAccessObject<Moment>{
 		values.put(MomentTable.COL_PRICE_RATING, moment.getPriceRating());
 		values.put(MomentTable.COL_QUALITY_RATING, moment.getQualityRating());
 		values.put(MomentTable.COL_DESCRIPTION, moment.getDescription());
+		values.put(MomentTable.COL_DATE, moment.getDate());
 		
 		long restaurantID = 0;
 		RestaurantDAO restaurantDAO = new RestaurantDAO(dbHelper);
@@ -93,6 +94,8 @@ public class MomentDAO extends DataAccessObject<Moment>{
 			MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
 			MenuItem menuItem = menuItemDAO.retrieve(cursor.getLong(4));
 			moment.setMenuItem(menuItem);
+			
+			moment.setDate(cursor.getString(6));
 		}
 		
 		return moment;
@@ -120,6 +123,7 @@ public class MomentDAO extends DataAccessObject<Moment>{
 				moment.setMenuItem(menuItem);
 				
 				moment.setDescription(cursor.getString(5));
+				moment.setDate(cursor.getString(6));
 				momentsList.add(moment);
 			}while(cursor.moveToNext());
 		}

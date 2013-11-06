@@ -12,7 +12,7 @@ import android.provider.BaseColumns;
  */
 public final class DBHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "FoodCaptureDB";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	SQLiteDatabase db;
 	
 	public static abstract class MenuItemTable implements BaseColumns{
@@ -45,16 +45,17 @@ public final class DBHelper extends SQLiteOpenHelper {
 		public static final String COL_RESTAURANT_ID = "restaurantId";
 		public static final String COL_MENU_ITEM_ID = "menuItemId";
 		public static final String COL_DESCRIPTION = "description";
+		public static final String COL_DATE = "date";
 		private static final String TABLE_CREATE = 
 				String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
-						"%s INTEGER, %s INTEGER,%s INTEGER, %s INTEGER, %s TEXT, " +
+						"%s INTEGER, %s INTEGER,%s INTEGER, %s INTEGER, %s TEXT, %s TEXT, " +
 						
 						String.format("FOREIGN KEY(%s) REFERENCES %s(%s), ", COL_RESTAURANT_ID, 
 								RestaurantTable.TABLE_NAME, RestaurantTable.COL_ID ) +
 						String.format("FOREIGN KEY(%s) REFERENCES %s(%s)", COL_MENU_ITEM_ID,
 								MenuItemTable.TABLE_NAME, MenuItemTable.COL_ID) +
 						")", TABLE_NAME, COL_ID, 
-						COL_PRICE_RATING, COL_QUALITY_RATING, COL_RESTAURANT_ID, COL_MENU_ITEM_ID, COL_DESCRIPTION);
+						COL_PRICE_RATING, COL_QUALITY_RATING, COL_RESTAURANT_ID, COL_MENU_ITEM_ID, COL_DESCRIPTION, COL_DATE);
 	}
 	
 	public DBHelper(Context context){
