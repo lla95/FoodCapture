@@ -95,7 +95,7 @@ public class EditMoment extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_moment);
-		
+
 		foodTextView = (TextView) this.findViewById(R.id.foodTextView);
 		priceTextView = (TextView) this.findViewById(R.id.priceTextView);
 		descriptionTextView = (TextView) this.findViewById(R.id.descriptionTextView);
@@ -143,13 +143,8 @@ public class EditMoment extends Activity{
 		}
 		
 		if (mMap != null){
+			mMap.clear();
 			mMap.setMyLocationEnabled(true);
-			GoogleMapOptions options = new GoogleMapOptions();
-			
-			options.mapType(GoogleMap.MAP_TYPE_NORMAL)
-				.compassEnabled(false)
-				.rotateGesturesEnabled(false)
-				.tiltGesturesEnabled(false);
 			drawMarker(mLocation);
 		}
 	}
@@ -159,7 +154,6 @@ public class EditMoment extends Activity{
 	 * @param mLocation2
 	 */
 	private void drawMarker(Location location) {
-		mMap.clear();
 		LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(currentPosition)
@@ -274,11 +268,9 @@ public class EditMoment extends Activity{
 		Utility.changeTypeFace(restaurantTextView, getApplicationContext(), CustomFonts.LANE_NARROW);
 		Utility.changeTypeFace(locationTextView, getApplicationContext(), CustomFonts.LANE_NARROW);
 		Utility.changeTypeFace(pictureTextView, getApplicationContext(), CustomFonts.LANE_NARROW);
-
 		Utility.changeTypeFace(foodEditText, getApplicationContext(), CustomFonts.TITILLIUM_BOLD);
 		Utility.changeTypeFace(descriptionEditText, getApplicationContext(), CustomFonts.LANE_NARROW);
-		Utility.changeTypeFace(restaurantEditText, getApplicationContext(), CustomFonts.LANE_NARROW);
-		
+		Utility.changeTypeFace(restaurantEditText, getApplicationContext(), CustomFonts.LANE_NARROW);	
 		Utility.changeTypeFace(takePictureButton, getApplicationContext(), CustomFonts.TITILLIUM_BOLD);
 	}
 	
@@ -337,61 +329,16 @@ public class EditMoment extends Activity{
 	}
 	
 	/**
-	 * This method is taken from developer.android.com/training/displaying-bitmaps.html
-	 * @param options
-	 * @param reqWidth
-	 * @param reqHeight
-	 * @return
-	 */
-	public static int calculateInSampleSize(
-        BitmapFactory.Options options, int reqWidth, int reqHeight) {
-	    // Raw height and width of image
-	    final int height = options.outHeight;
-	    final int width = options.outWidth;
-	    int inSampleSize = 1;
-	
-	    if (height > reqHeight || width > reqWidth) {
-	
-	        final int halfHeight = height / 2;
-	        final int halfWidth = width / 2;
-	
-	        // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-	        // height and width larger than the requested height and width.
-	        while ((halfHeight / inSampleSize) > reqHeight
-	                && (halfWidth / inSampleSize) > reqWidth) {
-	            inSampleSize *= 2;
-	        }
-	    }
-	    return inSampleSize;
-	}
-	
-	/**
-	 * This method is taken from developer.android.com/training/displaying-bitmaps.html
-	 * @param options
-	 * @param reqWidth
-	 * @param reqHeight
-	 * @return
-	 */
-	public static Bitmap decodeSampledBitmapFromFile(String path,
-	        int reqWidth, int reqHeight) {
-
-	    // First decode with inJustDecodeBounds=true to check dimensions
-	    final BitmapFactory.Options options = new BitmapFactory.Options();
-	    options.inJustDecodeBounds = true;
-	    BitmapFactory.decodeFile(path, options);
-
-	    // Calculate inSampleSize
-	    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-	    // Decode bitmap with inSampleSize set
-	    options.inJustDecodeBounds = false;
-	    return BitmapFactory.decodeFile(path, options);
-	}
-	
-	/**
 	 * Display the image in the preview image view.
 	 */
 	private void handleCameraPhoto(){
-		pictureImageView.setImageBitmap(decodeSampledBitmapFromFile(this.fileUri.getPath(), THUMBSIZE_WIDTH, THUMBSIZE_HEIGHT));
+		pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(fileUri.getPath(), THUMBSIZE_WIDTH, THUMBSIZE_HEIGHT));
 	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+	
+	
 }

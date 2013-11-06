@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -82,8 +83,7 @@ public class MainActivity extends Activity {
 			final int THUMBSIZE_WIDTH = 500;
 			final int THUMBSIZE_HEIGHT = 300;
 			
-			Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(moment.getMenuItem().getImagePath()),  THUMBSIZE_WIDTH, THUMBSIZE_HEIGHT);
-			foodThumbnail.setImageBitmap(thumbImage);
+			foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), THUMBSIZE_WIDTH, THUMBSIZE_HEIGHT));
     		
         	restaurantTextView.setText("@ " + moment.getRestaurant().getName());
         	foodTextView.setText(moment.getMenuItem().getName());
@@ -114,6 +114,17 @@ public class MainActivity extends Activity {
 					AlertDialog dialog = builder.create();
 					dialog.show();
 					return false;
+				}
+        		
+        	});
+        	
+        	momentRow.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					Intent i = new Intent(MainActivity.this, MomentInformation.class);
+					i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+					MainActivity.this.startActivity(i);		
 				}
         		
         	});
