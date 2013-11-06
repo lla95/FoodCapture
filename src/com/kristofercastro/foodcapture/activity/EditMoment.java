@@ -122,7 +122,6 @@ public class EditMoment extends Activity{
 		priceWidget = new PriceWidget(this);
 		
 		setupLocManager();
-		mMap =  ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 		setUpMapIfNeeded();
 		
 	}
