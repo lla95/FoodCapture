@@ -48,10 +48,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class EditMoment extends Activity implements LocationListener{
-
-	int qualityRating = 0;
-	int priceRating = 0;
+public class EditMoment extends Activity{
 	
 	// static labels
 	TextView foodTextView;
@@ -66,23 +63,10 @@ public class EditMoment extends Activity implements LocationListener{
 	EditText foodEditText;
 	EditText descriptionEditText;
 	EditText restaurantEditText;
-	
-	ArrayList<ImageView> qualityRatingIcons;
-	ArrayList<ImageView> priceRatingIcons;
-	
-	// Quality Rating Icons
-	ImageView firstStar;
-	ImageView secondStar;
-	ImageView thirdStar;
-	ImageView fourthStar;
-	ImageView fifthStar;
-	
-	// Price Rating Icons
-	ImageView firstDollar;
-	ImageView secondDollar;
-	ImageView thirdDollar;
-	ImageView fourthDollar;
-	ImageView fifthDollar;
+
+	// Rating widgets
+	QualityWidget qualityWidget;
+	PriceWidget priceWidget;
 	
 	// Camera variables
 	Button cameraButton;
@@ -113,7 +97,6 @@ public class EditMoment extends Activity implements LocationListener{
 		setContentView(R.layout.activity_edit_moment);
 		
 		foodTextView = (TextView) this.findViewById(R.id.foodTextView);
-		qualityTextView = (TextView) this.findViewById(R.id.qualityTextView);
 		priceTextView = (TextView) this.findViewById(R.id.priceTextView);
 		descriptionTextView = (TextView) this.findViewById(R.id.descriptionTextView);
 		restaurantTextView = (TextView) this.findViewById(R.id.restaurantTextView);
@@ -133,7 +116,10 @@ public class EditMoment extends Activity implements LocationListener{
 		
 		cameraImageView.setOnClickListener(cameraButtonOnClickHandler);
 		changeFont();
-		initializeIcons();
+		
+		// Initialize widgets
+		qualityWidget = new QualityWidget(this);
+		priceWidget = new PriceWidget(this);
 		
 		setupLocManager();
 		mMap =  ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -148,7 +134,6 @@ public class EditMoment extends Activity implements LocationListener{
 		criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
 		String bestProvider = mLocManager.getBestProvider(criteria, true);	
 		mLocation = mLocManager.getLastKnownLocation(bestProvider);
-		//Log.i("MyCameraApp", + mLocation.getLatitude() + " : " +  mLocation.getLongitude());
 	}
 
 	private void setUpMapIfNeeded() {
@@ -178,7 +163,6 @@ public class EditMoment extends Activity implements LocationListener{
 		LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(currentPosition)
-		.snippet("Lat: " + location.getLatitude() + "Lng: "+ location.getLongitude())
 		.icon(BitmapDescriptorFactory.defaultMarker((BitmapDescriptorFactory.HUE_AZURE)))
 		.title("Current Location");
 		mMap.addMarker(markerOptions);
@@ -186,107 +170,12 @@ public class EditMoment extends Activity implements LocationListener{
 
 	}
 
-	/**
-	 * Bind the rating variables to the actual ID and store 
-	 * them into their corresponding array list.
-	 */
-	private void initializeIcons() {
-		firstStar = (ImageView) findViewById(R.id.firstStar);
-		secondStar = (ImageView) findViewById(R.id.secondStar);
-		thirdStar = (ImageView) findViewById(R.id.thirdStar);
-		fourthStar = (ImageView) findViewById(R.id.fourthStar);
-		fifthStar = (ImageView) findViewById(R.id.fifthStar);
-
-		// Price Rating Icons
-		firstDollar = (ImageView) findViewById(R.id.firstDollar);
-		secondDollar= (ImageView) findViewById(R.id.secondDollar);
-		thirdDollar = (ImageView) findViewById(R.id.thirdDollar);
-		fourthDollar = (ImageView) findViewById(R.id.fourthDollar);
-		fifthDollar = (ImageView) findViewById(R.id.fifthDollar);
-
-		
-		qualityRatingIcons = new ArrayList<ImageView>();
-		qualityRatingIcons.add(firstStar);
-		qualityRatingIcons.add(secondStar);
-		qualityRatingIcons.add(thirdStar);
-		qualityRatingIcons.add(fourthStar);
-		qualityRatingIcons.add(fifthStar);
-		
-		priceRatingIcons = new ArrayList<ImageView>();
-		priceRatingIcons.add(firstDollar);
-		priceRatingIcons.add(secondDollar);
-		priceRatingIcons.add(thirdDollar);
-		priceRatingIcons.add(fourthDollar);
-		priceRatingIcons.add(fifthDollar);
-		
-		toggleQualitySelected();
-		togglePriceSelected();
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.edit_moment, menu);
 		return true;
-	}
-	
-	/**
-	 * Toggle between selected icon image versus non-selected icon image
-	 */
-	private void toggleQualitySelected(){
-		for (final ImageView icon : qualityRatingIcons){
-			icon.setOnClickListener(new OnClickListener(){
-				@Override
-				public void onClick(View v) {				
-					// reset
-					qualityRating = 0;
-					for (ImageView icon : qualityRatingIcons){
-						icon.setImageResource(R.drawable.quality_icon_default);
-					}		
-					// look for the icon clicked by iterating through each icon and marking it
-					for (ImageView currentIcon : qualityRatingIcons){
-						if ( !icon.equals(currentIcon) ){
-							currentIcon.setImageResource(R.drawable.quality_icon_selected);
-							qualityRating++;
-						}else{
-							currentIcon.setImageResource(R.drawable.quality_icon_selected);
-							qualityRating++;
-							break;
-						}
-					}
-				}		
-			});
-		}
-	}
-	
-	/**
-	 * Toggle between selected icon image versus non-selected icon image
-	 */
-	private void togglePriceSelected(){
-		for (final ImageView icon : priceRatingIcons){
-			icon.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					// reset
-					priceRating = 0;
-					for (ImageView icon : priceRatingIcons){
-						icon.setImageResource(R.drawable.price_icon_default);
-					}		
-					// look for the icon clicked by iterating through each icon and marking it
-					for (ImageView currentIcon : priceRatingIcons){
-						if ( !icon.equals(currentIcon) ){
-							currentIcon.setImageResource(R.drawable.price_icon_selected);
-							priceRating++;
-						}else{
-							currentIcon.setImageResource(R.drawable.price_icon_selected);
-							priceRating++;
-							break;
-						}
-					}
-				}
-			});
-		}				
 	}
 	
 	@Override
@@ -356,8 +245,8 @@ public class EditMoment extends Activity implements LocationListener{
 			moment = new com.kristofercastro.foodcapture.model.Moment();
 		moment.setMenuItem(menuItem);
 		moment.setRestaurant(restaurant);
-		moment.setPriceRating(priceRating);
-		moment.setQualityRating(qualityRating);
+		moment.setPriceRating(priceWidget.getPriceRating());
+		moment.setQualityRating(qualityWidget.getQualityRating());
 		moment.setDescription(descriptionEditText.getText().toString());
 		moment.setDate(Utility.getCurrentDate());
 		MomentDAO momentDAO = new MomentDAO(new DBHelper(this));
@@ -380,7 +269,6 @@ public class EditMoment extends Activity implements LocationListener{
 
 	private void changeFont(){
 		Utility.changeTypeFace(foodTextView, getApplicationContext(), CustomFonts.LANE_NARROW);
-		Utility.changeTypeFace(qualityTextView, getApplicationContext(), CustomFonts.LANE_NARROW);
 		Utility.changeTypeFace(priceTextView, getApplicationContext(), CustomFonts.LANE_NARROW);
 		Utility.changeTypeFace(descriptionTextView, getApplicationContext(), CustomFonts.LANE_NARROW);
 		Utility.changeTypeFace(restaurantTextView, getApplicationContext(), CustomFonts.LANE_NARROW);
@@ -506,11 +394,4 @@ public class EditMoment extends Activity implements LocationListener{
 	private void handleCameraPhoto(){
 		pictureImageView.setImageBitmap(decodeSampledBitmapFromFile(this.fileUri.getPath(), THUMBSIZE_WIDTH, THUMBSIZE_HEIGHT));
 	}
-
-	@Override
-	public void onLocationChanged(Location arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

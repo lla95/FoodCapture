@@ -7,9 +7,23 @@ import com.kristofercastro.foodcapture.R.menu;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MomentInformation extends Activity {
-
+	
+	// static labels
+	TextView foodTextView;
+	TextView qualityTextView;
+	TextView priceTextView;
+	TextView descriptionTextView;
+	TextView restaurantTextView;
+	TextView dateTimeTextView;
+	TextView locationTextView;
+	TextView pictureTextView;
+	
+	ImageView pictureImageView;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
