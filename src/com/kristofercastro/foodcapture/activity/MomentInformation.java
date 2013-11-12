@@ -2,6 +2,7 @@ package com.kristofercastro.foodcapture.activity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,7 +20,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MomentInformation extends Activity {
@@ -44,11 +47,22 @@ public class MomentInformation extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_moment_information);	
 		
+		bindControls();
 		Bundle extras = this.getIntent().getExtras();
 		setupGoogleMaps();
-		
-		
 		new GetMomentTask().execute(extras.getLong("momentID"));
+	}
+
+	private void bindControls() {
+		foodTextView = (TextView) this.findViewById(R.id.foodTextView);
+		qualityTextView = (TextView) this.findViewById(R.id.qualityTextView);
+		priceTextView = (TextView) this.findViewById(R.id.priceTextView);
+    	descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
+		restaurantTextView = (TextView) this.findViewById(R.id.restaurantTextView);
+		dateTimeTextView = (TextView) this.findViewById(R.id.dateTimeTextView);
+		locationTextView = (TextView) this.findViewById(R.id.locationTextView);
+		pictureTextView = (TextView) this.findViewById(R.id.pictureTextView);
+		pictureImageView = (ImageView) this.findViewById(R.id.pictureThumbnail);		
 	}
 
 	private void setupGoogleMaps() {
@@ -61,15 +75,33 @@ public class MomentInformation extends Activity {
 			googleMaps.clear();
 			googleMaps.setMyLocationEnabled(true);
 		}
-		
 	}
 	
 	private class GetMomentTask extends AsyncTask<Long, Void, Void>{
 
+
 		@Override
 		protected void onPostExecute(Void result) {
 			drawMarker();
+			
+			foodTextView.setText(moment.getMenuItem().getName());
+			descriptionTextView.setText(moment.getDescription());
+        	restaurantTextView.setText("@ " + moment.getRestaurant().getName());
+			dateTimeTextView.setText(moment.getDate());
+			pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
+			displayRatings(moment);
+			
+			changeFont();    		
 			super.onPostExecute(result);
+		}
+
+		private void changeFont() {
+        	Utility.changeFontLaneNarrow(descriptionTextView, MomentInformation.this);
+    		Utility.changeFontTitillium(foodTextView, MomentInformation.this);
+    		Utility.changeFontTitillium(qualityTextView, MomentInformation.this);
+    		Utility.changeFontTitillium(priceTextView, MomentInformation.this);
+    		Utility.changeFontTitillium(restaurantTextView, MomentInformation.this);
+			
 		}
 
 		@Override
@@ -81,6 +113,19 @@ public class MomentInformation extends Activity {
 		}	
 	}
 		
+	private void displayRatings(Moment moment) {
+		LinearLayout qRatingsLayout = (LinearLayout) findViewById(R.id.qualityRatingLayout);
+		for (int i = 0; i < moment.getQualityRating(); i++){
+			ImageView ratingIcon = (ImageView) qRatingsLayout.getChildAt(i);
+			ratingIcon.setImageResource(R.drawable.quality_icon_selected);
+		}
+		LinearLayout pRatingsLayout = (LinearLayout) findViewById(R.id.priceRatingLayout);
+		for (int i = 0; i < moment.getPriceRating(); i++){
+			ImageView ratingIcon = (ImageView) pRatingsLayout.getChildAt(i);
+			ratingIcon.setImageResource(R.drawable.price_icon_selected);
+		}
+	}
+	
 	/**
 	 * Draws the current location.
 	 * @param mLocation2
@@ -91,7 +136,7 @@ public class MomentInformation extends Activity {
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(currentPosition)
 		.icon(BitmapDescriptorFactory.defaultMarker((BitmapDescriptorFactory.HUE_AZURE)))
-		.title("Current Location");
+		.title("Location");
 		googleMaps.addMarker(markerOptions);
 		googleMaps.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition,15));
 

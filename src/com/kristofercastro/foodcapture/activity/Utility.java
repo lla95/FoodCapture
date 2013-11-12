@@ -21,6 +21,8 @@ import android.widget.TextView;
  */
 public class Utility {
 
+	public static final int THUMBSIZE_WIDTH = 500;
+	public static final int THUMBSIZE_HEIGHT = 300;
 	public static void main(String[] args){
 		System.out.println("test");
 	}
@@ -36,6 +38,14 @@ public class Utility {
 	public static void changeTypeFace(TextView v, Context context, String font){
 		Typeface tf = Typeface.createFromAsset(context.getAssets(), font);
 		v.setTypeface(tf);
+	}
+	
+	public static void changeFontLaneNarrow(TextView view, Context context){
+		Utility.changeTypeFace(view, context, CustomFonts.LANE_NARROW);
+	}
+	
+	public static void changeFontTitillium(TextView view, Context context){
+		Utility.changeTypeFace(view, context, CustomFonts.TITILLIUM_BOLD);
 	}
 	
 	public static String getCurrentDate(){		
@@ -91,7 +101,11 @@ public class Utility {
 	    // Calculate inSampleSize
 	    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
 	    options.inJustDecodeBounds = false;
-	    return BitmapFactory.decodeFile(path, options);
+	    Bitmap newBitmap = BitmapFactory.decodeFile(path, options);
+	   
+	    // @TO-DO: may have to do if statement when in landscape mode
+	    return Bitmap.createBitmap(newBitmap, 0,newBitmap.getHeight()/2 - newBitmap.getWidth()/2,reqWidth, reqHeight);
+
 	}
 	
 }

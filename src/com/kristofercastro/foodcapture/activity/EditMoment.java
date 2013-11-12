@@ -78,8 +78,8 @@ public class EditMoment extends Activity{
 	Bitmap thumbImage; 
 
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-	private static final int THUMBSIZE_HEIGHT = 300;
-	private static final int THUMBSIZE_WIDTH = 300;
+	private static final int THUMBSIZE_HEIGHT = 256;
+	private static final int THUMBSIZE_WIDTH = 256;
 	private int MEDIA_TYPE_IMAGE = 1;
 	private String imagePath;
 	
@@ -90,6 +90,7 @@ public class EditMoment extends Activity{
 	private GoogleMap mMap;
 	LocationManager mLocManager;
 	Location mLocation;
+	private String bestProvider;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,15 +124,24 @@ public class EditMoment extends Activity{
 		
 		setupLocManager();
 		setUpMapIfNeeded();
-		
 	}
+	
+	
+	@Override
+	protected void onResume() {
+		if ( mLocManager == null)
+			setupLocManager();
+		setUpMapIfNeeded();
+		super.onResume();
+	}
+
 
 	private void setupLocManager() {
 		mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.NO_REQUIREMENT);
 		criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
-		String bestProvider = mLocManager.getBestProvider(criteria, true);	
+		bestProvider = mLocManager.getBestProvider(criteria, true);	
 		mLocation = mLocManager.getLastKnownLocation(bestProvider);
 	}
 
@@ -144,6 +154,9 @@ public class EditMoment extends Activity{
 		if (mMap != null){
 			mMap.clear();
 			mMap.setMyLocationEnabled(true);
+			
+			// update location
+			mLocation = mLocManager.getLastKnownLocation(bestProvider);
 			drawMarker(mLocation);
 		}
 	}

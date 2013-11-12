@@ -45,13 +45,6 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private void changeFontLaneNarrow(TextView view){
-		Utility.changeTypeFace(view, getApplicationContext(), CustomFonts.LANE_NARROW);
-	}
-	
-	private void changeFontTitillium(TextView view){
-		Utility.changeTypeFace(view, getApplicationContext(), CustomFonts.TITILLIUM_BOLD);
-	}
 	
 	/**
 	 * Takes the list of moments and display them.
@@ -98,17 +91,13 @@ public class MainActivity extends Activity {
 	        	TextView dateTextView = (TextView) momentRow.findViewById(R.id.dateTimeTextView);
 	        	ImageView foodThumbnail = (ImageView) momentRow.findViewById(R.id.pictureThumbnail);
 	        	
-	        	changeFontLaneNarrow(descriptionTextView);
-	    		changeFontTitillium(foodTextView);
-	    		changeFontTitillium(qualityTextView);
-	    		changeFontTitillium(priceTextView);
-	    		changeFontTitillium(restaurantTextView);
-	    		
-	    		
-				final int THUMBSIZE_WIDTH = 500;
-				final int THUMBSIZE_HEIGHT = 300;
-				
-				foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), THUMBSIZE_WIDTH, THUMBSIZE_HEIGHT));
+	        	Utility.changeFontLaneNarrow(descriptionTextView, MainActivity.this);
+	    		Utility.changeFontTitillium(foodTextView, MainActivity.this);
+	    		Utility.changeFontTitillium(qualityTextView, MainActivity.this);
+	    		Utility.changeFontTitillium(priceTextView, MainActivity.this);
+	    		Utility.changeFontTitillium(restaurantTextView, MainActivity.this);
+	    			
+				foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
 	    		
 	        	restaurantTextView.setText("@ " + moment.getRestaurant().getName());
 	        	foodTextView.setText(moment.getMenuItem().getName());

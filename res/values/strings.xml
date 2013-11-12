@@ -9,7 +9,7 @@
     <string name="action_delete_moment">delete moment</string>
     <string name="action_moment_title">Capture the Moment</string>
     <string name="action_save_moment">save moment</string>
-    
+
     <!-- Used in Edit/Add/View moment -->
     <string name="label_capture_moment">Capture the Moment</string>
     <string name="label_food">Food</string>
@@ -18,12 +18,14 @@
     <string name="label_description">Comment</string>
     <string name="label_restaurant">Place</string>
     <string name="label_location">Where</string>
-    
+    <string name="label_share">Share</string>
     <string name="label_picture_restaurant"> /@ Restaurant</string>
-    
     <string name="text_take_picture_button">Take a Picture</string>
     <string name="title_activity_edit_moment">EditMoment</string>
-    
-    <string name="food_title_color">#ca5869</string>  
- 
+    <string name="food_title_color">#ca5869</string>
+    <string name="API_KEY">AIzaSyCgDK8gO6oetbNQZmoePFI5TAfXNbNrwFQ</string>
+    <string name="BROWSER_API_KEY">AIzaSyBz997dNB2bAgKKlz19D-pSXChtN668Og8</string>
+    <string name="title_activity_food_adventures_list">FoodAdventuresList</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
