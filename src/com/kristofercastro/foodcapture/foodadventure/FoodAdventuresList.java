@@ -52,22 +52,25 @@ public class FoodAdventuresList extends Activity {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			localRestaurants = placesService.findPlaces(10, mLocation.getLatitude(), mLocation.getLongitude());
+			localRestaurants = placesService.findPlaces(5, mLocation.getLatitude(), mLocation.getLongitude());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.i("MyCameraApp", "Entered onPost");
-			for ( Place place : localRestaurants){
-				Log.i("MyCameraApp", place.toString());
-			}
-			Log.i("MyCameraApp", "Finished on Post");
 			super.onPostExecute(result);
-			
-		}	
-		
-		
+			drawAllMarkers();
+		}		
+	}
+	
+	/**
+	 * Draws all the markers for all returned places
+	 */
+	private void drawAllMarkers(){
+		for (int i = 0; i < localRestaurants.size(); i++){
+			Place place = localRestaurants.get(i);
+			drawMarker(place.getName(), place.getLatitude(), place.getLongitude());
+		}
 	}
 	
 	private void setupGoogleMaps() {
@@ -79,7 +82,8 @@ public class FoodAdventuresList extends Activity {
 		if (googleMaps != null){
 			googleMaps.clear();
 			googleMaps.setMyLocationEnabled(true);
-			drawMarker(mLocation.getLatitude(),mLocation.getLongitude());
+			drawMarker("Current Location",mLocation.getLatitude(),mLocation.getLongitude());
+			focusCameraAtCurrentLocation();
 		}
 	}
 	
@@ -87,15 +91,17 @@ public class FoodAdventuresList extends Activity {
 	 * Draws a marker at a location
 	 * @param mLocation2
 	 */
-	private void drawMarker(double latitude, double longitude) {
+	private void drawMarker(String name, double latitude, double longitude) {
 		LatLng currentPosition = new LatLng(latitude, longitude);
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(currentPosition)
 		.icon(BitmapDescriptorFactory.defaultMarker((BitmapDescriptorFactory.HUE_AZURE)))
-		.title("Location");
+		.title(name);
 		googleMaps.addMarker(markerOptions);
-		googleMaps.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition,15));
-
+	}
+	
+	private void focusCameraAtCurrentLocation(){
+		googleMaps.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()),12));
 	}
 	
 	private void setupLocManager() {

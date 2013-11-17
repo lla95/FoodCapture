@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">FoodCapture</string>
+    <string name="app_name">Food Capture</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_moments">MomentsActivity</string>
     <string name="title_activity_moment_information">MomentInformation</string>
@@ -27,5 +27,6 @@
     <string name="BROWSER_API_KEY">AIzaSyBz997dNB2bAgKKlz19D-pSXChtN668Og8</string>
     <string name="title_activity_food_adventures_list">FoodAdventuresList</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_food_adventures_places_fragment">FoodAdventuresPlacesFragment</string>
 
 </resources>

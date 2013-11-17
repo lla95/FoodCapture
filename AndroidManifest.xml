@@ -66,10 +66,16 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/API_KEY" />
 
-<!--         <activity
+        <!--
+             <activity
             android:name="com.kristofercastro.foodcapture.foodadventure.FoodAdventuresList"
             android:label="@string/title_activity_food_adventures_list" >
-        </activity> -->
+        </activity>
+        -->
+        <activity
+            android:name="com.kristofercastro.foodcapture.foodadventure.FoodAdventuresPlacesFragment"
+            android:label="@string/title_activity_food_adventures_places_fragment" >
+        </activity>
     </application>
 
 </manifest>

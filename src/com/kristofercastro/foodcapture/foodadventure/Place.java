@@ -1,5 +1,6 @@
 package com.kristofercastro.foodcapture.foodadventure;
 
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,11 +19,11 @@ public class Place {
 	private String id;
 	private String icon;
 	private String name;
-	private Double latitude;
-	private Double longitude;
+	private double latitude;
+	private double longitude;
 	private String vicinity;
 	private String phoneNumber;
-	
+		
 	public String getId() {
 		return id;
 	}
