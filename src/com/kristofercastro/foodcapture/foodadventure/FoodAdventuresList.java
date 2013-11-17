@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.Menu;
@@ -50,6 +51,16 @@ public class FoodAdventuresList extends Activity {
 
 	private class RetrieveLocalRestaurants extends AsyncTask<Void, Void, Void>{
 
+		private ProgressDialog dialog = new ProgressDialog(FoodAdventuresList.this);
+		
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			this.dialog.setMessage("Generating places...");
+			this.dialog.show();
+		}
+
 		@Override
 		protected Void doInBackground(Void... params) {
 			localRestaurants = placesService.findPlaces(5, mLocation.getLatitude(), mLocation.getLongitude());
@@ -59,6 +70,8 @@ public class FoodAdventuresList extends Activity {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			if (dialog.isShowing())
+				dialog.dismiss();
 			drawAllMarkers();
 		}		
 	}
