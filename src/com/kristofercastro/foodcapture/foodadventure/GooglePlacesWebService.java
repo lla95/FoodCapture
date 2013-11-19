@@ -59,6 +59,8 @@ public class GooglePlacesWebService {
 		resultPlaces = new ArrayList<Place>();
 		placesPage1.addAll(placesPage2);
 		placesPage1.addAll(placesPage3);
+		Log.i("MyCameraApp", "size: " + placesPage1.size());
+
 		int startOfChosenPlaces = randomlyChoosePlaces(placesPage1, 5);
 	
 		for (int i = startOfChosenPlaces; i < placesPage1.size(); i++){
@@ -81,7 +83,8 @@ public class GooglePlacesWebService {
 		Random rand = new Random();
 		for(int i = 0; i < maxResults; i++){
 			int ranNumber = rand.nextInt(arraySize-tailOffset);
-			
+			Log.i("MyCameraApp", "rand number: " + ranNumber);
+
 			// swap with tail
 			Place temp = placesArray.get(ranNumber);
 			placesArray.set(ranNumber, placesArray.get(tailOffset));

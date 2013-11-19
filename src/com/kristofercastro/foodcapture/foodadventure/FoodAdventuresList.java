@@ -9,9 +9,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kristofercastro.foodcapture.R;
-import com.kristofercastro.foodcapture.R.layout;
-import com.kristofercastro.foodcapture.R.menu;
-import com.kristofercastro.foodcapture.model.Restaurant;
+
 
 import android.location.Criteria;
 import android.location.Location;
@@ -19,12 +17,16 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.Menu;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
-public class FoodAdventuresList extends Activity {
+public class FoodAdventuresList extends FragmentActivity {
 
 	GooglePlacesWebService placesService;
 	GoogleMap googleMaps;
@@ -73,6 +75,13 @@ public class FoodAdventuresList extends Activity {
 			if (dialog.isShowing())
 				dialog.dismiss();
 			drawAllMarkers();
+			
+			android.app.FragmentManager fragmentManager = getFragmentManager();
+			android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+			
+			Fragment placesFragment = new FoodAdventuresPlacesFragment();
+			fragmentTransaction.add(R.id.restaurant_lists, placesFragment);
+			fragmentTransaction.commit();
 		}		
 	}
 	
@@ -99,6 +108,7 @@ public class FoodAdventuresList extends Activity {
 			focusCameraAtCurrentLocation();
 		}
 	}
+	
 	
 	/**
 	 * Draws a marker at a location
