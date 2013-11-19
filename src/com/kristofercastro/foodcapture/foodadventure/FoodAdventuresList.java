@@ -1,14 +1,17 @@
 package com.kristofercastro.foodcapture.foodadventure;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kristofercastro.foodcapture.R;
+import com.kristofercastro.foodcapture.activity.Utility;
 
 
 import android.location.Criteria;
@@ -20,6 +23,11 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.util.Log;
 import android.view.Menu;
 import android.support.v4.app.FragmentActivity;
@@ -34,12 +42,13 @@ public class FoodAdventuresList extends FragmentActivity {
 	private String bestProvider;
 	private Location mLocation;
 	ArrayList<Place> localRestaurants;
+	HashMap<Integer, Marker> markers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_food_adventures_list);
-		
+		markers = new HashMap<Integer,Marker>();
 		placesService = new GooglePlacesWebService(this);
 		setupLocManager();
 		setupGoogleMaps();
@@ -91,7 +100,7 @@ public class FoodAdventuresList extends FragmentActivity {
 	private void drawAllMarkers(){
 		for (int i = 0; i < localRestaurants.size(); i++){
 			Place place = localRestaurants.get(i);
-			drawMarker(place.getName(), place.getLatitude(), place.getLongitude());
+			drawMarker(place.getName(), i, place.getLatitude(), place.getLongitude());
 		}
 	}
 	
@@ -110,17 +119,23 @@ public class FoodAdventuresList extends FragmentActivity {
 	}
 	
 	
+	private void drawMarker(String name, double latitude, double longitude) {
+		drawMarker(name, null, latitude, longitude);
+	}
+
 	/**
 	 * Draws a marker at a location
 	 * @param mLocation2
 	 */
-	private void drawMarker(String name, double latitude, double longitude) {
+	private void drawMarker(String name, Integer index, double latitude, double longitude) {
 		LatLng currentPosition = new LatLng(latitude, longitude);
+			
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(currentPosition)
 		.icon(BitmapDescriptorFactory.defaultMarker((BitmapDescriptorFactory.HUE_AZURE)))
 		.title(name);
-		googleMaps.addMarker(markerOptions);
+		Marker marker = googleMaps.addMarker(markerOptions);
+		markers.put(index,marker);
 	}
 	
 	private void focusCameraAtCurrentLocation(){

@@ -17,6 +17,7 @@
             android:layout_marginBottom="20dp"/>
    
 	<LinearLayout
+	    android:id="@+id/placesIdentifierCircle"
        	android:background="@drawable/adventures_identifier"
        	android:layout_width="wrap_content"
        	android:layout_height="wrap_content"

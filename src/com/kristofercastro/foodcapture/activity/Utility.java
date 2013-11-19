@@ -108,4 +108,8 @@ public class Utility {
 
 	}
 	
+	public static String convertIntToLetter(int i) {
+		return String.format("%s", (char)(65+i)).toUpperCase();
+	}
+	
 }
