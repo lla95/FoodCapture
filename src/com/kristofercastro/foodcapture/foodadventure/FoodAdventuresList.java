@@ -100,7 +100,7 @@ public class FoodAdventuresList extends FragmentActivity {
 	private void drawAllMarkers(){
 		for (int i = 0; i < localRestaurants.size(); i++){
 			Place place = localRestaurants.get(i);
-			drawMarker(place.getName(), i, place.getLatitude(), place.getLongitude());
+			drawMarker(place, i, place.getLatitude(), place.getLongitude());
 		}
 	}
 	
@@ -113,27 +113,30 @@ public class FoodAdventuresList extends FragmentActivity {
 		if (googleMaps != null){
 			googleMaps.clear();
 			googleMaps.setMyLocationEnabled(true);
-			drawMarker("Current Location",mLocation.getLatitude(),mLocation.getLongitude());
+			Place tempPlace = new Place();
+			tempPlace.setName("Current Location");
+			drawMarker(tempPlace,mLocation.getLatitude(),mLocation.getLongitude());
 			focusCameraAtCurrentLocation();
 		}
 	}
 	
 	
-	private void drawMarker(String name, double latitude, double longitude) {
-		drawMarker(name, null, latitude, longitude);
+	private void drawMarker(Place place, double latitude, double longitude) {
+		drawMarker(place, null, latitude, longitude);
 	}
 
 	/**
 	 * Draws a marker at a location
 	 * @param mLocation2
 	 */
-	private void drawMarker(String name, Integer index, double latitude, double longitude) {
+	private void drawMarker(Place place, Integer index, double latitude, double longitude) {
 		LatLng currentPosition = new LatLng(latitude, longitude);
-			
+		
+		String titleText = place.getName() + "\n";
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(currentPosition)
 		.icon(BitmapDescriptorFactory.defaultMarker((BitmapDescriptorFactory.HUE_AZURE)))
-		.title(name);
+		.title(titleText);
 		Marker marker = googleMaps.addMarker(markerOptions);
 		markers.put(index,marker);
 	}

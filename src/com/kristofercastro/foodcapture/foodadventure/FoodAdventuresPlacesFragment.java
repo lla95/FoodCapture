@@ -66,16 +66,21 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 
 				@Override
 				public void onClick(View v) {
+					// lets get the text view inside the layout
 					TextView textView = (TextView) v.findViewById(R.id.placesIdentifierTextView);
+					
+					// the letter is the key for the hash map of markers so we extract that
 					String letter = textView.getText().toString();
+					
+					// find the marker we are looking for that corresponds to the letter
 					HashMap<Integer, Marker> markerHash = ((FoodAdventuresList) FoodAdventuresPlacesFragment
 							.this.getActivity()).markers;
-					Marker marker = markerHash.get((int)(letter.charAt(0) - 65));	
+					Marker marker = markerHash.get((int)(letter.charAt(0) - 65));		
 					
+					// make maps focus on that restaurant
 					GoogleMap maps = ((FoodAdventuresList) FoodAdventuresPlacesFragment
 							.this.getActivity()).googleMaps;
-					maps.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-								
+					maps.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));								
 					marker.showInfoWindow();								
 				}
 				
