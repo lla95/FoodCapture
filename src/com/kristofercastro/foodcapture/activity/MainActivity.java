@@ -45,7 +45,6 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	
 	/**
 	 * Takes the list of moments and display them.
 	 */
@@ -228,6 +227,7 @@ public class MainActivity extends Activity {
 	 */
 	private void addMomentHandler(){
 		Intent i = new Intent(this, EditMoment.class);
+		i.putExtra("mode", Message.CREATE_NEW_MOMENT);
 		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
 		this.startActivity(i);
 	}

@@ -19,7 +19,9 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +38,7 @@ public class MomentInformation extends Activity {
 	TextView dateTimeTextView;
 	TextView locationTextView;
 	TextView pictureTextView;
+	TextView reviewTextView;
 	
 	ImageView pictureImageView;
 	
@@ -55,6 +58,7 @@ public class MomentInformation extends Activity {
 
 	private void bindControls() {
 		foodTextView = (TextView) this.findViewById(R.id.foodTextView);
+		reviewTextView = (TextView) this.findViewById(R.id.reviewTextView);
 		qualityTextView = (TextView) this.findViewById(R.id.qualityTextView);
 		priceTextView = (TextView) this.findViewById(R.id.priceTextView);
     	descriptionTextView = (TextView) findViewById(R.id.descriptionTextView);
@@ -101,7 +105,9 @@ public class MomentInformation extends Activity {
     		Utility.changeFontTitillium(qualityTextView, MomentInformation.this);
     		Utility.changeFontTitillium(priceTextView, MomentInformation.this);
     		Utility.changeFontTitillium(restaurantTextView, MomentInformation.this);
-			
+    		
+    		Utility.changeFontLaneNarrow(reviewTextView, MomentInformation.this);
+    		Utility.changeFontLaneNarrow(locationTextView, MomentInformation.this);		
 		}
 
 		@Override
@@ -141,6 +147,7 @@ public class MomentInformation extends Activity {
 		googleMaps.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition,15));
 
 	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -148,4 +155,26 @@ public class MomentInformation extends Activity {
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		switch (item.getItemId()){
+			case R.id.action_edit_moment : {
+				editMomentHandler();
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Event handler for when the user click the add moment
+	 * in the action bar
+	 */
+	private void editMomentHandler(){
+		Intent i = new Intent(this, EditMoment.class);
+		i.putExtra("mode", Message.EDIT_EXISTING_MOMENT);
+		i.putExtra("momentID", getIntent().getExtras().getLong("momentID"));
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+		this.startActivity(i);
+	}
 }

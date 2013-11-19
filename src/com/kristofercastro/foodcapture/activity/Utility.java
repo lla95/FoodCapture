@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Class containing helper functions
@@ -104,12 +105,23 @@ public class Utility {
 	    Bitmap newBitmap = BitmapFactory.decodeFile(path, options);
 	   
 	    // @TO-DO: may have to do if statement when in landscape mode
-	    return Bitmap.createBitmap(newBitmap, 0,newBitmap.getHeight()/2 - newBitmap.getWidth()/2,reqWidth, reqHeight);
+	    
+	    boolean isInPortrait = (newBitmap.getHeight()/2 - newBitmap.getWidth()/2) < 0 ? false : true;
+	    Bitmap resultBitmap = null;
+	    if (isInPortrait){
+	    	resultBitmap = Bitmap.createBitmap(newBitmap, 0,newBitmap.getHeight()/2 - newBitmap.getWidth()/2,reqWidth, reqHeight);
+	    }else{
+	    	resultBitmap = Bitmap.createBitmap(newBitmap, newBitmap.getWidth()/2 - newBitmap.getHeight()/2, 0,reqWidth, reqHeight);
+	    }
+	    return resultBitmap;
 
 	}
 	
 	public static String convertIntToLetter(int i) {
 		return String.format("%s", (char)(65+i)).toUpperCase();
 	}
-	
+/*	
+	public static void toastMessage(Context context, String text){
+		Toast.makeText(context, text, Toast.LENGTH_SHORT);
+	}*/
 }

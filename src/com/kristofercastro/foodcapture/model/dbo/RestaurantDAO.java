@@ -51,14 +51,17 @@ public class RestaurantDAO extends DataAccessObject<Restaurant>{
 		String selectQuery = "SELECT * FROM " + RestaurantTable.TABLE_NAME +
 				" WHERE " + RestaurantTable.COL_ID + "='" + id + "'";
 		Cursor cursor = db.rawQuery(selectQuery, null);
-		
 		Restaurant restaurant = null;
-		if(cursor.moveToFirst()){
-			restaurant = new Restaurant();
-			restaurant.setId(cursor.getLong(0));
-			restaurant.setName(cursor.getString(1));
-			restaurant.setLatitude(cursor.getFloat(2));
-			restaurant.setLongitude(cursor.getFloat(3));
+		try{
+			if(cursor.moveToFirst()){
+				restaurant = new Restaurant();
+				restaurant.setId(cursor.getLong(0));
+				restaurant.setName(cursor.getString(1));
+				restaurant.setLatitude(cursor.getFloat(2));
+				restaurant.setLongitude(cursor.getFloat(3));
+			}
+		}finally{
+			cursor.close();
 		}
 		return restaurant;
 	}
@@ -69,18 +72,20 @@ public class RestaurantDAO extends DataAccessObject<Restaurant>{
 		
 		String selectQuery = "SELECT * FROM " + RestaurantTable.TABLE_NAME;
 		Cursor cursor = db.rawQuery(selectQuery, null);
-				
-		if(cursor.moveToFirst()){
-			do{
-				Restaurant restaurant = new Restaurant();
-				restaurant.setId(cursor.getLong(0));
-				restaurant.setName(cursor.getString(1));
-				restaurant.setLatitude(cursor.getFloat(2));
-				restaurant.setLongitude(cursor.getFloat(3));
-				restaurantList.add(restaurant);
-			}while(cursor.moveToNext());
+		try{
+			if(cursor.moveToFirst()){
+				do{
+					Restaurant restaurant = new Restaurant();
+					restaurant.setId(cursor.getLong(0));
+					restaurant.setName(cursor.getString(1));
+					restaurant.setLatitude(cursor.getFloat(2));
+					restaurant.setLongitude(cursor.getFloat(3));
+					restaurantList.add(restaurant);
+				}while(cursor.moveToNext());
+			}
+		}finally{
+			cursor.close();
 		}
-		
 		return restaurantList;
 	}
 }

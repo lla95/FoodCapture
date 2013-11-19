@@ -1,4 +1,4 @@
-<ScrollView 
+<LinearLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"    
     android:layout_width="match_parent"
@@ -7,17 +7,28 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MomentInformation">
+    tools:context=".MomentInformation"
+    android:orientation="vertical">
       
        <RelativeLayout
 		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content">
+		    android:layout_height="match_parent">
+		    
+		    <TextView
+			    android:id="@+id/reviewTextView"
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:text="@string/label_review"
+			    style="@style/EditMomentFont"
+			    android:paddingTop="15dp"
+			    android:paddingBottom="15dp"/>
+		    
 		    <include 
 		        android:id="@+id/menu_item"
 		        layout="@layout/menu_item_row"
 			    android:layout_width="wrap_content"
 			   	android:layout_height="wrap_content"
-			   	android:layout_marginBottom="15dp"/>
+			   	android:layout_below="@id/reviewTextView"/>
 		     
 		    <TextView
 			    android:id="@+id/locationTextView"
@@ -25,22 +36,24 @@
 			    android:layout_height="wrap_content"
 			    android:text="@string/label_location"
 			    style="@style/EditMomentFont"
-			    android:layout_below="@id/menu_item"/>
+			    android:layout_below="@id/menu_item"
+			    android:paddingTop="15dp"
+			    android:paddingBottom="15dp"/>
 		    
 			<fragment
 		        android:id="@+id/map"        
 		        android:layout_width="match_parent"
-		        android:layout_height="500dp"
+		        android:layout_height="match_parent"
 		        android:layout_below="@id/locationTextView"
 		        android:name="com.google.android.gms.maps.MapFragment"/> 
 		        
-		     <TextView
+<!-- 		     <TextView
 			    android:id="@+id/shareTextView"
 			    android:layout_width="match_parent"
 			    android:layout_height="wrap_content"
 			    android:text="@string/label_share"
 			    style="@style/EditMomentFont"
-			    android:layout_below="@id/map"/>
+			    android:layout_below="@id/map"/> -->
 		     
      </RelativeLayout>
-     </ScrollView>
+</LinearLayout>

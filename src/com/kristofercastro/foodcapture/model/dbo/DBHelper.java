@@ -79,4 +79,6 @@ public final class DBHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + MomentTable.TABLE_NAME);
 		onCreate(db);
 	}
+	
+	
 }

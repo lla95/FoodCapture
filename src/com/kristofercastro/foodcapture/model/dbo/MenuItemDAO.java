@@ -54,12 +54,17 @@ public class MenuItemDAO extends DataAccessObject<MenuItem> {
 				+ " WHERE " + MenuItemTable.COL_ID +"='" + id + "'";
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		MenuItem menuItem = null;
-		if (cursor.moveToFirst()){
-			menuItem = new MenuItem();
-			menuItem.setId(cursor.getLong(0));
-			menuItem.setName(cursor.getString(1));
-			menuItem.setImagePath(cursor.getString(2));
+		try{
+			if (cursor.moveToFirst()){
+				menuItem = new MenuItem();
+				menuItem.setId(cursor.getLong(0));
+				menuItem.setName(cursor.getString(1));
+				menuItem.setImagePath(cursor.getString(2));
+			}
+		}finally{
+			cursor.close();
 		}
+		
 		return menuItem;
 	}
 
@@ -69,15 +74,18 @@ public class MenuItemDAO extends DataAccessObject<MenuItem> {
 		
 		String selectQuery = "SELECT * FROM " + MenuItemTable.TABLE_NAME;
 		Cursor cursor = db.rawQuery(selectQuery, null);
-		
-		if (cursor.moveToFirst()){
-			do{
-				MenuItem menuItem = new MenuItem();
-				menuItem.setId(cursor.getLong(0));
-				menuItem.setName(cursor.getString(1));
-				menuItem.setImagePath(cursor.getString(2));
-				menuItemList.add(menuItem);
-			}while(cursor.moveToNext());
+		try{
+			if (cursor.moveToFirst()){
+				do{
+					MenuItem menuItem = new MenuItem();
+					menuItem.setId(cursor.getLong(0));
+					menuItem.setName(cursor.getString(1));
+					menuItem.setImagePath(cursor.getString(2));
+					menuItemList.add(menuItem);
+				}while(cursor.moveToNext());
+			}
+		}finally{
+			cursor.close();
 		}
 		
 		return menuItemList;

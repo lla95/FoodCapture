@@ -9,6 +9,7 @@
     <string name="action_delete_moment">delete moment</string>
     <string name="action_moment_title">Capture the Moment</string>
     <string name="action_save_moment">save moment</string>
+    <string name="action_edit_moment">edit moment</string>
 
     <!-- Used in Edit/Add/View moment -->
     <string name="label_capture_moment">Capture the Moment</string>
@@ -18,6 +19,7 @@
     <string name="label_description">Comment</string>
     <string name="label_restaurant">Place</string>
     <string name="label_location">Where</string>
+    <string name="label_review">My Review</string>
     <string name="label_share">Share</string>
     <string name="label_picture_restaurant"> /@ Restaurant</string>
     <string name="text_take_picture_button">Take a Picture</string>
