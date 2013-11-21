@@ -5,8 +5,6 @@
     android:layout_margin="0dp"
     android:padding="15dp">
     
-    
-    
    <TextView 
             android:id="@+id/foodTextView"
             android:layout_width="wrap_content"

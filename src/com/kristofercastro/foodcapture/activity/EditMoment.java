@@ -115,6 +115,11 @@ public class EditMoment extends Activity{
 		setUpMapIfNeeded();
 	}
 	
+	/**
+	 * Update edit text boxes, rating widgets in the condition that configuration changes
+	 * For example, orientation change
+	 * @param savedInstanceState
+	 */
 	private void updateUserInputsBasedOnEdit(Bundle savedInstanceState) {
 		foodEditText.setText(savedInstanceState.getString("food name"));
 		descriptionEditText.setText(savedInstanceState.getString("desription"));
@@ -142,6 +147,10 @@ public class EditMoment extends Activity{
 		super.onSaveInstanceState(outState);
 	}
 	
+	/**
+	 * Set the mode of saving a moment: are we saving because we are creating a new moment or
+	 * are we saving from an already existing moment?
+	 */
 	private void figureOutMode() {
 		// Figure out which mode we in: creating new moment or editting new one
 		Bundle extras = this.getIntent().getExtras();
@@ -149,6 +158,9 @@ public class EditMoment extends Activity{
 		currentPlace = new Place();		
 	}
 
+	/**
+	 * Attach references to the actual layout controls
+	 */
 	private void bindUIControls(){
 
 		foodTextView = (TextView) this.findViewById(R.id.foodTextView);
@@ -177,6 +189,10 @@ public class EditMoment extends Activity{
 		priceWidget = new PriceWidget(this);
 	}
 
+	/**
+	 * Grab the already existing moment in the database and fill the edit texts and ratings
+	 * controls
+	 */
 	private void setupEditTextValues() {
 		if (MODE_CREATE_OR_EDIT == Message.EDIT_EXISTING_MOMENT){
 			Long momentID = getIntent().getExtras().getLong("momentID");		

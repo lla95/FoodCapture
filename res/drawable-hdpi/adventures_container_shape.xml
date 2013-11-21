@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" 
+     android:id="@+id/adventures_container_shape">
+	<solid android:color="#ffffff"/>
+	<stroke 
+	    android:width="8dp"
+	    android:color="#6c333b"/>
+ 	<corners
+	    android:radius="250dp"/>
+	<size 
+	    android:width="250dp"
+	    android:height="250dp"/>
+	<padding 
+	    android:top="10dp"
+	    android:left="10dp"
+	    android:right="10dp"
+	    android:bottom="10dp"/>
+</shape>
+

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import com.kristofercastro.foodcapture.R;
 import com.kristofercastro.foodcapture.activity.Utility.CustomFonts;
+import com.kristofercastro.foodcapture.foodadventure.EditAdventure;
+import com.kristofercastro.foodcapture.foodadventure.FoodAdventuresList;
 import com.kristofercastro.foodcapture.model.Moment;
 import com.kristofercastro.foodcapture.model.dbo.DBHelper;
 import com.kristofercastro.foodcapture.model.dbo.MomentDAO;
@@ -228,10 +230,22 @@ public class MainActivity extends Activity {
 				deleteMomentHandler();
 				break;
 			}
+			case R.id.action_add_adventure : {
+				addAdventureHandler();
+				break;
+			}
 		}
 		return true;	
 	}
 	
+	private void addAdventureHandler() {
+		Intent i = new Intent(this, EditAdventure.class);
+		//i.putExtra("mode", "hi");
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+		this.startActivity(i);
+		
+	}
+
 	/**
 	 * Event handler for when the user click the add moment
 	 * in the action bar
