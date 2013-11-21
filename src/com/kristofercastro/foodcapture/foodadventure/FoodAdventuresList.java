@@ -59,10 +59,7 @@ public class FoodAdventuresList extends FragmentActivity {
 		setupLocManager();
 		setupGoogleMaps();
 		
-		if (savedInstanceState == null){
-			grabPlaces();
-		}
-		else{
+		if (savedInstanceState != null){
 			localRestaurants = savedInstanceState.getParcelableArrayList("localRestaurants"); 
 		}
 	}

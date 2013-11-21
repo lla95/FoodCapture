@@ -22,6 +22,12 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 
+/**
+ * A horizontal scroll view of places.  This fragment allows so that when you select one of the places
+ * it focuses the place in google maps
+ * @author Kristofer Castro
+ *
+ */
 public class FoodAdventuresPlacesFragment extends Fragment {
 	
 	ArrayList<Place> places;
@@ -32,7 +38,7 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 	        Bundle savedInstanceState) {
 		 View v = inflater.inflate(R.layout.activity_food_adventures_places_fragment, container, false);
 		 // grab the local restaurants from the main activity
-		 places = ((FoodAdventuresList) this.getActivity()).localRestaurants;
+		 places = ((FoodAdventureActivityInterface) this.getActivity()).getPlaces();
         // Inflate the layout for this fragment
         return v;
     }
@@ -73,13 +79,13 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 						String letter = textView.getText().toString();
 						
 						// find the marker we are looking for that corresponds to the letter
-						HashMap<Integer, Marker> markerHash = ((FoodAdventuresList) FoodAdventuresPlacesFragment
-								.this.getActivity()).markers;
+						HashMap<Integer, Marker> markerHash = ((FoodAdventureActivityInterface) FoodAdventuresPlacesFragment
+								.this.getActivity()).getMarkers();
 						Marker marker = markerHash.get((int)(letter.charAt(0) - 65));		
 						
 						// make maps focus on that restaurant
-						GoogleMap maps = ((FoodAdventuresList) FoodAdventuresPlacesFragment
-								.this.getActivity()).googleMaps;
+						GoogleMap maps = ((FoodAdventureActivityInterface) FoodAdventuresPlacesFragment
+								.this.getActivity()).getGoogleMaps();;
 						try{
 							maps.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));								
 							marker.showInfoWindow();	
@@ -110,5 +116,4 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 			placeRow.setBackgroundColor(Color.parseColor("#e9e2d8"));
 		}
 	}
-	
 }
