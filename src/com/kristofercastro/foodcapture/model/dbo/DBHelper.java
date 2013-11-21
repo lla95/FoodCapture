@@ -58,6 +58,18 @@ public final class DBHelper extends SQLiteOpenHelper {
 						COL_PRICE_RATING, COL_QUALITY_RATING, COL_RESTAURANT_ID, COL_MENU_ITEM_ID, COL_DESCRIPTION, COL_DATE);
 	}
 	
+	public static abstract class FoodAdventureTable implements BaseColumns{
+		public static final String TABLE_NAME = "food_adventure";
+		public static final String COL_ID = BaseColumns._ID;
+		public static final String COL_NAME = "name";
+		public static final String COL_DATE = "date_started";
+		
+		private static final String TABLE_CREATE = 
+				String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
+						"%s TEXT, %s TEXT)", FoodAdventureTable.TABLE_NAME, FoodAdventureTable.COL_ID, 
+						FoodAdventureTable.COL_NAME, FoodAdventureTable.COL_DATE); 
+	}
+	
 	public DBHelper(Context context){
 		// grab database and create it for us
 		super(context, DBHelper.DATABASE_NAME , null, DATABASE_VERSION);
@@ -70,6 +82,7 @@ public final class DBHelper extends SQLiteOpenHelper {
 		db.execSQL(MenuItemTable.TABLE_CREATE);
 		db.execSQL(RestaurantTable.TABLE_CREATE);	
 		db.execSQL(MomentTable.TABLE_CREATE);
+		db.execSQL(FoodAdventureTable.TABLE_CREATE);
 	}
 	
 	@Override
@@ -77,6 +90,7 @@ public final class DBHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + MenuItemTable.TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + RestaurantTable.TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + MomentTable.TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + FoodAdventureTable.TABLE_NAME);
 		onCreate(db);
 	}
 	

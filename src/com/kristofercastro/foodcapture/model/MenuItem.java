@@ -69,7 +69,6 @@ public class MenuItem implements Parcelable {
 	}
 	
 	public static Parcelable.Creator<MenuItem> CREATOR = new Parcelable.Creator<MenuItem>(){
-
 		@Override
 		public MenuItem createFromParcel(Parcel source) {
 			return new MenuItem(source);
@@ -79,6 +78,5 @@ public class MenuItem implements Parcelable {
 		public MenuItem[] newArray(int size) {
 			return new MenuItem[size];
 		}
-		
 	};
 }
