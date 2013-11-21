@@ -39,58 +39,60 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 	
 	@Override
 	public void onStart() {
+		Log.i("MyCameraApp", "OnStarT!");
 		super.onStart();
 		displayPlaces();
 	}
 
-
 	private void displayPlaces(){
 		LinearLayout parent = (LinearLayout) getActivity().findViewById(R.id.adventures_list_layout);
 				
-		for (int i = 0 ; i < places.size(); i++){
-			Place place = places.get(i);
-			View placesRow = getActivity().getLayoutInflater().inflate(R.layout.adventure_item_row, parent, false);
-			TextView foodTextView = (TextView) placesRow.findViewById(R.id.foodTextView);
-			TextView foodIdentifier = (TextView) placesRow.findViewById(R.id.placesIdentifierTextView);
-			
-			// change fonts
-			Utility.changeFontTitillium(foodTextView, getActivity());
-			Utility.changeFontTitillium(foodIdentifier, getActivity());
-			
-			// set values
-			foodTextView.setText(place.getName());
-			foodIdentifier.setText(Utility.convertIntToLetter(i));
-			
-			LinearLayout placesIdentifierCircle = (LinearLayout) placesRow.findViewById(R.id.placesIdentifierCircle);
-			placesIdentifierCircle.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View v) {
-					// lets get the text view inside the layout
-					TextView textView = (TextView) v.findViewById(R.id.placesIdentifierTextView);
-					
-					// the letter is the key for the hash map of markers so we extract that
-					String letter = textView.getText().toString();
-					
-					// find the marker we are looking for that corresponds to the letter
-					HashMap<Integer, Marker> markerHash = ((FoodAdventuresList) FoodAdventuresPlacesFragment
-							.this.getActivity()).markers;
-					Marker marker = markerHash.get((int)(letter.charAt(0) - 65));		
-					
-					// make maps focus on that restaurant
-					GoogleMap maps = ((FoodAdventuresList) FoodAdventuresPlacesFragment
-							.this.getActivity()).googleMaps;
-					maps.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));								
-					marker.showInfoWindow();								
-				}
+		try{
+			for (int i = 0 ; i < places.size(); i++){
+				Place place = places.get(i);
+				View placesRow = getActivity().getLayoutInflater().inflate(R.layout.adventure_item_row, parent, false);
+				TextView foodTextView = (TextView) placesRow.findViewById(R.id.foodTextView);
+				TextView foodIdentifier = (TextView) placesRow.findViewById(R.id.placesIdentifierTextView);
 				
-			});
-			
-			// add to layout
-			parent.addView(placesRow);
-			
-			
-		}		
+				// change fonts
+				Utility.changeFontTitillium(foodTextView, getActivity());
+				Utility.changeFontTitillium(foodIdentifier, getActivity());
+				
+				// set values
+				foodTextView.setText(place.getName());
+				foodIdentifier.setText(Utility.convertIntToLetter(i));
+				
+				LinearLayout placesIdentifierCircle = (LinearLayout) placesRow.findViewById(R.id.placesIdentifierCircle);
+				placesIdentifierCircle.setOnClickListener(new OnClickListener(){
+	
+					@Override
+					public void onClick(View v) {
+						// lets get the text view inside the layout
+						TextView textView = (TextView) v.findViewById(R.id.placesIdentifierTextView);
+						
+						// the letter is the key for the hash map of markers so we extract that
+						String letter = textView.getText().toString();
+						
+						// find the marker we are looking for that corresponds to the letter
+						HashMap<Integer, Marker> markerHash = ((FoodAdventuresList) FoodAdventuresPlacesFragment
+								.this.getActivity()).markers;
+						Marker marker = markerHash.get((int)(letter.charAt(0) - 65));		
+						
+						// make maps focus on that restaurant
+						GoogleMap maps = ((FoodAdventuresList) FoodAdventuresPlacesFragment
+								.this.getActivity()).googleMaps;
+						maps.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));								
+						marker.showInfoWindow();								
+					}
+					
+				});			
+				// add to layout
+				parent.addView(placesRow);
+				}
+			}catch(NullPointerException e){
+				String err = (e.getMessage() == null)? "Places is null" : e.getMessage();
+				Log.e("MyCameraApp", err);
+			}
 		
 		// color even number of child one color
 		for(int i = 0; i < parent.getChildCount(); i+=2){

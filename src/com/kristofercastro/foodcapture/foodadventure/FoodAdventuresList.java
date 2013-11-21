@@ -43,16 +43,37 @@ public class FoodAdventuresList extends FragmentActivity {
 	private Location mLocation;
 	ArrayList<Place> localRestaurants;
 	HashMap<Integer, Marker> markers;
-
+	
+	Bundle currentSavedInstanceState;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		this.currentSavedInstanceState = savedInstanceState;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_food_adventures_list);
 		markers = new HashMap<Integer,Marker>();
 		placesService = new GooglePlacesWebService(this);
+				
 		setupLocManager();
 		setupGoogleMaps();
-		grabPlaces();
+		
+		if (savedInstanceState == null){
+			grabPlaces();
+		}
+		else{
+			localRestaurants = savedInstanceState.getParcelableArrayList("localRestaurants"); 
+		}
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putParcelableArrayList("localRestaurants", localRestaurants);
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
 	}
 
 	private void grabPlaces() {
@@ -85,12 +106,14 @@ public class FoodAdventuresList extends FragmentActivity {
 				dialog.dismiss();
 			drawAllMarkers();
 			
-			android.app.FragmentManager fragmentManager = getFragmentManager();
-			android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-			
-			Fragment placesFragment = new FoodAdventuresPlacesFragment();
-			fragmentTransaction.add(R.id.restaurant_lists, placesFragment);
-			fragmentTransaction.commit();
+			if (currentSavedInstanceState == null){
+				android.app.FragmentManager fragmentManager = getFragmentManager();
+				android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+				
+				Fragment placesFragment = new FoodAdventuresPlacesFragment();
+				fragmentTransaction.add(R.id.restaurant_lists, placesFragment);
+				fragmentTransaction.commit();
+			}
 		}		
 	}
 	
@@ -153,6 +176,8 @@ public class FoodAdventuresList extends FragmentActivity {
 		bestProvider = mLocManager.getBestProvider(criteria, true);	
 		mLocation = mLocManager.getLastKnownLocation(bestProvider);
 	}
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

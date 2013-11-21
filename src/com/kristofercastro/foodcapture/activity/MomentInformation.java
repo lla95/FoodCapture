@@ -161,6 +161,7 @@ public class MomentInformation extends Activity {
 		switch (item.getItemId()){
 			case R.id.action_edit_moment : {
 				editMomentHandler();
+				finish();
 			}
 		}
 		return true;

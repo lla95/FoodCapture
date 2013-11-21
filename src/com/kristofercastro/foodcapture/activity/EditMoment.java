@@ -320,6 +320,7 @@ public class EditMoment extends Activity{
 				Intent i = new Intent(EditMoment.this, MainActivity.class);
 				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
 				EditMoment.this.startActivity(i);
+				finish();
 			}
 			else
 				Toast.makeText(EditMoment.this, "Couldn't save the moment.", Toast.LENGTH_SHORT).show();

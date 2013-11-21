@@ -66,7 +66,6 @@ public class GooglePlacesWebService {
 		for (int i = startOfChosenPlaces; i < placesPage1.size(); i++){
 			resultPlaces.add(placesPage1.get(i));
 		}
-		Log.i("MyCameraApp", "size: " + resultPlaces.size());
 
 		return resultPlaces;
 	}
@@ -83,7 +82,6 @@ public class GooglePlacesWebService {
 		Random rand = new Random();
 		for(int i = 0; i < maxResults; i++){
 			int ranNumber = rand.nextInt(arraySize-tailOffset);
-			Log.i("MyCameraApp", "rand number: " + ranNumber);
 
 			// swap with tail
 			Place temp = placesArray.get(ranNumber);
@@ -98,7 +96,6 @@ public class GooglePlacesWebService {
 	public ArrayList<Place> findPlacesHelper(double latitude, double longitude){
 		ArrayList<Place> places = new ArrayList<Place>();
 		String httpRequestUrl = generateUrl(latitude,longitude, "restaurant|food");
-		//Log.i("MyCameraApp", "request: " + httpRequestUrl);
 
 		try{
 			String jsonString = getPlaceJSON(httpRequestUrl);

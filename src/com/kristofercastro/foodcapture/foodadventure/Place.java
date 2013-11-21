@@ -8,13 +8,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.R.string;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Acts as a container for the data returned by Google Places API
  * @author Kristofer Castro
  * @date 11/7/2013
  */
-public class Place {
+public class Place implements Parcelable {
 
 	private String id;
 	private String icon;
@@ -23,6 +25,18 @@ public class Place {
 	private double longitude;
 	private String vicinity;
 	private String phoneNumber;
+	
+	public Place(){};
+	
+	public Place(Parcel in){
+		id = in.readString();
+		icon = in.readString();
+		name = in.readString();
+		latitude = in.readDouble();
+		longitude = in.readDouble();
+		vicinity = in.readString();
+		phoneNumber = in.readString();
+	}
 		
 	public String getId() {
 		return id;
@@ -107,4 +121,36 @@ public class Place {
 				+ ", longitude:" + this.longitude;
 		
 	}
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(id);
+		dest.writeString(icon);
+		dest.writeString(name);
+		dest.writeDouble(latitude);
+		dest.writeDouble(longitude);
+		dest.writeString(vicinity);
+		dest.writeString(phoneNumber);
+		
+	}
+	
+	public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>(){
+
+		@Override
+		public Place createFromParcel(Parcel source) {
+			return new Place(source);
+		}
+
+		@Override
+		public Place[] newArray(int size) {
+			// TODO Auto-generated method stub
+			return new Place[size];
+		}
+		
+	};
 }
