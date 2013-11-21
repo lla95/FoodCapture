@@ -16,19 +16,18 @@ public class Moment implements Parcelable {
 	int qualityRating;
 	String description;
 	String date;
-	
-	public Moment(int id, int priceRating, int qualityRating, Restaurant restaurant, MenuItem menuItem, String description, String date){
-		this.id = id;
-		this.priceRating = priceRating;
-		this.qualityRating = qualityRating;
-		this.restaurant = restaurant;
-		this.menuItem = menuItem;
-		this.description = description;
-		this.date = date;
-	}
+	FoodAdventure foodAdventure;
 
 	public String getDate() {
 		return date;
+	}
+
+	public FoodAdventure getFoodAdventure() {
+		return foodAdventure;
+	}
+
+	public void setFoodAdventure(FoodAdventure foodAdventure) {
+		this.foodAdventure = foodAdventure;
 	}
 
 	public void setDate(String date) {

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.kristofercastro.foodcapture.model.FoodAdventure;
 import com.kristofercastro.foodcapture.model.MenuItem;
 import com.kristofercastro.foodcapture.model.Moment;
 import com.kristofercastro.foodcapture.model.Restaurant;
@@ -58,6 +59,10 @@ public class MomentDAO extends DataAccessObject<Moment>{
 		// add the id's of the foreign keys from Restaurant and Menu Item DB Tables
 		values.put(MomentTable.COL_RESTAURANT_ID, restaurantID);
 		values.put(MomentTable.COL_MENU_ITEM_ID, menuItemID);
+		
+		if (moment.getFoodAdventure() != null){
+			values.put(MomentTable.COL_FOOD_ADVENTURE_ID, moment.getFoodAdventure().getId());
+		}
 		
 		return db.insert(MomentTable.TABLE_NAME, null, values);
 	}
@@ -126,6 +131,10 @@ public class MomentDAO extends DataAccessObject<Moment>{
 				moment.setMenuItem(menuItem);
 				moment.setDescription(cursor.getString(5));
 				moment.setDate(cursor.getString(6));
+				
+				FoodAdventureDAO foodAdventureDAO = new FoodAdventureDAO(dbHelper);
+				FoodAdventure foodAdventure = foodAdventureDAO.retrieve(cursor.getLong(7));
+				moment.setFoodAdventure(foodAdventure);
 			}
 		}finally{
 			cursor.close();
@@ -158,6 +167,11 @@ public class MomentDAO extends DataAccessObject<Moment>{
 				
 				moment.setDescription(cursor.getString(5));
 				moment.setDate(cursor.getString(6));
+				
+				FoodAdventureDAO foodAdventureDAO = new FoodAdventureDAO(dbHelper);
+				FoodAdventure foodAdventure = foodAdventureDAO.retrieve(cursor.getLong(7));
+				moment.setFoodAdventure(foodAdventure);
+				
 				momentsList.add(moment);
 			}while(cursor.moveToNext());
 		}

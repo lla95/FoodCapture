@@ -46,16 +46,19 @@ public final class DBHelper extends SQLiteOpenHelper {
 		public static final String COL_MENU_ITEM_ID = "menuItemId";
 		public static final String COL_DESCRIPTION = "description";
 		public static final String COL_DATE = "date";
+		public static final String COL_FOOD_ADVENTURE_ID = "foodAdventureId";
 		private static final String TABLE_CREATE = 
 				String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
-						"%s INTEGER, %s INTEGER,%s INTEGER, %s INTEGER, %s TEXT, %s TEXT, " +
+						"%s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, %s TEXT, %s TEXT, %s INTEGER, " +
 						
 						String.format("FOREIGN KEY(%s) REFERENCES %s(%s), ", COL_RESTAURANT_ID, 
 								RestaurantTable.TABLE_NAME, RestaurantTable.COL_ID ) +
-						String.format("FOREIGN KEY(%s) REFERENCES %s(%s)", COL_MENU_ITEM_ID,
+						String.format("FOREIGN KEY(%s) REFERENCES %s(%s), ", COL_MENU_ITEM_ID,
 								MenuItemTable.TABLE_NAME, MenuItemTable.COL_ID) +
-						")", TABLE_NAME, COL_ID, 
-						COL_PRICE_RATING, COL_QUALITY_RATING, COL_RESTAURANT_ID, COL_MENU_ITEM_ID, COL_DESCRIPTION, COL_DATE);
+						String.format("FOREIGN KEY(%s) REFERENCES %s(%s)", COL_FOOD_ADVENTURE_ID,
+								FoodAdventureTable.TABLE_NAME, FoodAdventureTable.COL_ID) +
+						")", TABLE_NAME, COL_ID, 					
+						COL_PRICE_RATING, COL_QUALITY_RATING, COL_RESTAURANT_ID, COL_MENU_ITEM_ID, COL_DESCRIPTION, COL_DATE, COL_FOOD_ADVENTURE_ID);
 	}
 	
 	public static abstract class FoodAdventureTable implements BaseColumns{

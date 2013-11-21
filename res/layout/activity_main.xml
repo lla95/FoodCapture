@@ -8,7 +8,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity"
     android:orientation="vertical">
-
+	
+    <TextView android:id="@+id/capturedMomentsHeaderTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Captured Moments"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/feature_header"/>
     <ScrollView 
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
@@ -24,10 +32,17 @@
 		    android:id="@+id/momentsListLayout" 
 		    android:orientation="vertical">
 		  
-    	</LinearLayout>
-    	
-           
+    	</LinearLayout>     
     </ScrollView>
+    
+    <TextView android:id="@+id/foodAdventuresHeaderTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Food Adventures"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/feature_header"/>
     
    <!--  <include layout="@layout/menu_item_row"/> -->
     

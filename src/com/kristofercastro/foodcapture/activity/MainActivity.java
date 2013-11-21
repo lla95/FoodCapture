@@ -37,6 +37,15 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		changeFont();
+	}
+
+	private void changeFont() {
+		TextView capturedMomentsHeader = (TextView) this.findViewById(R.id.capturedMomentsHeaderTextView);
+		TextView foodAdventuresHeader = (TextView) this.findViewById(R.id.foodAdventuresHeaderTextView);
+		
+		Utility.changeFontTitillium(capturedMomentsHeader, this);
+		Utility.changeFontTitillium(foodAdventuresHeader, this);
 	}
 
 	@Override
@@ -96,7 +105,9 @@ public class MainActivity extends Activity {
 	    		Utility.changeFontTitillium(priceTextView, MainActivity.this);
 	    		Utility.changeFontTitillium(restaurantTextView, MainActivity.this);
 	    			
-				foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
+	    		String imagePath = moment.getMenuItem().getImagePath();
+	    		if (imagePath != null && imagePath.length() > 0)
+	    			foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
 	    		
 	        	restaurantTextView.setText("@ " + moment.getRestaurant().getName());
 	        	foodTextView.setText(moment.getMenuItem().getName());

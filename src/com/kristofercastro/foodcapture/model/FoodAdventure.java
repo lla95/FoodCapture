@@ -2,14 +2,23 @@ package com.kristofercastro.foodcapture.model;
 
 import java.util.ArrayList;
 
-public class FoodAdventure {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class FoodAdventure implements Parcelable{
 	Long id;
 	String name;
 	String date;
-	ArrayList<Restaurant> restaurants;
-	ArrayList<Moment> moments;
+	Moment[] moments;
 	
 	public FoodAdventure(){}
+
+	public FoodAdventure(Parcel source) {
+		this.id = source.readLong();
+		this.name = source.readString();
+		this.date = source.readString();
+		this.moments = (Moment[]) source.readParcelableArray(Moment.class.getClassLoader());
+	}
 
 	public Long getId() {
 		return id;
@@ -35,19 +44,36 @@ public class FoodAdventure {
 		this.date = date;
 	}
 
-	public ArrayList<Restaurant> getRestaurants() {
-		return restaurants;
-	}
-
-	public void setRestaurants(ArrayList<Restaurant> restaurants) {
-		this.restaurants = restaurants;
-	}
-
-	public ArrayList<Moment> getMoments() {
+	public Moment[] getMoments() {
 		return moments;
 	}
 	
-	public void setMoments(ArrayList<Moment> moments) {
+	public void setMoments(Moment[] moments) {
 		this.moments = moments;
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeLong(this.id);
+		dest.writeString(this.getName());
+		dest.writeString(this.getDate());
+		dest.writeParcelableArray(this.moments, 0);
 	}	
+	
+	public static Parcelable.Creator<FoodAdventure> CREATOR = new Parcelable.Creator<FoodAdventure>(){
+		@Override
+		public FoodAdventure createFromParcel(Parcel source) {
+			return new FoodAdventure(source);
+		}
+
+		@Override
+		public FoodAdventure[] newArray(int size) {
+			return new FoodAdventure[size];
+		}
+	};
 }

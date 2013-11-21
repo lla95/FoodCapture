@@ -4,8 +4,11 @@ import java.util.ArrayList;
 
 import com.kristofercastro.foodcapture.model.FoodAdventure;
 import com.kristofercastro.foodcapture.model.MenuItem;
+import com.kristofercastro.foodcapture.model.Moment;
+import com.kristofercastro.foodcapture.model.Restaurant;
 import com.kristofercastro.foodcapture.model.dbo.DBHelper.FoodAdventureTable;
 import com.kristofercastro.foodcapture.model.dbo.DBHelper.MenuItemTable;
+import com.kristofercastro.foodcapture.model.dbo.DBHelper.MomentTable;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -64,6 +67,14 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 	public ArrayList<FoodAdventure> retrieveAll() {
 		ArrayList<FoodAdventure> foodAdventureList = new ArrayList<FoodAdventure>();
 		
+		String selectColumns = FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_ID + "," 
+				+ FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_NAME + ","
+				+ FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_DATE;
+		String selectFrom = FoodAdventureTable.TABLE_NAME + " ";
+		String selectInner = "INNER JOIN " + MomentTable.TABLE_NAME + " ";
+		String selectOn = "ON " + FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_ID
+			+ "=" 
+			+ MomentTable.TABLE_NAME + ".";
 		String selectQuery = "SELECT * FROM " + FoodAdventureTable.TABLE_NAME;
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		try{
@@ -83,7 +94,21 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 		return foodAdventureList;
 	}
 	
-	public void 
+	/**
+	 * Returns all moments that the adventures generated that need to be reviewed
+	 * @param foodAdventure
+	 * @return
+	 */
+	public ArrayList<Moment> retrieveMoments(FoodAdventure foodAdventure){
+		ArrayList<Moment> result = new ArrayList<Moment>();
+		
+		String selectQuery = 
+				"SELECT * FROM " + FoodAdventureTable.TABLE_NAME;
+
+		
+		
+		return result;
+	}
 
 	
 }

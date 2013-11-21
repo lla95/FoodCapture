@@ -92,7 +92,9 @@ public class MomentInformation extends Activity {
 			descriptionTextView.setText(moment.getDescription());
         	restaurantTextView.setText("@ " + moment.getRestaurant().getName());
 			dateTimeTextView.setText(moment.getDate());
-			pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
+			String imagePath = moment.getMenuItem().getImagePath();
+    		if (imagePath != null && imagePath.length() > 0)
+    			pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
 			displayRatings(moment);
 			
 			changeFont();    		
