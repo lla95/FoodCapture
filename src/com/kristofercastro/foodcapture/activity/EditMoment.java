@@ -4,17 +4,13 @@ import java.io.File;
 import java.net.URL;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kristofercastro.foodcapture.R;
-import com.kristofercastro.foodcapture.R.layout;
-import com.kristofercastro.foodcapture.R.menu;
 import com.kristofercastro.foodcapture.activity.Utility.CustomFonts;
 import com.kristofercastro.foodcapture.foodadventure.Place;
 import com.kristofercastro.foodcapture.model.*;
@@ -25,7 +21,6 @@ import com.kristofercastro.foodcapture.model.dbo.MomentDAO;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,9 +29,7 @@ import android.provider.MediaStore;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -98,13 +91,65 @@ public class EditMoment extends Activity{
 	int MODE_CREATE_OR_EDIT;
 	Place currentPlace;
 	Moment moment;
+	Bundle currentSavedInstanceState;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		this.currentSavedInstanceState = savedInstanceState;
 		setContentView(R.layout.activity_edit_moment);
+		bindUIControls();
+		figureOutMode();	
 		
-		Toast.makeText(this, "Created", Toast.LENGTH_SHORT).show();
+		if ( savedInstanceState == null){
+			setupEditTextValues();
+		}else{
+			moment = (Moment) savedInstanceState.getParcelable("moment");
+			if ( moment != null)
+				updateUserInputs();		  
+			updateUserInputsBasedOnEdit(savedInstanceState);
+			
+		}
+		
+		setupLocManager();
+		setUpMapIfNeeded();
+	}
+	
+	private void updateUserInputsBasedOnEdit(Bundle savedInstanceState) {
+		foodEditText.setText(savedInstanceState.getString("food name"));
+		descriptionEditText.setText(savedInstanceState.getString("desription"));
+    	restaurantEditText.setText(savedInstanceState.getString("restaurant name"));
+		imagePath = savedInstanceState.getString("image path");
+		if (imagePath != null)
+			pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(imagePath, Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
+		qualityWidget.setQualityRating(savedInstanceState.getInt("quality rating"));
+		priceWidget.setPriceRating(savedInstanceState.getInt("price rating"));
+		qualityWidget.updateDisplayRatings();
+		priceWidget.updateDisplayRatings();
+		changeFont();  
+		
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putParcelable("moment", moment);
+		outState.putString("food name", foodEditText.getText().toString());
+		outState.putString("description", descriptionEditText.getText().toString());
+		outState.putString("restaurant name", restaurantEditText.getText().toString());
+		outState.putString("image path", imagePath);
+		outState.putInt("quality rating", qualityWidget.getQualityRating());
+		outState.putInt("price rating", priceWidget.getPriceRating());
+		super.onSaveInstanceState(outState);
+	}
+	
+	private void figureOutMode() {
+		// Figure out which mode we in: creating new moment or editting new one
+		Bundle extras = this.getIntent().getExtras();
+		MODE_CREATE_OR_EDIT = (Integer) extras.get("mode");
+		currentPlace = new Place();		
+	}
+
+	private void bindUIControls(){
 
 		foodTextView = (TextView) this.findViewById(R.id.foodTextView);
 		priceTextView = (TextView) this.findViewById(R.id.priceTextView);
@@ -130,31 +175,11 @@ public class EditMoment extends Activity{
 		// Initialize widgets
 		qualityWidget = new QualityWidget(this);
 		priceWidget = new PriceWidget(this);
-		
-		// Figure out which mode we in: creating new moment or editting new one
-		Bundle extras = this.getIntent().getExtras();
-		MODE_CREATE_OR_EDIT = (Integer) extras.get("mode");
-		currentPlace = new Place();
-		
-		setupEditTextValues();
-		setupLocManager();
-		setUpMapIfNeeded();
 	}
-	
-	
-	
-	@Override
-	protected void onStart() {
-		Toast.makeText(this, "OnStart", Toast.LENGTH_SHORT).show();
-		super.onStart();
-	}
-
-
 
 	private void setupEditTextValues() {
 		if (MODE_CREATE_OR_EDIT == Message.EDIT_EXISTING_MOMENT){
-			Long momentID = getIntent().getExtras().getLong("momentID");
-			
+			Long momentID = getIntent().getExtras().getLong("momentID");		
 			new GetMomentTask().execute(momentID);
 		}
 	}
@@ -163,19 +188,7 @@ public class EditMoment extends Activity{
 
 		@Override
 		protected void onPostExecute(Void result) {
-			drawMarkerAlreadyExists();
-			
-			foodEditText.setText(moment.getMenuItem().getName());
-			descriptionEditText.setText(moment.getDescription());
-        	restaurantEditText.setText(moment.getRestaurant().getName());
-			pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
-			imagePath = moment.getMenuItem().getImagePath();
-			
-			qualityWidget.setQualityRating(moment.getQualityRating());
-			priceWidget.setPriceRating(moment.getPriceRating());
-			displayRatings(moment);	
-			
-			changeFont();    		
+			updateUserInputs();
 			super.onPostExecute(result);
 		}
 
@@ -186,19 +199,23 @@ public class EditMoment extends Activity{
 			moment = momentDAO.retrieve(momentID);
 			return null;
 		}	
+	}
+	
+	private void updateUserInputs(){
+		drawMarkerAlreadyExists();
 		
-		private void displayRatings(Moment moment) {
-			LinearLayout qRatingsLayout = (LinearLayout) findViewById(R.id.qualityRatingLayout);
-			for (int i = 0; i < moment.getQualityRating(); i++){
-				ImageView ratingIcon = (ImageView) qRatingsLayout.getChildAt(i);
-				ratingIcon.setImageResource(R.drawable.quality_icon_selected);
-			}
-			LinearLayout pRatingsLayout = (LinearLayout) findViewById(R.id.priceRatingLayout);
-			for (int i = 0; i < moment.getPriceRating(); i++){
-				ImageView ratingIcon = (ImageView) pRatingsLayout.getChildAt(i);
-				ratingIcon.setImageResource(R.drawable.price_icon_selected);
-			}
-		}
+		foodEditText.setText(moment.getMenuItem().getName());
+		descriptionEditText.setText(moment.getDescription());
+    	restaurantEditText.setText(moment.getRestaurant().getName());
+		pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
+		imagePath = moment.getMenuItem().getImagePath();
+		
+		qualityWidget.setQualityRating(moment.getQualityRating());
+		priceWidget.setPriceRating(moment.getPriceRating());
+		qualityWidget.updateDisplayRatings();
+		priceWidget.updateDisplayRatings();
+		changeFont(); 
+		
 	}
 	
 	@Override
@@ -328,24 +345,6 @@ public class EditMoment extends Activity{
 		}			
 	}
 
-/*	private class GetMomentTask extends AsyncTask<Long, Void, Void>{
-
-
-		@Override
-		protected void onPostExecute(Void result) {
-	
-			super.onPostExecute(result);
-		}
-
-		@Override
-		protected Void doInBackground(Long... params) {
-			Long momentID = params[0];
-			MomentDAO momentDAO = new MomentDAO(new DBHelper(MomentInformation.this));
-			moment = momentDAO.retrieve(momentID);
-			return null;
-		}	
-	}*/
-	
 	/**
 	 * 
 	 * @return the id of the moment

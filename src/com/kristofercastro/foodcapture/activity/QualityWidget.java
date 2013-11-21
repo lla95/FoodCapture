@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import com.kristofercastro.foodcapture.R;
 import com.kristofercastro.foodcapture.activity.Utility.CustomFonts;
+import com.kristofercastro.foodcapture.model.Moment;
 
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -93,6 +95,14 @@ public class QualityWidget {
 
 	public void setQualityRating(int qualityRating) {
 		this.qualityRating = qualityRating;
+	}
+	
+	public void updateDisplayRatings() {
+		LinearLayout qRatingsLayout = (LinearLayout) activity.findViewById(R.id.qualityRatingLayout);
+		for (int i = 0; i < getQualityRating(); i++){
+			ImageView ratingIcon = (ImageView) qRatingsLayout.getChildAt(i);
+			ratingIcon.setImageResource(R.drawable.quality_icon_selected);
+		}
 	}
 	
 	private void changeFont(){

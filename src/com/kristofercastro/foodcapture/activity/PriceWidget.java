@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class PriceWidget {
@@ -83,6 +84,14 @@ public class PriceWidget {
 				}
 			});
 		}				
+	}
+	
+	public void updateDisplayRatings() {
+		LinearLayout qRatingsLayout = (LinearLayout) activity.findViewById(R.id.priceRatingLayout);
+		for (int i = 0; i < getPriceRating(); i++){
+			ImageView ratingIcon = (ImageView) qRatingsLayout.getChildAt(i);
+			ratingIcon.setImageResource(R.drawable.price_icon_selected);
+		}
 	}
 	
 	private void changeFont(){
