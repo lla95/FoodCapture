@@ -21,11 +21,14 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -202,6 +205,47 @@ public class EditAdventure extends FragmentActivity implements FoodAdventureActi
 			}
 		}		
 	}
+	
+	private boolean validateInput() {
+		boolean allGood = true;
+		if ( this.foodAdventureNameEditText.getText().toString().length() == 0){
+			foodAdventureNameEditText.setError("Adventure name/description is required!");
+			allGood = false;
+		}
+		if ( localRestaurants == null ||  this.localRestaurants.size()  == 0 ){
+			
+			new AlertDialog.Builder(this)
+			.setTitle("Missing input")
+			.setMessage("\nYou need to click on 'Generate Places' to randomly find places for this feature to work.\n")
+			.setNeutralButton("ok", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+			}).show();
+			allGood = false;
+		}
+
+		return allGood;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		
+		switch(item.getItemId()){
+
+			case R.id.action_save_adventure : {
+				if (this.validateInput()){
+					
+				}
+				break;
+			}
+		}
+		return true;	
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
