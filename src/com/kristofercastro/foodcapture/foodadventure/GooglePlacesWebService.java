@@ -59,7 +59,6 @@ public class GooglePlacesWebService {
 		resultPlaces = new ArrayList<Place>();
 		placesPage1.addAll(placesPage2);
 		placesPage1.addAll(placesPage3);
-		Log.i("MyCameraApp", "size: " + placesPage1.size());
 
 		int startOfChosenPlaces = randomlyChoosePlaces(placesPage1, 5);
 	

@@ -39,7 +39,6 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 	
 	@Override
 	public void onStart() {
-		Log.i("MyCameraApp", "OnStarT!");
 		super.onStart();
 		displayPlaces();
 	}
@@ -81,10 +80,15 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 						// make maps focus on that restaurant
 						GoogleMap maps = ((FoodAdventuresList) FoodAdventuresPlacesFragment
 								.this.getActivity()).googleMaps;
-						maps.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));								
-						marker.showInfoWindow();								
-					}
-					
+						try{
+							maps.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));								
+							marker.showInfoWindow();	
+						}catch(NullPointerException e){
+							String err = (maps == null)? "Maps is null" : e.getMessage();
+							err += "\t" + marker == null? "Marker is null" : e.getMessage();
+							Log.e(getTag(), err);
+						}
+					}			
 				});			
 				// add to layout
 				parent.addView(placesRow);
