@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import com.kristofercastro.foodcapture.R;
 import com.kristofercastro.foodcapture.activity.Utility.CustomFonts;
 import com.kristofercastro.foodcapture.foodadventure.EditAdventure;
-import com.kristofercastro.foodcapture.foodadventure.FoodAdventuresList;
+import com.kristofercastro.foodcapture.foodadventure.FoodAdventureInformation;
 import com.kristofercastro.foodcapture.model.FoodAdventure;
 import com.kristofercastro.foodcapture.model.Moment;
 import com.kristofercastro.foodcapture.model.dbo.DBHelper;
@@ -170,8 +170,7 @@ public class MainActivity extends Activity {
 				} // end of if 
 			}
 			super.onPostExecute(result);
-		}
-		
+		}	
 	}
 
 	/**
@@ -303,7 +302,7 @@ public class MainActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						Intent i = new Intent(MainActivity.this, FoodAdventuresList.class);
+						Intent i = new Intent(MainActivity.this, FoodAdventureInformation.class);
 						i.putExtra("foodAdventureID", foodAdventure.getId());
 						i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
 						MainActivity.this.startActivity(i);		

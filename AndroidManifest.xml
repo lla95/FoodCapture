@@ -73,8 +73,10 @@
             android:value="@string/API_KEY" />
 
         <activity
-            android:name="com.kristofercastro.foodcapture.foodadventure.FoodAdventuresList"
-            android:label="@string/title_activity_food_adventures_list" >
+            android:name="com.kristofercastro.foodcapture.foodadventure.FoodAdventureInformation"
+            android:label="@string/title_activity_food_adventures_list" 
+            android:screenOrientation="portrait"
+			android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
         <activity
             android:name="com.kristofercastro.foodcapture.foodadventure.FoodAdventuresPlacesFragment"
@@ -82,7 +84,9 @@
         </activity>
         <activity
             android:name="com.kristofercastro.foodcapture.foodadventure.EditAdventure"
-            android:label="@string/title_activity_edit_adventure" >
+            android:label="@string/title_activity_edit_adventure" 
+            android:screenOrientation="portrait"
+			android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
     </application>
 

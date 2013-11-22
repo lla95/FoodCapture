@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -114,6 +115,28 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 		for(int i = 1; i < parent.getChildCount(); i+=2){
 			View placeRow = parent.getChildAt(i);
 			placeRow.setBackgroundColor(Color.parseColor("#e9e2d8"));
+		}
+	}
+	
+	/**
+	 * Add the functionality that when you click on a place
+	 * it opens the review
+	 */
+	public void attachOnClickReviewListener(){
+		LinearLayout parent = (LinearLayout) getActivity().findViewById(R.id.adventures_list_layout);
+		
+		for (int i = 0; i < parent.getChildCount(); i++){
+			View placeItem = parent.getChildAt(i);
+			
+			placeItem.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					Activity parentActivity = FoodAdventuresPlacesFragment.this.getActivity();
+					
+				}
+				
+			});
 		}
 	}
 }

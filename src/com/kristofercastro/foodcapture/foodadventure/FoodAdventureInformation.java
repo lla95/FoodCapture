@@ -12,6 +12,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kristofercastro.foodcapture.R;
 import com.kristofercastro.foodcapture.activity.Utility;
+import com.kristofercastro.foodcapture.model.FoodAdventure;
+import com.kristofercastro.foodcapture.model.Moment;
+import com.kristofercastro.foodcapture.model.Restaurant;
+import com.kristofercastro.foodcapture.model.dbo.DBHelper;
+import com.kristofercastro.foodcapture.model.dbo.FoodAdventureDAO;
 
 
 import android.location.Criteria;
@@ -36,7 +41,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-public class FoodAdventuresList extends FragmentActivity {
+public class FoodAdventureInformation extends FragmentActivity implements FoodAdventureActivityInterface {
 
 	GooglePlacesWebService placesService;
 	GoogleMap googleMaps;
@@ -44,6 +49,8 @@ public class FoodAdventuresList extends FragmentActivity {
 	private String bestProvider;
 	private Location mLocation;
 	ArrayList<Place> localRestaurants;
+	FoodAdventure currentFoodAdventure;
+	
 	HashMap<Integer, Marker> markers;
 	
 	Bundle currentSavedInstanceState;
@@ -58,9 +65,11 @@ public class FoodAdventuresList extends FragmentActivity {
 				
 		setupLocManager();
 		setupGoogleMaps();
-		
+				
 		if (savedInstanceState != null){
 			localRestaurants = savedInstanceState.getParcelableArrayList("localRestaurants"); 
+		}else{
+			grabPlaces();
 		}
 	}
 	
@@ -82,7 +91,7 @@ public class FoodAdventuresList extends FragmentActivity {
 
 	private class RetrieveLocalRestaurants extends AsyncTask<Void, Void, Void>{
 
-		private ProgressDialog dialog = new ProgressDialog(FoodAdventuresList.this);
+		private ProgressDialog dialog = new ProgressDialog(FoodAdventureInformation.this);
 		
 		
 		@Override
@@ -94,13 +103,27 @@ public class FoodAdventuresList extends FragmentActivity {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			localRestaurants = placesService.findPlaces(5, mLocation.getLatitude(), mLocation.getLongitude());
+			FoodAdventureDAO foodAdventureDAO = new FoodAdventureDAO(new DBHelper(FoodAdventureInformation.this));
+			
+			Long foodAdventureID = FoodAdventureInformation.this.getIntent().getExtras().getLong("foodAdventureID");
+			currentFoodAdventure = foodAdventureDAO.retrieve(foodAdventureID);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			ArrayList<Place> restaurantLists = new ArrayList<Place>();
+			ArrayList<Moment> moments = currentFoodAdventure.getMoments();
+			for(int i = 0; i < moments.size(); i++){
+				Moment moment = moments.get(i);
+				Place place = new Place();
+				place.setName(moment.getRestaurant().getName());
+				place.setLatitude((double) moment.getRestaurant().getLatitude());
+				place.setLongitude((double) moment.getRestaurant().getLongitude());
+				restaurantLists.add(place);
+			}
+			localRestaurants = restaurantLists;
 			if (dialog.isShowing())
 				dialog.dismiss();
 			drawAllMarkers();
@@ -142,7 +165,6 @@ public class FoodAdventuresList extends FragmentActivity {
 		}
 	}
 	
-	
 	private void drawMarker(Place place, double latitude, double longitude) {
 		drawMarker(place, null, latitude, longitude);
 	}
@@ -182,6 +204,24 @@ public class FoodAdventuresList extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.food_adventures_list, menu);
 		return true;
+	}
+
+	@Override
+	public HashMap<Integer, Marker> getMarkers() {
+		// TODO Auto-generated method stub
+		return this.markers;
+	}
+
+	@Override
+	public ArrayList<Place> getPlaces() {
+		// TODO Auto-generated method stub
+		return this.localRestaurants;
+	}
+
+	@Override
+	public GoogleMap getGoogleMaps() {
+		// TODO Auto-generated method stub
+		return this.googleMaps;
 	}
 
 }
