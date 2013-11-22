@@ -223,10 +223,9 @@ public class EditMoment extends Activity{
 		foodEditText.setText(moment.getMenuItem().getName());
 		descriptionEditText.setText(moment.getDescription());
     	restaurantEditText.setText(moment.getRestaurant().getName());
-    	String imagePath = moment.getMenuItem().getImagePath();
+    	imagePath = moment.getMenuItem().getImagePath();
 		if (imagePath != null && imagePath.length() > 0)
-			pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
-		imagePath = moment.getMenuItem().getImagePath();
+			pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(imagePath, Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
 		
 		qualityWidget.setQualityRating(moment.getQualityRating());
 		priceWidget.setPriceRating(moment.getPriceRating());

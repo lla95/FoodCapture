@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.kristofercastro.foodcapture.model.FoodAdventure;
 import com.kristofercastro.foodcapture.model.MenuItem;
@@ -83,37 +84,40 @@ public class MomentDAO extends DataAccessObject<Moment>{
 		values.put(MomentTable.COL_QUALITY_RATING, moment.getQualityRating());
 		values.put(MomentTable.COL_DESCRIPTION, moment.getDescription());
 
-		long restaurantID = 0;
+		long restaurantID = moment.getRestaurant().getId();
 		RestaurantDAO restaurantDAO = new RestaurantDAO(dbHelper);
-		String restaurantName = moment.getRestaurant().getName();
+		Restaurant restaurant = moment.getRestaurant();
+		String restaurantName = restaurant.getName();
 		
 		boolean restaurantExists = false;
 		
 		// find the restaurant if it exists.
 		ArrayList<Restaurant> restaurantList = restaurantDAO.retrieveAll();
-		for(Restaurant restaurant : restaurantList){
-			if (restaurant.getName().equalsIgnoreCase(restaurantName)){
-				restaurantID = restaurant.getId();
+		for(Restaurant r : restaurantList){
+			if (r.getName().equalsIgnoreCase(restaurantName)){
+				restaurantID = r.getId();
 				restaurantExists = true;
 			}
 		}
-		if ( !restaurantExists )
+			
+		if ( !restaurantExists ){
 			restaurantID = restaurantDAO.create(moment.getRestaurant());
-		else{
-			restaurantID = restaurantDAO.update(moment.getRestaurant());
+		}else{
+			// this doesn't actually return the id of the restaurant
+			restaurantDAO.update(moment.getRestaurant());
 		}
-		MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
 		
-		long menuItemID = menuItemDAO.update(moment.getMenuItem());
+		MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
+		Log.i("MyCameraApp", "file: " + moment.getMenuItem().getImagePath());
+		menuItemDAO.update(moment.getMenuItem());
 		
 		// add the id's of the foreign keys from Restaurant and Menu Item DB Tables
 		// add the id's of the foreign keys from Restaurant and Menu Item DB Tables
 		values.put(MomentTable.COL_RESTAURANT_ID, restaurantID);
-		values.put(MomentTable.COL_MENU_ITEM_ID, menuItemID);
+		values.put(MomentTable.COL_MENU_ITEM_ID, moment.getMenuItem().getId());
 		
 		return db.update(MomentTable.TABLE_NAME, values, MomentTable.COL_ID + "=" + moment.getId(), null);
 	}
-
 	@Override
 	public Moment retrieve(long id) {
 		String selectQuery = "SELECT * FROM " + MomentTable.TABLE_NAME + " WHERE " + MomentTable.COL_ID +"='" + id + "'";

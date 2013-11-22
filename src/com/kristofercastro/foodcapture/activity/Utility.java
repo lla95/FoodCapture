@@ -111,7 +111,7 @@ public class Utility {
 	    if (isInPortrait){
 	    	resultBitmap = Bitmap.createBitmap(newBitmap, 0,newBitmap.getHeight()/2 - newBitmap.getWidth()/2,reqWidth, reqHeight);
 	    }else{
-	    	resultBitmap = Bitmap.createBitmap(newBitmap, newBitmap.getWidth()/2 - newBitmap.getHeight()/2, 0,reqWidth, reqHeight);
+	    	resultBitmap = Bitmap.createBitmap(newBitmap, newBitmap.getWidth()/2 - newBitmap.getHeight()/2,0, reqWidth, reqHeight);
 	    }
 	    return resultBitmap;
 

@@ -123,7 +123,7 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 	 * it opens the review
 	 */
 	public void attachOnClickReviewListener(){
-		LinearLayout parent = (LinearLayout) getActivity().findViewById(R.id.adventures_list_layout);
+		final LinearLayout parent = (LinearLayout) getActivity().findViewById(R.id.adventures_list_layout);
 		
 		for (int i = 0; i < parent.getChildCount(); i++){
 			View placeItem = parent.getChildAt(i);
@@ -133,6 +133,10 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 				@Override
 				public void onClick(View v) {
 					Activity parentActivity = FoodAdventuresPlacesFragment.this.getActivity();
+					
+		        	View momentRowToAdd = parentActivity.getLayoutInflater().inflate(R.layout.menu_item_row, parent, false);      	
+					View momentRowExisting = parentActivity.findViewById(R.id.menu_item);
+					
 					
 				}
 				

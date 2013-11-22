@@ -95,8 +95,8 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(Void result) {
 			clearMoments();
 	        LinearLayout item = (LinearLayout) findViewById(R.id.momentsListLayout);
-			for (final Moment moment : momentsList){
-				
+			for (int i = momentsList.size()-1; i >= 0; i--){
+				final Moment moment = momentsList.get(i);
 				// only display moments that actually has a review.  That is it has a menu item
 				if (moment.getFoodAdventure() == null){
 				
