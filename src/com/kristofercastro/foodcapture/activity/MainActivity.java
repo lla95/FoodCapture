@@ -98,76 +98,76 @@ public class MainActivity extends Activity {
 			for (final Moment moment : momentsList){
 				
 				// only display moments that actually has a review.  That is it has a menu item
-				if (moment.getMenuItem() == null || moment.getPriceRating() == 0
-						|| moment.getQualityRating() == 0 || moment.getMenuItem().getName().length() == 0) break;
+				if (moment.getFoodAdventure() == null){
 				
-	        	View momentRow = getLayoutInflater().inflate(R.layout.menu_item_row, item, false);
-	        	
-	        	final long momentID = moment.getId();
-	        	TextView restaurantTextView = (TextView) momentRow.findViewById(R.id.restaurantTextView);
-	        	TextView foodTextView = (TextView) momentRow.findViewById(R.id.foodTextView);
-	        	TextView descriptionTextView = (TextView) momentRow.findViewById(R.id.descriptionTextView);
-	        	TextView qualityTextView = (TextView) momentRow.findViewById(R.id.qualityTextView);
-	        	TextView priceTextView = (TextView) momentRow.findViewById(R.id.priceTextView);
-	        	TextView dateTextView = (TextView) momentRow.findViewById(R.id.dateTimeTextView);
-	        	ImageView foodThumbnail = (ImageView) momentRow.findViewById(R.id.pictureThumbnail);
-	        	
-	        	Utility.changeFontLaneNarrow(descriptionTextView, MainActivity.this);
-	    		Utility.changeFontTitillium(foodTextView, MainActivity.this);
-	    		Utility.changeFontTitillium(qualityTextView, MainActivity.this);
-	    		Utility.changeFontTitillium(priceTextView, MainActivity.this);
-	    		Utility.changeFontTitillium(restaurantTextView, MainActivity.this);
-	    		
-	    		String imagePath = moment.getMenuItem().getImagePath();
-	    		if (imagePath != null && imagePath.length() > 0)
-	    			foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
-	    		
-	        	restaurantTextView.setText("@ " + moment.getRestaurant().getName());
-	        	foodTextView.setText(moment.getMenuItem().getName());
-	        	descriptionTextView.setText(moment.getDescription());
-	        	dateTextView.setText(moment.getDate());
-	        	item.addView(momentRow);
-	        	
-	        	// delete functionality
-	        	momentRow.setOnLongClickListener(new OnLongClickListener(){
-
-					@Override
-					public boolean onLongClick(View v) {
-						
-						// Create confirmation dialog
-						AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-						builder.setMessage("Are you sure you want to delete this moment?")
-						       .setTitle("Confirm Delete");
-						builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-					           public void onClick(DialogInterface dialog, int id) {
-									new DeleteMomentTask().execute(momentID);
-					           }
-					       });
-						builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-					           public void onClick(DialogInterface dialog, int id) {
-					               // User cancelled the dialog
-					           }
-					       });
-						AlertDialog dialog = builder.create();
-						dialog.show();
-						return false;
-					}
-	        		
-	        	});
-	        	
-	        	momentRow.setOnClickListener(new OnClickListener(){
-
-					@Override
-					public void onClick(View v) {
-						Intent i = new Intent(MainActivity.this, MomentInformation.class);
-						i.putExtra("momentID", moment.getId());
-						i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
-						MainActivity.this.startActivity(i);		
-					}
-	        		
-	        	});
-	        	
-	        	displayRatings(moment, momentRow);
+		        	View momentRow = getLayoutInflater().inflate(R.layout.menu_item_row, item, false);
+		        	
+		        	final long momentID = moment.getId();
+		        	TextView restaurantTextView = (TextView) momentRow.findViewById(R.id.restaurantTextView);
+		        	TextView foodTextView = (TextView) momentRow.findViewById(R.id.foodTextView);
+		        	TextView descriptionTextView = (TextView) momentRow.findViewById(R.id.descriptionTextView);
+		        	TextView qualityTextView = (TextView) momentRow.findViewById(R.id.qualityTextView);
+		        	TextView priceTextView = (TextView) momentRow.findViewById(R.id.priceTextView);
+		        	TextView dateTextView = (TextView) momentRow.findViewById(R.id.dateTimeTextView);
+		        	ImageView foodThumbnail = (ImageView) momentRow.findViewById(R.id.pictureThumbnail);
+		        	
+		        	Utility.changeFontLaneNarrow(descriptionTextView, MainActivity.this);
+		    		Utility.changeFontTitillium(foodTextView, MainActivity.this);
+		    		Utility.changeFontTitillium(qualityTextView, MainActivity.this);
+		    		Utility.changeFontTitillium(priceTextView, MainActivity.this);
+		    		Utility.changeFontTitillium(restaurantTextView, MainActivity.this);
+		    		
+		    		String imagePath = moment.getMenuItem().getImagePath();
+		    		if (imagePath != null && imagePath.length() > 0)
+		    			foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
+		    		
+		        	restaurantTextView.setText("@ " + moment.getRestaurant().getName());
+		        	foodTextView.setText(moment.getMenuItem().getName());
+		        	descriptionTextView.setText(moment.getDescription());
+		        	dateTextView.setText(moment.getDate());
+		        	item.addView(momentRow);
+		        	
+		        	// delete functionality
+		        	momentRow.setOnLongClickListener(new OnLongClickListener(){
+	
+						@Override
+						public boolean onLongClick(View v) {
+							
+							// Create confirmation dialog
+							AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+							builder.setMessage("Are you sure you want to delete this moment?")
+							       .setTitle("Confirm Delete");
+							builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+						           public void onClick(DialogInterface dialog, int id) {
+										new DeleteMomentTask().execute(momentID);
+						           }
+						       });
+							builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+						           public void onClick(DialogInterface dialog, int id) {
+						               // User cancelled the dialog
+						           }
+						       });
+							AlertDialog dialog = builder.create();
+							dialog.show();
+							return false;
+						}
+		        		
+		        	});
+		        	
+		        	momentRow.setOnClickListener(new OnClickListener(){
+	
+						@Override
+						public void onClick(View v) {
+							Intent i = new Intent(MainActivity.this, MomentInformation.class);
+							i.putExtra("momentID", moment.getId());
+							i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+							MainActivity.this.startActivity(i);		
+						}
+		        		
+		        	});
+		        	
+		        	displayRatings(moment, momentRow);
+				} // end of if 
 			}
 			super.onPostExecute(result);
 		}
