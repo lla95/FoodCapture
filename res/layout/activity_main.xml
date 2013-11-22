@@ -12,11 +12,10 @@
 	
     <TextView android:id="@+id/capturedMomentsHeaderTextView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_height="wrap_content"
         android:text="Captured Moments"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="@dimen/header_text_font_size"
         android:textColor="#FFFFFF"
         android:background="@drawable/feature_header"/>
     <ScrollView 
@@ -40,18 +39,17 @@
     
     <TextView android:id="@+id/foodAdventuresHeaderTextView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_height="wrap_content"
         android:text="Food Adventures"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="@dimen/header_text_font_size"
         android:textColor="#FFFFFF"
         android:background="@drawable/feature_header"/>
     
  	<HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="28"
+        android:layout_weight="40"
         android:background="#1e1e1e">
  	        <LinearLayout
 			    android:layout_width="wrap_content"

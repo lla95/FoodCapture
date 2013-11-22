@@ -7,22 +7,45 @@
     android:background="#ffffff"
     android:weightSum="100">
     
+   <TextView android:id="@+id/restaurantsScrollHeader"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Generated Places"
+      android:gravity="center"
+      android:textSize="@dimen/header_text_font_size"
+      android:textColor="#FFFFFF"
+      android:background="@drawable/feature_header"/>
    <HorizontalScrollView
         android:id="@+id/restaurant_lists"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </HorizontalScrollView>
     
+     <TextView android:id="@+id/selecetedRestaurantHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selected Place"
+        android:gravity="center"
+        android:textSize="@dimen/header_text_font_size"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/feature_header"/>
    	<LinearLayout 
    	    android:id="@+id/restaurant_specific_lists"
    	    android:layout_width="match_parent"
         android:layout_height="wrap_content"
    	    android:layout_gravity="center"
    	    android:orientation="horizontal"
-   	    android:layout_marginBottom="-20dp">
+   	    android:layout_marginBottom="-21dp">
    	    <include layout="@layout/menu_item_row"/>
 	</LinearLayout>
-    
+     <TextView android:id="@+id/mapHeader"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Map View"
+      android:gravity="center"
+      android:textSize="@dimen/header_text_font_size"
+      android:textColor="#FFFFFF"
+      android:background="@drawable/feature_header"/>
 	<fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.MapFragment"

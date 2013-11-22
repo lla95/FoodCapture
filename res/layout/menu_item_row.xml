@@ -55,7 +55,7 @@
             android:id="@+id/foodTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sample Food"
+            android:text="Missing Review"
             android:textSize="38sp"
             android:textColor="#ca5868"
             android:layout_marginBottom="20dp"/>
@@ -74,7 +74,6 @@
             android:id="@+id/descriptionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sample text. Sample text. Sample text"
             android:maxLines="1" 
             android:layout_marginBottom="20dp"
             android:layout_marginRight="20dp"

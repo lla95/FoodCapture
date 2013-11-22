@@ -37,6 +37,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.Log;
 import android.view.Menu;
+import android.widget.TextView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -60,6 +61,7 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 		this.currentSavedInstanceState = savedInstanceState;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_food_adventures_list);
+		changeFont();
 		markers = new HashMap<Integer,Marker>();
 		placesService = new GooglePlacesWebService(this);
 				
@@ -137,6 +139,16 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 				fragmentTransaction.commit();
 			}
 		}		
+	}
+	
+	public void changeFont(){	
+		TextView restaurantsScrollHeader = (TextView) this.findViewById(R.id.restaurantsScrollHeader);
+		TextView selectedRestaurantHeader = (TextView) this.findViewById(R.id.selecetedRestaurantHeader);
+		TextView mapHeader = (TextView) this.findViewById(R.id.mapHeader);
+		
+		Utility.changeFontLaneNarrow(restaurantsScrollHeader, this);
+		Utility.changeFontLaneNarrow(selectedRestaurantHeader, this);
+		Utility.changeFontLaneNarrow(mapHeader, this);
 	}
 	
 	/**

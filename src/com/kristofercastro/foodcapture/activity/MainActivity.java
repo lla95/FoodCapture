@@ -49,8 +49,8 @@ public class MainActivity extends Activity {
 		TextView capturedMomentsHeader = (TextView) this.findViewById(R.id.capturedMomentsHeaderTextView);
 		TextView foodAdventuresHeader = (TextView) this.findViewById(R.id.foodAdventuresHeaderTextView);
 		
-		Utility.changeFontTitillium(capturedMomentsHeader, this);
-		Utility.changeFontTitillium(foodAdventuresHeader, this);
+		Utility.changeFontLaneNarrow(capturedMomentsHeader, this);
+		Utility.changeFontLaneNarrow(foodAdventuresHeader, this);
 	}
 
 	@Override
