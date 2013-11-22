@@ -179,7 +179,6 @@ public class MainActivity extends Activity {
 	 */
 	private class DeleteMomentTask extends AsyncTask<Long, Integer, Boolean>{
 
-
 		@Override
 		protected void onPostExecute(Boolean deleteSuccessfull) {
 			super.onPostExecute(deleteSuccessfull);
@@ -198,6 +197,32 @@ public class MainActivity extends Activity {
 		}			
 	}
 	
+	
+	private class DeleteAdventureTask extends AsyncTask<Long, Integer, Boolean>{
+		@Override
+		protected void onPostExecute(Boolean deleteSuccessfull) {
+			super.onPostExecute(deleteSuccessfull);
+			if (deleteSuccessfull){
+				displayAllAdventures();
+			}
+			else{
+				Log.i("MyCameraApp", "Did not succesfully delete");
+			}
+		}
+
+		@Override
+		protected Boolean doInBackground(Long... params) {
+			// TODO Auto-generated method stub
+			return deleteAdventure(params[0]);
+		}
+
+		
+	}
+	
+	private Boolean deleteAdventure(Long adventureID) {
+		FoodAdventureDAO foodAdventureDAO = new FoodAdventureDAO(new DBHelper(this));
+		return foodAdventureDAO.delete(adventureID);
+	}	
 	
 	private class GetAllAdventuresTask extends AsyncTask<Void, Void, Integer>{
 
@@ -254,11 +279,12 @@ public class MainActivity extends Activity {
 						
 						// Create confirmation dialog
 						AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-						builder.setMessage("Are you sure you want to delete this adventure?")
+						builder.setMessage("Are you sure you want to delete this adventure?  It will delete all " +
+								"moments with it.")
 						       .setTitle("Confirm Delete");
 						builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					           public void onClick(DialogInterface dialog, int id) {
-									//new DeleteAdventureTask().execute(foodAdventureID);
+									new DeleteAdventureTask().execute(foodAdventureID);
 					           }
 					       });
 						builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -271,7 +297,8 @@ public class MainActivity extends Activity {
 						return false;
 					}
 	        		
-	        	});	        	
+	        	});	     
+	        	
 	        	foodAdventureItem.setOnClickListener(new OnClickListener(){
 
 					@Override
@@ -340,10 +367,28 @@ public class MainActivity extends Activity {
 				addAdventureHandler();
 				break;
 			}
+			case R.id.action_delete_adventure : {
+				deleteAdventureHandler();
+				break;
+			}
 		}
 		return true;	
 	}
 	
+	private void deleteAdventureHandler() {
+		new AlertDialog.Builder(this)
+		.setTitle("How to Delete an Adventure?")
+		.setMessage("\nTouch and hold an adventure for a few seconds to delete it.\n")
+		.setNeutralButton("ok", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+			}
+		}).show();
+		
+	}
+
 	private void addAdventureHandler() {
 		Intent i = new Intent(this, EditAdventure.class);
 		//i.putExtra("mode", "hi");

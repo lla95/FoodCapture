@@ -3,7 +3,7 @@
      android:id="@+id/adventures_container_shape">
 	<solid android:color="#ffffff"/>
 	<stroke 
-	    android:width="8dp"
+	    android:width="12dp"
 	    android:color="#6c333b"/>
  	<corners
 	    android:radius="250dp"/>

@@ -48,6 +48,11 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 	
 	@Override
 	public boolean delete(long id) {
+		FoodAdventure foodAdventure = retrieve(id);
+		for ( Moment moment : foodAdventure.getMoments()){
+			MomentDAO momentDAO = new MomentDAO(dbHelper);
+			momentDAO.delete(moment.getId());
+		}
 		return db.delete(FoodAdventureTable.TABLE_NAME, FoodAdventureTable.COL_ID + "=" + id, null) > 0;
 	}
 
