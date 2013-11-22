@@ -22,18 +22,19 @@
 	     android:text="Portland Trip With friends"
 	     android:maxWidth="250dp"
 	     android:maxLines="2"
-	     android:textSize="18sp"
+	     android:textSize="20sp"
 	     android:textColor="#137b3e"/>
         
         <TextView
 	     android:id="@+id/adventureDateTextView"
 	     android:layout_width="wrap_content"
 	     android:layout_height="wrap_content"
+	     
 	     android:text="Oct 31, 2014"
 	     android:maxWidth="250dp"
 	     android:maxLines="2"
 	     android:textSize="18sp"
-	     android:textColor="#137b3e"/>
+	     android:textColor="#c2c0bf"/>
         
         <TextView
 	     android:id="@+id/adventureProgressTextView"
@@ -43,8 +44,8 @@
 	     android:layout_marginTop="15dp"
 	     android:maxWidth="250dp"
 	     android:maxLines="2"
-	     android:textSize="18sp"
-	     android:textColor="#137b3e"/>
+	     android:textSize="24sp"
+	     android:textColor="#37a949"/>
     </LinearLayout>
 
 </LinearLayout>

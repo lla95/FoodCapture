@@ -7,8 +7,10 @@ import com.kristofercastro.foodcapture.R;
 import com.kristofercastro.foodcapture.activity.Utility.CustomFonts;
 import com.kristofercastro.foodcapture.foodadventure.EditAdventure;
 import com.kristofercastro.foodcapture.foodadventure.FoodAdventuresList;
+import com.kristofercastro.foodcapture.model.FoodAdventure;
 import com.kristofercastro.foodcapture.model.Moment;
 import com.kristofercastro.foodcapture.model.dbo.DBHelper;
+import com.kristofercastro.foodcapture.model.dbo.FoodAdventureDAO;
 import com.kristofercastro.foodcapture.model.dbo.MomentDAO;
 
 import android.media.ThumbnailUtils;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
 	ArrayList<Moment> momentsList;
+	ArrayList<FoodAdventure> foodAdventuresList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,9 @@ public class MainActivity extends Activity {
 		new GetAllMomentsTask().execute(1);
 	}
 	
+	private void displayAllAdventures(){
+		new GetAllAdventuresTask().execute();
+	}
 	private void displayRatings(Moment moment, View momentRow) {
 		LinearLayout qRatingsLayout = (LinearLayout) momentRow.findViewById(R.id.qualityRatingLayout);
 		for (int i = 0; i < moment.getQualityRating(); i++){
@@ -90,6 +96,11 @@ public class MainActivity extends Activity {
 			clearMoments();
 	        LinearLayout item = (LinearLayout) findViewById(R.id.momentsListLayout);
 			for (final Moment moment : momentsList){
+				
+				// only display moments that actually has a review.  That is it has a menu item
+				if (moment.getMenuItem() == null || moment.getPriceRating() == 0
+						|| moment.getQualityRating() == 0 || moment.getMenuItem().getName().length() == 0) break;
+				
 	        	View momentRow = getLayoutInflater().inflate(R.layout.menu_item_row, item, false);
 	        	
 	        	final long momentID = moment.getId();
@@ -106,7 +117,7 @@ public class MainActivity extends Activity {
 	    		Utility.changeFontTitillium(qualityTextView, MainActivity.this);
 	    		Utility.changeFontTitillium(priceTextView, MainActivity.this);
 	    		Utility.changeFontTitillium(restaurantTextView, MainActivity.this);
-	    			
+	    		
 	    		String imagePath = moment.getMenuItem().getImagePath();
 	    		if (imagePath != null && imagePath.length() > 0)
 	    			foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(moment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
@@ -187,6 +198,96 @@ public class MainActivity extends Activity {
 		}			
 	}
 	
+	
+	private class GetAllAdventuresTask extends AsyncTask<Void, Void, Integer>{
+
+		@Override
+		protected Integer doInBackground(Void... params) {
+			FoodAdventureDAO foodAdventureDAO = new FoodAdventureDAO(new DBHelper(MainActivity.this));
+			foodAdventuresList= foodAdventureDAO.retrieveAll();			
+			return foodAdventuresList.size();
+		}
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			clearAdventures();
+	        LinearLayout item = (LinearLayout) findViewById(R.id.foodAdventuresListLayout);
+			for (final FoodAdventure foodAdventure : foodAdventuresList){
+						
+	        	View foodAdventureItem = getLayoutInflater().inflate(R.layout.adventure_item_row_main, item, false);
+	        	
+	        	final long foodAdventureID = foodAdventure.getId();
+	        	
+	        	TextView adventureNameTextView = (TextView) foodAdventureItem.findViewById(R.id.adventureNameTextView);
+	        	TextView adventureDateTextView = (TextView) foodAdventureItem.findViewById(R.id.adventureDateTextView);
+	        	TextView adventureProgressTextView = (TextView) foodAdventureItem.findViewById(R.id.adventureProgressTextView);
+	        	
+	        	adventureNameTextView.setText(foodAdventure.getName());
+	        	adventureDateTextView.setText(foodAdventure.getDate());
+	        	
+	        	int progress = 0;
+	        	
+	        	ArrayList<Moment> moments = foodAdventure.getMoments();
+	        	Log.i("MyCameraApp", "moments size: " + moments.size());
+	        	for (Moment moment : moments){
+	        		if ( moment.getMenuItem() == null || moment.getPriceRating() == 0 || moment.getQualityRating() == 0){
+	        			// don't add to counter
+	        		}else{
+	        			progress += 1; // since we only generate 5
+	        		}
+	        	}
+	        	
+	        	int percentage = (int) ((float) progress/moments.size() * 100);
+	        	adventureProgressTextView.setText(percentage+"%");
+	        	
+	        	Utility.changeFontTitillium(adventureNameTextView, MainActivity.this);
+	    		Utility.changeFontTitillium(adventureDateTextView, MainActivity.this);
+	    		Utility.changeFontTitillium(adventureProgressTextView, MainActivity.this);
+	
+	        	item.addView(foodAdventureItem);
+	        	
+	        	// delete functionality
+	        	foodAdventureItem.setOnLongClickListener(new OnLongClickListener(){
+
+					@Override
+					public boolean onLongClick(View v) {
+						
+						// Create confirmation dialog
+						AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+						builder.setMessage("Are you sure you want to delete this adventure?")
+						       .setTitle("Confirm Delete");
+						builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					           public void onClick(DialogInterface dialog, int id) {
+									//new DeleteAdventureTask().execute(foodAdventureID);
+					           }
+					       });
+						builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					           public void onClick(DialogInterface dialog, int id) {
+					               // User cancelled the dialog
+					           }
+					       });
+						AlertDialog dialog = builder.create();
+						dialog.show();
+						return false;
+					}
+	        		
+	        	});	        	
+	        	foodAdventureItem.setOnClickListener(new OnClickListener(){
+
+					@Override
+					public void onClick(View v) {
+						Intent i = new Intent(MainActivity.this, FoodAdventuresList.class);
+						i.putExtra("foodAdventureID", foodAdventure.getId());
+						i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+						MainActivity.this.startActivity(i);		
+					}
+	        		
+	        	});
+			}
+			super.onPostExecute(result);
+		}		
+	}
+	
 	private Boolean deleteMoment(long momentID){
 		MomentDAO momentDAO = new MomentDAO(new DBHelper(this));
 		return momentDAO.delete(momentID);
@@ -197,6 +298,10 @@ public class MainActivity extends Activity {
         item.removeAllViews();
 	}
 	
+	private void clearAdventures(){
+		LinearLayout item = (LinearLayout) findViewById(R.id.foodAdventuresListLayout);
+		item.removeAllViews();
+	}
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
@@ -212,6 +317,7 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onStart() {
 		displayAllMoments();
+		displayAllAdventures();
 		super.onStart();
 	}
 

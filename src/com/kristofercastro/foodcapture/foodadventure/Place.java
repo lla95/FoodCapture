@@ -64,14 +64,14 @@ public class Place implements Parcelable {
 		this.phoneNumber = phoneNumber;
 	}
 	
-	public Double getLatitude() {
-		return latitude;
+	public float getLatitude() {
+		return (float) latitude;
 	}
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
-	public Double getLongitude() {
-		return longitude;
+	public float getLongitude() {
+		return (float) longitude;
 	}
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;

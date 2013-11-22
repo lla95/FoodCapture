@@ -54,7 +54,11 @@ public class MomentDAO extends DataAccessObject<Moment>{
 			restaurantID = restaurantDAO.create(moment.getRestaurant());
 		
 		MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
-		long menuItemID = menuItemDAO.create(moment.getMenuItem());
+		
+		long menuItemID = 0;
+		if (moment.getMenuItem() != null){
+			menuItemID = menuItemDAO.create(moment.getMenuItem());
+		}
 		
 		// add the id's of the foreign keys from Restaurant and Menu Item DB Tables
 		values.put(MomentTable.COL_RESTAURANT_ID, restaurantID);

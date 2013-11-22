@@ -47,6 +47,7 @@ public class Moment implements Parcelable {
 		menuItem = source.readParcelable(MenuItem.class.getClassLoader());
 		description = source.readString();
 		date = source.readString();
+		foodAdventure = source.readParcelable(FoodAdventure.class.getClassLoader());
 	}
 
 /***************************************
@@ -117,6 +118,7 @@ public class Moment implements Parcelable {
 		dest.writeInt(qualityRating);
 		dest.writeString(description);
 		dest.writeString(date);
+		dest.writeParcelable(foodAdventure, 0);
 	}
 	
 	public static Parcelable.Creator<Moment> CREATOR = new Parcelable.Creator<Moment>(){

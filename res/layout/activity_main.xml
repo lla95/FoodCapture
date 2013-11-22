@@ -64,9 +64,6 @@
 			    android:id="@+id/foodAdventuresListLayout" 
 			    android:orientation="horizontal"
 			    android:gravity="center">
-		  	 	        <include layout="@layout/adventure_item_row_main"/>     
-		  	 	        <include layout="@layout/adventure_item_row_main"/> 
-  
     		</LinearLayout>     
     </HorizontalScrollView>
    <!--  <include layout="@layout/menu_item_row"/> -->

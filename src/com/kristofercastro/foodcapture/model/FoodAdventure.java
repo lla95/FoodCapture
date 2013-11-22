@@ -9,7 +9,7 @@ public class FoodAdventure implements Parcelable{
 	Long id;
 	String name;
 	String date;
-	Moment[] moments;
+	ArrayList<Moment> moments;
 	
 	public FoodAdventure(){}
 
@@ -17,7 +17,8 @@ public class FoodAdventure implements Parcelable{
 		this.id = source.readLong();
 		this.name = source.readString();
 		this.date = source.readString();
-		this.moments = (Moment[]) source.readParcelableArray(Moment.class.getClassLoader());
+		this.moments = new ArrayList<Moment>();
+		source.readList(moments, Moment.class.getClassLoader());
 	}
 
 	public Long getId() {
@@ -44,11 +45,11 @@ public class FoodAdventure implements Parcelable{
 		this.date = date;
 	}
 
-	public Moment[] getMoments() {
+	public ArrayList<Moment> getMoments() {
 		return moments;
 	}
 	
-	public void setMoments(Moment[] moments) {
+	public void setMoments(ArrayList<Moment> moments) {
 		this.moments = moments;
 	}
 
@@ -62,7 +63,7 @@ public class FoodAdventure implements Parcelable{
 		dest.writeLong(this.id);
 		dest.writeString(this.getName());
 		dest.writeString(this.getDate());
-		dest.writeParcelableArray(this.moments, 0);
+		dest.writeList(this.moments);
 	}	
 	
 	public static Parcelable.Creator<FoodAdventure> CREATOR = new Parcelable.Creator<FoodAdventure>(){

@@ -13,7 +13,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.kristofercastro.foodcapture.R;
 import com.kristofercastro.foodcapture.R.layout;
 import com.kristofercastro.foodcapture.R.menu;
+import com.kristofercastro.foodcapture.activity.EditMoment;
+import com.kristofercastro.foodcapture.activity.MainActivity;
 import com.kristofercastro.foodcapture.activity.Utility;
+import com.kristofercastro.foodcapture.model.FoodAdventure;
+import com.kristofercastro.foodcapture.model.Moment;
+import com.kristofercastro.foodcapture.model.Restaurant;
+import com.kristofercastro.foodcapture.model.dbo.DBHelper;
+import com.kristofercastro.foodcapture.model.dbo.FoodAdventureDAO;
 
 import android.location.Criteria;
 import android.location.Location;
@@ -26,6 +33,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +43,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditAdventure extends FragmentActivity implements FoodAdventureActivityInterface {
 
@@ -238,7 +247,8 @@ public class EditAdventure extends FragmentActivity implements FoodAdventureActi
 
 			case R.id.action_save_adventure : {
 				if (this.validateInput()){
-					
+					Void params = null;
+					new SaveAdventureTask().execute(params);
 				}
 				break;
 			}
@@ -246,6 +256,57 @@ public class EditAdventure extends FragmentActivity implements FoodAdventureActi
 		return true;	
 	}
 	
+	private class SaveAdventureTask extends AsyncTask<Void, Void, Long>{
+
+
+		@Override
+		protected Long doInBackground(Void... params) {
+			return saveAdventure();
+		}
+		
+		@Override
+		protected void onPostExecute(Long result) {
+			super.onPostExecute(result);
+			if (result != null){
+				Toast.makeText(EditAdventure.this, "Moment Saved!", Toast.LENGTH_SHORT).show();
+				Intent i = new Intent(EditAdventure.this, MainActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+				EditAdventure.this.startActivity(i);
+				finish();
+			}
+			else
+				Toast.makeText(EditAdventure.this, "Couldn't save the adventure.", Toast.LENGTH_SHORT).show();
+
+		}	
+	}
+	
+	private Long saveAdventure(){
+		FoodAdventureDAO foodAdventureDAO = new FoodAdventureDAO(new DBHelper(EditAdventure.this));
+		
+		FoodAdventure foodAdventure = new FoodAdventure();
+		foodAdventure.setName(foodAdventureNameEditText.getText().toString());
+		foodAdventure.setDate(Utility.getCurrentDate());
+		
+		ArrayList<Moment> momentsArray = new ArrayList<Moment>();
+					
+		for (int i = 0; i < localRestaurants.size(); i++){
+			Place place = localRestaurants.get(i);
+			Moment newMoment = new Moment();
+			
+			Restaurant newRestaurant = new Restaurant();
+			newRestaurant.setLatitude(place.getLatitude());
+			newRestaurant.setLongitude(place.getLongitude());
+			newRestaurant.setName(place.getName());
+			
+			// TO-DO : add address
+			newMoment.setRestaurant(newRestaurant);	
+			
+			momentsArray.add(newMoment);
+			
+		}
+		foodAdventure.setMoments(momentsArray);
+		return foodAdventureDAO.create(foodAdventure);
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

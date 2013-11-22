@@ -13,11 +13,16 @@ import com.kristofercastro.foodcapture.model.dbo.DBHelper.MomentTable;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 
+	private SQLiteOpenHelper dbHelper;
+
 	public FoodAdventureDAO(SQLiteOpenHelper dbHelper){
 		this.db = dbHelper.getWritableDatabase();
+		this.dbHelper = dbHelper;
+
 	}
 	
 	@Override
@@ -27,7 +32,18 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 		ContentValues values = new ContentValues();
 		values.put(FoodAdventureTable.COL_NAME, foodAdventure.getName());
 		values.put(FoodAdventureTable.COL_DATE, foodAdventure.getDate());
-		return db.insert(FoodAdventureTable.TABLE_NAME, null, values);
+		Long rowID = db.insert(FoodAdventureTable.TABLE_NAME, null, values);
+		
+		foodAdventure = this.retrieve(rowID);
+		if ( rowID != -1){
+			ArrayList<Moment> momentsArray = dbo.getMoments();
+			MomentDAO momentDAO = new MomentDAO(dbHelper);
+			for(Moment moment : momentsArray){
+				moment.setFoodAdventure(foodAdventure);
+				momentDAO.create(moment);
+			}
+		}
+		return rowID;
 	}
 	
 	@Override
@@ -39,7 +55,7 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 	public int update(FoodAdventure foodAdventure) {
 		ContentValues values = new ContentValues();
 		values.put(FoodAdventureTable.COL_NAME,foodAdventure.getName());
-		values.put(FoodAdventureTable.COL_DATE, foodAdventure.getDate());
+		//values.put(FoodAdventureTable.COL_DATE, foodAdventure.getDate());
 		return db.update(FoodAdventureTable.TABLE_NAME, values, FoodAdventureTable.COL_ID + "=" + foodAdventure.getId() , null);
 	}
 
@@ -55,6 +71,7 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 				foodAdventure.setId(cursor.getLong(0));
 				foodAdventure.setName(cursor.getString(1));
 				foodAdventure.setDate(cursor.getString(2));
+				foodAdventure.setMoments(retrieveMoments(foodAdventure));
 			}
 		}finally{
 			cursor.close();
@@ -66,16 +83,8 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 	@Override
 	public ArrayList<FoodAdventure> retrieveAll() {
 		ArrayList<FoodAdventure> foodAdventureList = new ArrayList<FoodAdventure>();
-		
-		String selectColumns = FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_ID + "," 
-				+ FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_NAME + ","
-				+ FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_DATE;
-		String selectFrom = FoodAdventureTable.TABLE_NAME + " ";
-		String selectInner = "INNER JOIN " + MomentTable.TABLE_NAME + " ";
-		String selectOn = "ON " + FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_ID
-			+ "=" 
-			+ MomentTable.TABLE_NAME + ".";
 		String selectQuery = "SELECT * FROM " + FoodAdventureTable.TABLE_NAME;
+		
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		try{
 			if (cursor.moveToFirst()){
@@ -84,7 +93,10 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 					foodAdventure.setId(cursor.getLong(0));
 					foodAdventure.setName(cursor.getString(1));
 					foodAdventure.setDate(cursor.getString(2));
+					
+					foodAdventure.setMoments(retrieveMoments(foodAdventure));
 					foodAdventureList.add(foodAdventure);
+					
 				}while(cursor.moveToNext());
 			}
 		}finally{
@@ -102,10 +114,53 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 	public ArrayList<Moment> retrieveMoments(FoodAdventure foodAdventure){
 		ArrayList<Moment> result = new ArrayList<Moment>();
 		
+		String selectColumns = 
+				MomentTable.TABLE_NAME + "." + MomentTable.COL_ID + "," 
+				+ MomentTable.TABLE_NAME + "." + MomentTable.COL_PRICE_RATING + ","
+				+ MomentTable.TABLE_NAME + "." + MomentTable.COL_QUALITY_RATING + ","
+				+ MomentTable.TABLE_NAME + "." + MomentTable.COL_RESTAURANT_ID + ","
+				+ MomentTable.TABLE_NAME + "." + MomentTable.COL_MENU_ITEM_ID + ","
+				+ MomentTable.TABLE_NAME + "." + MomentTable.COL_DESCRIPTION + ","
+				+ MomentTable.TABLE_NAME + "." + MomentTable.COL_DATE + ","
+				+ MomentTable.TABLE_NAME + "." + MomentTable.COL_FOOD_ADVENTURE_ID;
+		String selectFrom = MomentTable.TABLE_NAME + " ";
+		String selectInner = "INNER JOIN " + FoodAdventureTable.TABLE_NAME + " ";
+		String selectOn = "ON " + FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_ID
+			+ "=" 
+			+ MomentTable.TABLE_NAME + "." + MomentTable.COL_FOOD_ADVENTURE_ID;
+		String selectWhere = " WHERE " + FoodAdventureTable.TABLE_NAME + "." + FoodAdventureTable.COL_ID + "=" + foodAdventure.getId();
 		String selectQuery = 
-				"SELECT * FROM " + FoodAdventureTable.TABLE_NAME;
-
-		
+				"SELECT " + selectColumns + " FROM " + selectFrom + selectInner + selectOn + selectWhere;
+		//Log.i("MyCameraApp",selectQuery);
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		try{
+			if (cursor.moveToFirst()){
+				do{
+					Moment moment = new Moment();
+					moment.setId(cursor.getLong(0));
+					moment.setPriceRating(cursor.getInt(1));
+					moment.setQualityRating(cursor.getInt(2));
+					
+					RestaurantDAO restaurantDAO = new RestaurantDAO(dbHelper);
+					Restaurant restaurant = restaurantDAO.retrieve(cursor.getLong(3));
+					moment.setRestaurant(restaurant);
+					
+					MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
+					MenuItem menuItem = menuItemDAO.retrieve(cursor.getLong(4));
+					moment.setMenuItem(menuItem);
+					
+					moment.setDescription(cursor.getString(5));
+					moment.setDate(cursor.getString(6));
+					
+					FoodAdventure foodAdventureResult = foodAdventure;
+					moment.setFoodAdventure(foodAdventureResult);
+					
+					result.add(moment);
+				}while(cursor.moveToNext());
+			}
+			}finally{
+				cursor.close();
+			}
 		
 		return result;
 	}
