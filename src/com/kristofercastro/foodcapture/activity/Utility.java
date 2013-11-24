@@ -11,6 +11,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +82,7 @@ public class Utility {
 	            inSampleSize *= 2;
 	        }
 	    }
+	    Log.i("MyCameraApp", "SampleSize: " + inSampleSize);
 	    return inSampleSize;
 	}
 	
@@ -109,7 +111,7 @@ public class Utility {
 	    boolean isInPortrait = (newBitmap.getHeight()/2 - newBitmap.getWidth()/2) < 0 ? false : true;
 	    Bitmap resultBitmap = null;
 	    if (isInPortrait){
-	    	resultBitmap = Bitmap.createBitmap(newBitmap, 0,newBitmap.getHeight()/2 - newBitmap.getWidth()/2,reqWidth, reqHeight);
+	    	resultBitmap = Bitmap.createBitmap(newBitmap, 0,newBitmap.getHeight()/3,reqWidth, reqHeight);
 	    }else{
 	    	resultBitmap = Bitmap.createBitmap(newBitmap, newBitmap.getWidth()/2 - newBitmap.getHeight()/2,0, reqWidth, reqHeight);
 	    }

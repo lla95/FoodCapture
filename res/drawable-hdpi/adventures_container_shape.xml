@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" 
      android:id="@+id/adventures_container_shape">
-	<solid android:color="#ffffff"/>
+	<solid android:color="#e9e2d8"/>
 	<stroke 
-	    android:width="12dp"
+	    android:width="20dp"
 	    android:color="#6c333b"/>
  	<corners
-	    android:radius="250dp"/>
+	    android:radius="350dp"/>
 	<size 
-	    android:width="250dp"
-	    android:height="250dp"/>
+	    android:width="350dp"
+	    android:height="350dp"/>
 	<padding 
 	    android:top="10dp"
 	    android:left="10dp"

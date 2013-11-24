@@ -232,7 +232,6 @@ public class EditMoment extends Activity{
 		qualityWidget.updateDisplayRatings();
 		priceWidget.updateDisplayRatings();
 		changeFont(); 
-		
 	}
 	
 	@Override
