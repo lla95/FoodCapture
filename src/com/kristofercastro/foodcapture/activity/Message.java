@@ -10,6 +10,5 @@ package com.kristofercastro.foodcapture.activity;
 public class Message {
 	public static final int CREATE_NEW_MOMENT = 0;
 	public static final int EDIT_EXISTING_MOMENT = 1;
-	public static final int CREATE_NEW_MOMENT_WITH_ADVENTURE = 2;
-	public static final int EDIT_EXISTING_MOMENT_WITH_ADVENTURE = 3;
+	public static final int EDIT_EXISTING_MOMENT_WITH_ADVENTURE = 2;
 }

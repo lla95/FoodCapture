@@ -39,7 +39,7 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 			ArrayList<Moment> momentsArray = dbo.getMoments();
 			MomentDAO momentDAO = new MomentDAO(dbHelper);
 			for(Moment moment : momentsArray){
-				moment.setFoodAdventure(foodAdventure);
+				moment.setFoodAdventureID(foodAdventure.getId());
 				momentDAO.create(moment);
 			}
 		}
@@ -158,7 +158,7 @@ public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 					moment.setDate(cursor.getString(6));
 					
 					FoodAdventure foodAdventureResult = foodAdventure;
-					moment.setFoodAdventure(foodAdventureResult);
+					moment.setFoodAdventureID(foodAdventureResult.getId());
 					
 					result.add(moment);
 				}while(cursor.moveToNext());

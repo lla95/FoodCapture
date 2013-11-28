@@ -97,8 +97,8 @@ public class MainActivity extends Activity {
 	        LinearLayout item = (LinearLayout) findViewById(R.id.momentsListLayout);
 			for (int i = momentsList.size()-1; i >= 0; i--){
 				final Moment moment = momentsList.get(i);
-				// only display moments that actually has a review.  That is it has a menu item
-				if (moment.getFoodAdventure() == null){
+				// only display moments that doesn't have an adventure. 
+				if (moment.getFoodAdventureID() == 0){
 				
 		        	View momentRow = getLayoutInflater().inflate(R.layout.menu_item_row, item, false);
 		        	

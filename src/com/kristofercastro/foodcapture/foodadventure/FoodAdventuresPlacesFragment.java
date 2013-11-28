@@ -60,6 +60,12 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 	public void onStart() {
 		super.onStart();
 		displayPlaces();
+		defaultPlaceSelected();
+	}
+
+	private void defaultPlaceSelected() {
+		currentlySelectedPlace = places.get(0);
+		notifyAllMyListeners();		
 	}
 
 	private void displayPlaces(){

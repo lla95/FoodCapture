@@ -46,6 +46,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -70,7 +71,6 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 	
 	// Moment specific variables
 	ImageView pictureImageView;
-	Moment currentMoment;
 	private TextView descriptionTextView;
 	private TextView foodTextView;
 	private TextView restaurantTextView;
@@ -89,14 +89,7 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 		placesService = new GooglePlacesWebService(this);
 				
 		setupLocManager();
-		setupGoogleMaps();
-				
-		if (savedInstanceState != null){
-			localRestaurants = savedInstanceState.getParcelableArrayList("localRestaurants"); 
-		}else{
-			grabPlaces();
-		}
-		
+		setupGoogleMaps();	
 		setupCurrentMenuItem();
 	}
 	
@@ -108,6 +101,11 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 
 	@Override
 	protected void onStart() {
+		if (currentSavedInstanceState != null){
+			localRestaurants = currentSavedInstanceState.getParcelableArrayList("localRestaurants"); 
+		}else{
+			grabPlaces();
+		}
 		super.onStart();
 	}
 
@@ -140,7 +138,9 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			ArrayList<Place> restaurantLists = new ArrayList<Place>();
-			ArrayList<Moment> moments = currentFoodAdventure.getMoments();
+			moments = currentFoodAdventure.getMoments();
+			selectedMoment = moments.get(0);
+			updateReview();
 			for(int i = 0; i < moments.size(); i++){
 				Moment moment = moments.get(i);
 				Place place = new Place();
@@ -158,14 +158,34 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 				android.app.FragmentManager fragmentManager = getFragmentManager();
 				android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 				
-			    placesFragment = new FoodAdventuresPlacesFragment();
+				// clear child views
+				HorizontalScrollView restaurantListContainer = (HorizontalScrollView) FoodAdventureInformation.this.findViewById(R.id.restaurant_lists);
+			    restaurantListContainer.removeAllViews();
+			    
+				placesFragment = new FoodAdventuresPlacesFragment();
 			    placesFragment.addChangeListener(FoodAdventureInformation.this);
 				fragmentTransaction.add(R.id.restaurant_lists, placesFragment);
 				fragmentTransaction.commit();
 			}
+			
+			// retrieve all saved moments
+			new RetrieveAllSavedMoments().execute(currentFoodAdventure);
 		}		
+
 	}
 	
+
+	private class RetrieveAllSavedMoments extends AsyncTask<FoodAdventure, Void, Void>{
+
+		@Override
+		protected Void doInBackground(FoodAdventure... params) {
+			FoodAdventure foodAdventure = params[0];
+			FoodAdventureDAO foodAdventureDAO = new FoodAdventureDAO(new DBHelper(FoodAdventureInformation.this));
+			moments = foodAdventureDAO.retrieveMoments(foodAdventure);
+			return null;
+		}
+		
+	}
 	public void changeFont(){	
 		TextView restaurantsScrollHeader = (TextView) this.findViewById(R.id.restaurantsScrollHeader);
 		TextView selectedRestaurantHeader = (TextView) this.findViewById(R.id.selecetedRestaurantHeader);
@@ -276,21 +296,9 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 				 * if moment is not null then it already exists so we go to edit screen
 				 * with locked restaurant name and make sure to persist food adventure id
 				 */
+				bringFoodReviewIntent();
 			}			
 		});
-	}
-	
-	protected Moment getCurrentMoment(){
-		if (currentMoment == null){
-			currentMoment = new Moment();
-		}
-		return currentMoment;
-	}
-	
-	private void displayCurrentMomentReview(){
-		android.app.FragmentManager fragManager = getFragmentManager();
-		FoodAdventuresPlacesFragment placesFragment = (FoodAdventuresPlacesFragment) fragManager.findFragmentById(R.id.restaurant_lists);
-		Log.i("MyCameraApp", "Current place: " + placesFragment.getSelectedPlace());
 	}
 	
 	private void changeFontOfReview(){
@@ -320,7 +328,22 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 	public void propertyChange(PropertyChangeEvent event) {
 		/*Toast.makeText(this, "Got the event!" , Toast.LENGTH_SHORT).show();
 		displayCurrentMomentReview();*/
-		updateRestarauntText();
+		updateSelectedMoment();	
+		updateReview();		
+	}
+
+	/*
+	 * Based on the currently selected restaurant name, figure out its corresponding moment
+	 */
+	private void updateSelectedMoment() {
+		for (int i = 0; i < moments.size(); i++){
+			String restaurantNameOfMoment = moments.get(i).getRestaurant().getName();
+			String selectedRestaurantName = placesFragment.getSelectedPlace().getName();
+			
+			if (restaurantNameOfMoment.equalsIgnoreCase(selectedRestaurantName)){
+				selectedMoment = moments.get(i);
+			}
+		}		
 	}
 
 	/*
@@ -344,29 +367,93 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 	 */
 	private void bringFoodReviewIntent(){
 		Intent i = new Intent(this, EditMoment.class);
-		if ( selectedMoment != null){
-			Restaurant restaurantInfo = new Restaurant();
-			Place selectedPlace = placesFragment.getSelectedPlace();
-			restaurantInfo.setName(selectedPlace.getName());
-			restaurantInfo.setLongitude(selectedPlace.getLongitude());
-			restaurantInfo.setLatitude(selectedPlace.getLatitude());
-			i.putExtra("food adventure", currentFoodAdventure);
-			i.putExtra("restaurant", restaurantInfo);
-			i.putExtra("mode", Message.CREATE_NEW_MOMENT_WITH_ADVENTURE);
-			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
-			this.startActivity(i);	
-		}else{
-			i.putExtra("moment", this.selectedMoment);
-			i.putExtra("mode", Message.EDIT_EXISTING_MOMENT_WITH_ADVENTURE);
-			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
-			this.startActivity(i);	
+		i.putExtra("foodAdventureID", currentFoodAdventure.getId());
+		i.putExtra("momentID",selectedMoment.getId());
+		i.putExtra("mode", Message.EDIT_EXISTING_MOMENT);
+		i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+		this.startActivity(i);	
+	}
+	
+	private void updateReview(){
+		LinearLayout menuItemRow = (LinearLayout) this.findViewById(R.id.current_menu_item);
+		TextView restaurantTextView = (TextView) menuItemRow.findViewById(R.id.restaurantTextView);
+    	TextView foodTextView = (TextView) menuItemRow.findViewById(R.id.foodTextView);
+    	TextView descriptionTextView = (TextView) menuItemRow.findViewById(R.id.descriptionTextView);
+    	TextView dateTextView = (TextView) menuItemRow.findViewById(R.id.dateTimeTextView);
+    	ImageView foodThumbnail = (ImageView) menuItemRow.findViewById(R.id.pictureThumbnail);
+    	
+    	restaurantTextView.setText(selectedMoment.getRestaurant().getName());
+   
+    	// reset review
+    	foodTextView.setText("Review Not Completed");
+    	foodThumbnail.setImageBitmap(null);
+    	descriptionTextView.setText(null);
+    	clearRatings(selectedMoment, menuItemRow);
+    	
+    	if(selectedMoment.getMenuItem() != null){
+	    	foodTextView.setText(selectedMoment.getMenuItem().getName());
+	    	descriptionTextView.setText(selectedMoment.getDescription());
+	    	String imagePath = selectedMoment.getMenuItem().getImagePath();
+			if (imagePath != null && imagePath.length() > 0)
+				foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(selectedMoment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
+			
+	    	restaurantTextView.setText("@ " + selectedMoment.getRestaurant().getName());
+    	}
+    	//dateTextView.setText(selectedMoment.getDate());
+    	displayRatings(selectedMoment, menuItemRow);
+	}
+	
+	private void displayRatings(Moment moment, View momentRow) {
+		LinearLayout qRatingsLayout = (LinearLayout) momentRow.findViewById(R.id.qualityRatingLayout);
+		for (int i = 0; i < moment.getQualityRating(); i++){
+			ImageView ratingIcon = (ImageView) qRatingsLayout.getChildAt(i);
+			ratingIcon.setImageResource(R.drawable.quality_icon_selected);
+		}
+		LinearLayout pRatingsLayout = (LinearLayout) momentRow.findViewById(R.id.priceRatingLayout);
+		for (int i = 0; i < moment.getPriceRating(); i++){
+			ImageView ratingIcon = (ImageView) pRatingsLayout.getChildAt(i);
+			ratingIcon.setImageResource(R.drawable.price_icon_selected);
 		}
 	}
 	
-	private void updateRestarauntText(){
+	private void clearRatings(Moment moment, View momentRow){
+		LinearLayout qRatingsLayout = (LinearLayout) momentRow.findViewById(R.id.qualityRatingLayout);
+		for (int i = 0; i < 5; i++){
+			ImageView ratingIcon = (ImageView) qRatingsLayout.getChildAt(i);
+			ratingIcon.setImageResource(R.drawable.quality_icon_default);
+		}
+		LinearLayout pRatingsLayout = (LinearLayout) momentRow.findViewById(R.id.priceRatingLayout);
+		for (int i = 0; i < 5; i++){
+			ImageView ratingIcon = (ImageView) pRatingsLayout.getChildAt(i);
+			ratingIcon.setImageResource(R.drawable.price_icon_default);
+		}
+	}
+	
+	/*
+	 * Based on the selected place, display the appropriate information in the review
+	 */
+	private void updateCurrentReview(){
 		LinearLayout menuItemRow = (LinearLayout) this.findViewById(R.id.current_menu_item);
 		TextView restaurantTextView = (TextView) menuItemRow.findViewById(R.id.restaurantTextView);
-		restaurantTextView.setText(placesFragment.getSelectedPlace().getName());
+    	TextView foodTextView = (TextView) menuItemRow.findViewById(R.id.foodTextView);
+    	TextView descriptionTextView = (TextView) menuItemRow.findViewById(R.id.descriptionTextView);
+    	TextView qualityTextView = (TextView) menuItemRow.findViewById(R.id.qualityTextView);
+    	TextView priceTextView = (TextView) menuItemRow.findViewById(R.id.priceTextView);
+    	TextView dateTextView = (TextView) menuItemRow.findViewById(R.id.dateTimeTextView);
+    	ImageView foodThumbnail = (ImageView) menuItemRow.findViewById(R.id.pictureThumbnail);
+    	
+    	if (this.selectedMoment == null){
+    		restaurantTextView.setText(placesFragment.getSelectedPlace().getName());
+    	}else{
+    		String imagePath = selectedMoment.getMenuItem().getImagePath();
+    		if (imagePath != null && imagePath.length() > 0)
+    			foodThumbnail.setImageBitmap(Utility.decodeSampledBitmapFromFile(selectedMoment.getMenuItem().getImagePath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
+    		
+        	restaurantTextView.setText("@ " + selectedMoment.getRestaurant().getName());
+        	foodTextView.setText(selectedMoment.getMenuItem().getName());
+        	descriptionTextView.setText(selectedMoment.getDescription());
+        	dateTextView.setText(selectedMoment.getDate());
+    	}
 	}
 	
 }

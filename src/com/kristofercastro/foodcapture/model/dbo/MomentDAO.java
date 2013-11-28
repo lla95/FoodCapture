@@ -65,8 +65,8 @@ public class MomentDAO extends DataAccessObject<Moment>{
 		values.put(MomentTable.COL_RESTAURANT_ID, restaurantID);
 		values.put(MomentTable.COL_MENU_ITEM_ID, menuItemID);
 		
-		if (moment.getFoodAdventure() != null){
-			values.put(MomentTable.COL_FOOD_ADVENTURE_ID, moment.getFoodAdventure().getId());
+		if (moment.getFoodAdventureID() != 0){
+			values.put(MomentTable.COL_FOOD_ADVENTURE_ID, moment.getFoodAdventureID());
 		}
 		
 		return db.insert(MomentTable.TABLE_NAME, null, values);
@@ -108,7 +108,6 @@ public class MomentDAO extends DataAccessObject<Moment>{
 		}
 		
 		MenuItemDAO menuItemDAO = new MenuItemDAO(dbHelper);
-		Log.i("MyCameraApp", "file: " + moment.getMenuItem().getImagePath());
 		menuItemDAO.update(moment.getMenuItem());
 		
 		// add the id's of the foreign keys from Restaurant and Menu Item DB Tables
@@ -139,10 +138,9 @@ public class MomentDAO extends DataAccessObject<Moment>{
 				moment.setMenuItem(menuItem);
 				moment.setDescription(cursor.getString(5));
 				moment.setDate(cursor.getString(6));
-				
-				FoodAdventureDAO foodAdventureDAO = new FoodAdventureDAO(dbHelper);
-				FoodAdventure foodAdventure = foodAdventureDAO.retrieve(cursor.getLong(7));
-				moment.setFoodAdventure(foodAdventure);
+					
+				long foodAdventureID = (cursor.getLong(7));
+				moment.setFoodAdventureID(foodAdventureID);
 			}
 		}finally{
 			cursor.close();
@@ -176,9 +174,8 @@ public class MomentDAO extends DataAccessObject<Moment>{
 				moment.setDescription(cursor.getString(5));
 				moment.setDate(cursor.getString(6));
 				
-				FoodAdventureDAO foodAdventureDAO = new FoodAdventureDAO(dbHelper);
-				FoodAdventure foodAdventure = foodAdventureDAO.retrieve(cursor.getLong(7));
-				moment.setFoodAdventure(foodAdventure);
+				long foodAdventureID = (cursor.getLong(7));
+				moment.setFoodAdventureID(foodAdventureID);
 				
 				momentsList.add(moment);
 			}while(cursor.moveToNext());

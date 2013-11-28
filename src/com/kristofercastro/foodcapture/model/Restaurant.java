@@ -82,23 +82,6 @@ public class Restaurant implements Parcelable {
 		dest.writeFloat(longitude);	
 	}
 	
-	/**
-	 * public static final Parcelable.Creator<Place> CREATOR = new Parcelable.Creator<Place>(){
-
-		@Override
-		public Place createFromParcel(Parcel source) {
-			return new Place(source);
-		}
-
-		@Override
-		public Place[] newArray(int size) {
-			// TODO Auto-generated method stub
-			return new Place[size];
-		}
-		
-	};
-	 */
-	
 	public static final Parcelable.Creator<Restaurant> CREATOR = new Parcelable.Creator<Restaurant>(){
 
 		@Override

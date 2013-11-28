@@ -15,6 +15,7 @@ import com.kristofercastro.foodcapture.activity.Utility.CustomFonts;
 import com.kristofercastro.foodcapture.foodadventure.Place;
 import com.kristofercastro.foodcapture.model.*;
 import com.kristofercastro.foodcapture.model.dbo.DBHelper;
+import com.kristofercastro.foodcapture.model.dbo.MenuItemDAO;
 import com.kristofercastro.foodcapture.model.dbo.MomentDAO;
 
 
@@ -88,7 +89,7 @@ public class EditMoment extends Activity{
 	private String bestProvider;
 	
 	// state of moment
-	int MODE_CREATE_OR_EDIT;
+	int MODE;
 	Place currentPlace;
 	Moment moment;
 	Bundle currentSavedInstanceState;
@@ -154,7 +155,7 @@ public class EditMoment extends Activity{
 	private void figureOutMode() {
 		// Figure out which mode we in: creating new moment or editting new one
 		Bundle extras = this.getIntent().getExtras();
-		MODE_CREATE_OR_EDIT = (Integer) extras.get("mode");
+		MODE = extras.getInt("mode");
 		currentPlace = new Place();		
 	}
 
@@ -187,6 +188,22 @@ public class EditMoment extends Activity{
 		// Initialize widgets
 		qualityWidget = new QualityWidget(this);
 		priceWidget = new PriceWidget(this);
+		
+	}
+
+	/*
+	 * Disable certain edit text since we're coming from food adventure
+	 * which already provides some of the information
+	 */
+	private void freezeEditForAdventureFeature() {
+		if (MODE == Message.EDIT_EXISTING_MOMENT){
+			if(isPartOfAdventure())
+				restaurantEditText.setEnabled(false);
+		}		
+	}
+	
+	private boolean isPartOfAdventure(){
+		return this.moment.getFoodAdventureID() > 0;
 	}
 
 	/**
@@ -194,8 +211,8 @@ public class EditMoment extends Activity{
 	 * controls
 	 */
 	private void setupEditTextValues() {
-		if (MODE_CREATE_OR_EDIT == Message.EDIT_EXISTING_MOMENT){
-			Long momentID = getIntent().getExtras().getLong("momentID");		
+		if (MODE == Message.EDIT_EXISTING_MOMENT){
+			Long momentID = (Long) getIntent().getExtras().get("momentID");	
 			new GetMomentTask().execute(momentID);
 		}
 	}
@@ -220,18 +237,23 @@ public class EditMoment extends Activity{
 	private void updateUserInputs(){
 		drawMarkerAlreadyExists();
 		
-		foodEditText.setText(moment.getMenuItem().getName());
+		if (moment.getMenuItem() != null){
+			foodEditText.setText(moment.getMenuItem().getName());
+			imagePath = moment.getMenuItem().getImagePath();
+			if (imagePath != null && imagePath.length() > 0)
+				pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(imagePath, Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
+		}
+		
 		descriptionEditText.setText(moment.getDescription());
     	restaurantEditText.setText(moment.getRestaurant().getName());
-    	imagePath = moment.getMenuItem().getImagePath();
-		if (imagePath != null && imagePath.length() > 0)
-			pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(imagePath, Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
 		
 		qualityWidget.setQualityRating(moment.getQualityRating());
 		priceWidget.setPriceRating(moment.getPriceRating());
 		qualityWidget.updateDisplayRatings();
 		priceWidget.updateDisplayRatings();
 		changeFont(); 
+		
+		freezeEditForAdventureFeature();
 	}
 	
 	@Override
@@ -260,13 +282,11 @@ public class EditMoment extends Activity{
 		if (mMap != null){
 			mMap.clear();
 			mMap.setMyLocationEnabled(true);
-			
-			// update location
 			mLocation = mLocManager.getLastKnownLocation(bestProvider);
 			
-			if (MODE_CREATE_OR_EDIT == Message.CREATE_NEW_MOMENT){
+			if (MODE == Message.CREATE_NEW_MOMENT){
 				drawMarker(mLocation);
-			}else if (MODE_CREATE_OR_EDIT == Message.EDIT_EXISTING_MOMENT){
+			}else if (MODE == Message.EDIT_EXISTING_MOMENT){
 				Log.i("MyCameraApp", "id: " + this.getIntent().getExtras().getLong("momentID"));
 				//drawMarkerAlreadyExists();
 			}
@@ -336,10 +356,10 @@ public class EditMoment extends Activity{
 		@Override
 		protected Long doInBackground(URL... params) {
 			Long result = null;
-			if (MODE_CREATE_OR_EDIT == Message.CREATE_NEW_MOMENT){
+			if (MODE == Message.CREATE_NEW_MOMENT){
 				result = saveMoment();
 			}
-			else if (MODE_CREATE_OR_EDIT == Message.EDIT_EXISTING_MOMENT){
+			else if (MODE == Message.EDIT_EXISTING_MOMENT){
 				result = (long) saveMomentAlreadyExist();
 			}
 			return result;
@@ -400,7 +420,6 @@ public class EditMoment extends Activity{
 		moment.setPriceRating(priceWidget.getPriceRating());
 		moment.setQualityRating(qualityWidget.getQualityRating());
 		moment.setDescription(descriptionEditText.getText().toString());
-		
 		// create our restaurant object
 		com.kristofercastro.foodcapture.model.Restaurant
 			restaurant = moment.getRestaurant();
@@ -411,9 +430,18 @@ public class EditMoment extends Activity{
 		com.kristofercastro.foodcapture.model.MenuItem 
 			menuItem = moment.getMenuItem();
 		
-		menuItem.setImagePath(imagePath);
-		menuItem.setName(foodEditText.getText().toString());
-		
+		if (menuItem == null){
+			menuItem = new com.kristofercastro.foodcapture.model.MenuItem();
+			menuItem.setName(foodEditText.getText().toString());
+			menuItem.setImagePath(imagePath);
+			MenuItemDAO menuItemDAO = new MenuItemDAO(new DBHelper(this));
+			Long rowID = menuItemDAO.create(menuItem);
+			moment.setMenuItem(menuItemDAO.retrieve(rowID));
+		}else{
+			menuItem.setImagePath(imagePath);
+			menuItem.setName(foodEditText.getText().toString());
+		}
+	
 		return momentDAO.update(moment);
 	}
 

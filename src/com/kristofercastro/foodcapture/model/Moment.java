@@ -16,18 +16,18 @@ public class Moment implements Parcelable {
 	int qualityRating;
 	String description;
 	String date;
-	FoodAdventure foodAdventure;
+	long foodAdventureID;
 
 	public String getDate() {
 		return date;
 	}
 
-	public FoodAdventure getFoodAdventure() {
-		return foodAdventure;
+	public long getFoodAdventureID() {
+		return foodAdventureID;
 	}
 
-	public void setFoodAdventure(FoodAdventure foodAdventure) {
-		this.foodAdventure = foodAdventure;
+	public void setFoodAdventureID(long foodAdventureID) {
+		this.foodAdventureID = foodAdventureID;
 	}
 
 	public void setDate(String date) {
@@ -47,7 +47,7 @@ public class Moment implements Parcelable {
 		menuItem = source.readParcelable(MenuItem.class.getClassLoader());
 		description = source.readString();
 		date = source.readString();
-		foodAdventure = source.readParcelable(FoodAdventure.class.getClassLoader());
+		foodAdventureID = source.readLong();
 	}
 
 /***************************************
@@ -118,7 +118,7 @@ public class Moment implements Parcelable {
 		dest.writeInt(qualityRating);
 		dest.writeString(description);
 		dest.writeString(date);
-		dest.writeParcelable(foodAdventure, 0);
+		dest.writeLong(foodAdventureID);
 	}
 	
 	public static Parcelable.Creator<Moment> CREATOR = new Parcelable.Creator<Moment>(){

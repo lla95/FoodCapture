@@ -6,7 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class FoodAdventure implements Parcelable{
-	Long id;
+	long id;
 	String name;
 	String date;
 	ArrayList<Moment> moments;
@@ -17,11 +17,10 @@ public class FoodAdventure implements Parcelable{
 		this.id = source.readLong();
 		this.name = source.readString();
 		this.date = source.readString();
-		this.moments = new ArrayList<Moment>();
-		source.readList(moments, Moment.class.getClassLoader());
+		source.readTypedList(moments, Moment.CREATOR);
 	}
 
-	public Long getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -63,7 +62,7 @@ public class FoodAdventure implements Parcelable{
 		dest.writeLong(this.id);
 		dest.writeString(this.getName());
 		dest.writeString(this.getDate());
-		dest.writeList(this.moments);
+		dest.writeTypedList(this.moments);
 	}	
 	
 	public static Parcelable.Creator<FoodAdventure> CREATOR = new Parcelable.Creator<FoodAdventure>(){
