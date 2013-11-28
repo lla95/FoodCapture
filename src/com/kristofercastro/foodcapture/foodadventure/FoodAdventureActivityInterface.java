@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.Marker;
 /**
  * Used so we can re-use fragments on different Food Adventure related activities.
  * Fixes problem of sharing data without casting to a concrete type
- * @author Kier
+ * @author Kristofer Ken Castro
  *
  */
 public interface FoodAdventureActivityInterface {

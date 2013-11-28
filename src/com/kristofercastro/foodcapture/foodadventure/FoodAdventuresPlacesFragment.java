@@ -1,5 +1,7 @@
 package com.kristofercastro.foodcapture.foodadventure;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,14 +36,23 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 	
 	ArrayList<Place> places;
 	ViewGroup parent;
+	Place currentlySelectedPlace;
 	
+	ArrayList<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	        Bundle savedInstanceState) {
 		 View v = inflater.inflate(R.layout.activity_food_adventures_places_fragment, container, false);
 		 // grab the local restaurants from the main activity
 		 places = ((FoodAdventureActivityInterface) this.getActivity()).getPlaces();
-        // Inflate the layout for this fragment
+		 
+		 // Inflate the layout for this fragment
         return v;
     }
 	
@@ -55,7 +67,7 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 				
 		try{
 			for (int i = 0 ; i < places.size(); i++){
-				Place place = places.get(i);
+				final Place place = places.get(i);
 				View placesRow = getActivity().getLayoutInflater().inflate(R.layout.adventure_item_row, parent, false);
 				TextView foodTextView = (TextView) placesRow.findViewById(R.id.foodTextView);
 				TextView foodIdentifier = (TextView) placesRow.findViewById(R.id.placesIdentifierTextView);
@@ -73,6 +85,12 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 	
 					@Override
 					public void onClick(View v) {
+						
+						if (currentlySelectedPlace == null || !currentlySelectedPlace.getName().equals(place.getName())){
+							currentlySelectedPlace = place;
+							notifyAllMyListeners();
+						}
+						
 						// lets get the text view inside the layout
 						TextView textView = (TextView) v.findViewById(R.id.placesIdentifierTextView);
 						
@@ -117,30 +135,22 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 			placeRow.setBackgroundColor(Color.parseColor("#e9e2d8"));
 		}
 	}
-	
-	/**
-	 * Add the functionality that when you click on a place
-	 * it opens the review
-	 */
-	public void attachOnClickReviewListener(){
-		final LinearLayout parent = (LinearLayout) getActivity().findViewById(R.id.adventures_list_layout);
-		
-		for (int i = 0; i < parent.getChildCount(); i++){
-			View placeItem = parent.getChildAt(i);
-			
-			placeItem.setOnClickListener(new OnClickListener(){
 
-				@Override
-				public void onClick(View v) {
-					Activity parentActivity = FoodAdventuresPlacesFragment.this.getActivity();
-					
-		        	View momentRowToAdd = parentActivity.getLayoutInflater().inflate(R.layout.menu_item_row, parent, false);      	
-					View momentRowExisting = parentActivity.findViewById(R.id.menu_item);
-					
-					
-				}
-				
-			});
+	protected void notifyAllMyListeners() {
+		
+		for (PropertyChangeListener listener : this.listeners){
+			listener.propertyChange(new PropertyChangeEvent(this, "currentPlace", null, this.currentlySelectedPlace));
 		}
 	}
+
+	public Place getSelectedPlace() {
+		// TODO Auto-generated method stub
+		return currentlySelectedPlace;
+	}
+	
+	public void addChangeListener(PropertyChangeListener newListener){
+		listeners.add(newListener);
+	}
+	
+	
 }

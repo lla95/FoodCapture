@@ -1,5 +1,7 @@
 package com.kristofercastro.foodcapture.foodadventure;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,6 +13,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kristofercastro.foodcapture.R;
+import com.kristofercastro.foodcapture.activity.EditMoment;
+import com.kristofercastro.foodcapture.activity.MainActivity;
+import com.kristofercastro.foodcapture.activity.Message;
+import com.kristofercastro.foodcapture.activity.MomentInformation;
 import com.kristofercastro.foodcapture.activity.Utility;
 import com.kristofercastro.foodcapture.model.FoodAdventure;
 import com.kristofercastro.foodcapture.model.Moment;
@@ -28,6 +34,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -37,12 +44,17 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
-public class FoodAdventureInformation extends FragmentActivity implements FoodAdventureActivityInterface {
+public class FoodAdventureInformation extends FragmentActivity implements FoodAdventureActivityInterface, PropertyChangeListener {
 
 	GooglePlacesWebService placesService;
 	GoogleMap googleMaps;
@@ -55,6 +67,17 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 	HashMap<Integer, Marker> markers;
 	
 	Bundle currentSavedInstanceState;
+	
+	// Moment specific variables
+	ImageView pictureImageView;
+	Moment currentMoment;
+	private TextView descriptionTextView;
+	private TextView foodTextView;
+	private TextView restaurantTextView;
+	
+	private FoodAdventuresPlacesFragment placesFragment = null;
+	private ArrayList<Moment> moments = new ArrayList<Moment>();
+	private Moment selectedMoment;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +96,8 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 		}else{
 			grabPlaces();
 		}
+		
+		setupCurrentMenuItem();
 	}
 	
 	@Override
@@ -93,8 +118,7 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 
 	private class RetrieveLocalRestaurants extends AsyncTask<Void, Void, Void>{
 
-		private ProgressDialog dialog = new ProgressDialog(FoodAdventureInformation.this);
-		
+		private ProgressDialog dialog = new ProgressDialog(FoodAdventureInformation.this);		
 		
 		@Override
 		protected void onPreExecute() {
@@ -134,7 +158,8 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 				android.app.FragmentManager fragmentManager = getFragmentManager();
 				android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 				
-				Fragment placesFragment = new FoodAdventuresPlacesFragment();
+			    placesFragment = new FoodAdventuresPlacesFragment();
+			    placesFragment.addChangeListener(FoodAdventureInformation.this);
 				fragmentTransaction.add(R.id.restaurant_lists, placesFragment);
 				fragmentTransaction.commit();
 			}
@@ -235,5 +260,113 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 		// TODO Auto-generated method stub
 		return this.googleMaps;
 	}
+	
+	private void setupCurrentMenuItem(){
+		changeFontOfReview();
+		LinearLayout currentReview = (LinearLayout) this.findViewById(R.id.current_menu_item);
+		
+		currentReview.setOnClickListener(new OnClickListener(){
 
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(FoodAdventureInformation.this, "Clicked on it!", Toast.LENGTH_SHORT).show();
+				/* if moment is null go to create moment with preset inputs such as
+				 * food adventure id and restaurant name
+				 * 
+				 * if moment is not null then it already exists so we go to edit screen
+				 * with locked restaurant name and make sure to persist food adventure id
+				 */
+			}			
+		});
+	}
+	
+	protected Moment getCurrentMoment(){
+		if (currentMoment == null){
+			currentMoment = new Moment();
+		}
+		return currentMoment;
+	}
+	
+	private void displayCurrentMomentReview(){
+		android.app.FragmentManager fragManager = getFragmentManager();
+		FoodAdventuresPlacesFragment placesFragment = (FoodAdventuresPlacesFragment) fragManager.findFragmentById(R.id.restaurant_lists);
+		Log.i("MyCameraApp", "Current place: " + placesFragment.getSelectedPlace());
+	}
+	
+	private void changeFontOfReview(){
+		LinearLayout currentReview = (LinearLayout) this.findViewById(R.id.current_menu_item);
+		// static labels
+		foodTextView = (TextView) currentReview.findViewById(R.id.foodTextView);
+		//TextView reviewTextView = (TextView) currentReview.findViewById(R.id.reviewTextView);
+		TextView qualityTextView = (TextView) currentReview.findViewById(R.id.qualityTextView);
+		TextView priceTextView = (TextView) currentReview.findViewById(R.id.priceTextView);
+		descriptionTextView = (TextView) currentReview.findViewById(R.id.descriptionTextView);
+		restaurantTextView = (TextView) currentReview.findViewById(R.id.restaurantTextView);
+		//TextView dateTimeTextView = (TextView) currentReview.findViewById(R.id.dateTimeTextView);
+		//TextView locationTextView = (TextView) currentReview.findViewById(R.id.locationTextView);
+		//TextView pictureTextView = (TextView) currentReview.findViewById(R.id.pictureTextView);
+		Utility.changeFontLaneNarrow(descriptionTextView, this);
+		Utility.changeFontTitillium(foodTextView, this);
+		Utility.changeFontTitillium(qualityTextView, this);
+		Utility.changeFontTitillium(priceTextView, this);
+		Utility.changeFontTitillium(restaurantTextView, this);
+		
+		//Utility.changeFontLaneNarrow(reviewTextView, this);
+		//Utility.changeFontLaneNarrow(locationTextView, this);		
+		pictureImageView = (ImageView) currentReview.findViewById(R.id.pictureThumbnail);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		/*Toast.makeText(this, "Got the event!" , Toast.LENGTH_SHORT).show();
+		displayCurrentMomentReview();*/
+		updateRestarauntText();
+	}
+
+	/*
+	 * Checks to see if the current moment exists in the database
+	 */
+	private boolean currentMomentExists(){
+		for (int i = 0; i < moments.size(); i++){
+			String restaurantNameOfMoment = moments.get(i).getRestaurant().getName();
+			String selectedRestaurantName = placesFragment.getSelectedPlace().getName();
+			
+			if (restaurantNameOfMoment.equalsIgnoreCase(selectedRestaurantName)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/*
+	 * Sets up the intent with the appropriate extra information
+	 * so that the Edit Moment screen is properly set up.
+	 */
+	private void bringFoodReviewIntent(){
+		Intent i = new Intent(this, EditMoment.class);
+		if ( selectedMoment != null){
+			Restaurant restaurantInfo = new Restaurant();
+			Place selectedPlace = placesFragment.getSelectedPlace();
+			restaurantInfo.setName(selectedPlace.getName());
+			restaurantInfo.setLongitude(selectedPlace.getLongitude());
+			restaurantInfo.setLatitude(selectedPlace.getLatitude());
+			i.putExtra("food adventure", currentFoodAdventure);
+			i.putExtra("restaurant", restaurantInfo);
+			i.putExtra("mode", Message.CREATE_NEW_MOMENT_WITH_ADVENTURE);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+			this.startActivity(i);	
+		}else{
+			i.putExtra("moment", this.selectedMoment);
+			i.putExtra("mode", Message.EDIT_EXISTING_MOMENT_WITH_ADVENTURE);
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);	
+			this.startActivity(i);	
+		}
+	}
+	
+	private void updateRestarauntText(){
+		LinearLayout menuItemRow = (LinearLayout) this.findViewById(R.id.current_menu_item);
+		TextView restaurantTextView = (TextView) menuItemRow.findViewById(R.id.restaurantTextView);
+		restaurantTextView.setText(placesFragment.getSelectedPlace().getName());
+	}
+	
 }
