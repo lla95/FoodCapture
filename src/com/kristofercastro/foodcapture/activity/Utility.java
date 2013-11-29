@@ -1,5 +1,6 @@
 package com.kristofercastro.foodcapture.activity;
 
+import java.io.File;
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -10,8 +11,10 @@ import org.joda.time.format.ISODateTimeFormat;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -122,6 +125,23 @@ public class Utility {
 	public static String convertIntToLetter(int i) {
 		return String.format("%s", (char)(65+i)).toUpperCase();
 	}
+	
+	/**
+	 * This will return a bitmap of a view which we will use to take a screenshot
+	 * of the review
+	 * @param v
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	public static Bitmap loadBitmapFromView(View v, int width, int height) {
+	    Bitmap bitmap = Bitmap.createBitmap(width , height, Bitmap.Config.ARGB_8888);                
+	    Canvas c = new Canvas(bitmap);
+	    v.layout(0, 0, v.getLayoutParams().width, v.getLayoutParams().height);
+	    v.draw(c);
+	    return bitmap;
+	}
+	
 /*	
 	public static void toastMessage(Context context, String text){
 		Toast.makeText(context, text, Toast.LENGTH_SHORT);

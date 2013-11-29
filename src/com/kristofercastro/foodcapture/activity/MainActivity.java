@@ -12,6 +12,7 @@ import com.kristofercastro.foodcapture.model.Moment;
 import com.kristofercastro.foodcapture.model.dbo.DBHelper;
 import com.kristofercastro.foodcapture.model.dbo.FoodAdventureDAO;
 import com.kristofercastro.foodcapture.model.dbo.MomentDAO;
+import com.kristofercastro.foodcapture.settings.SettingsActivity;
 
 import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
@@ -69,6 +70,7 @@ public class MainActivity extends Activity {
 	private void displayAllAdventures(){
 		new GetAllAdventuresTask().execute();
 	}
+	
 	private void displayRatings(Moment moment, View momentRow) {
 		LinearLayout qRatingsLayout = (LinearLayout) momentRow.findViewById(R.id.qualityRatingLayout);
 		for (int i = 0; i < moment.getQualityRating(); i++){
@@ -80,6 +82,11 @@ public class MainActivity extends Activity {
 			ImageView ratingIcon = (ImageView) pRatingsLayout.getChildAt(i);
 			ratingIcon.setImageResource(R.drawable.price_icon_selected);
 		}
+		
+		TextView priceMeaningTextView = (TextView)momentRow.findViewById(R.id.price_meaning);
+		TextView qualityMeaningTextView = (TextView)momentRow.findViewById(R.id.quality_meaning);
+		priceMeaningTextView.setText(PriceWidget.getMeaning(moment.getPriceRating(), this));
+		qualityMeaningTextView.setText(QualityWidget.getMeaning(moment.getQualityRating(), this));
 	}
 	
 	private class GetAllMomentsTask extends AsyncTask<Integer, Void, Void>{
@@ -370,6 +377,11 @@ public class MainActivity extends Activity {
 				deleteAdventureHandler();
 				break;
 			}
+			case R.id.action_settings:{
+			    Intent i = new Intent(this, SettingsActivity.class);
+			    startActivity(i);
+			    break;
+			  }
 		}
 		return true;	
 	}

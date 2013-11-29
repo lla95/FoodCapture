@@ -54,6 +54,13 @@
 		         android:layout_height="@dimen/quality_icon_size_medium"
 		         android:src="@drawable/quality_icon_default"
 		         style="@style/QualityRatingIcons"/>
+	         
+	          <TextView android:id="@+id/quality_meaning"
+		          android:layout_width="wrap_content"
+		          android:layout_height="wrap_content"
+		          android:layout_marginTop="10sp"
+		          android:textColor="#b6b6b6"
+		          android:textSize="14sp"/>
             
         </LinearLayout>
 </RelativeLayout>

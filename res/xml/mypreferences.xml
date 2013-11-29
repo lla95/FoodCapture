@@ -1,0 +1,30 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <PreferenceCategory 
+        android:icon="@drawable/price_icon_selected"
+        android:title="@string/pref_header_price_settings"
+        android:key="pref_key_price_rating_settings">
+    <EditTextPreference android:selectable="false"
+        android:layout="@layout/quality_preference_header_layout"/>
+    <EditTextPreference android:title="one" android:key="one price rating" android:defaultValue="free" />
+    <EditTextPreference android:title="two" android:key="two price rating" android:defaultValue="$0 - $5" />
+    <EditTextPreference android:title="three" android:key="three price rating" android:defaultValue="$5 - $10"/>
+    <EditTextPreference android:title="four" android:key="four price rating" android:defaultValue="$10 - $15"/>
+    <EditTextPreference android:title="five" android:key="five price rating" android:defaultValue="$15+"/>
+   </PreferenceCategory>
+   
+   <PreferenceCategory 
+        android:icon="@drawable/quality_icon_selected"
+        android:title="@string/pref_header_quality_settings">
+    
+    <EditTextPreference android:selectable="false"
+        android:title="Quality Rating Number System:"
+        android:layout="@layout/price_preference_header_layout"/>
+    <EditTextPreference android:title="one" android:key="one quality rating" android:defaultValue="absolute garbage" />
+    <EditTextPreference android:title="two" android:key="two quality rating" android:defaultValue="awful" />
+    <EditTextPreference android:title="three" android:key="three quality rating" android:defaultValue="okay"/>
+    <EditTextPreference android:title="four" android:key="four quality rating" android:defaultValue="pretty good"/>
+    <EditTextPreference android:title="five" android:key="five quality rating" android:defaultValue="top notch"/>
+   </PreferenceCategory>
+
+</PreferenceScreen>

@@ -17,6 +17,8 @@ import com.kristofercastro.foodcapture.activity.EditMoment;
 import com.kristofercastro.foodcapture.activity.MainActivity;
 import com.kristofercastro.foodcapture.activity.Message;
 import com.kristofercastro.foodcapture.activity.MomentInformation;
+import com.kristofercastro.foodcapture.activity.PriceWidget;
+import com.kristofercastro.foodcapture.activity.QualityWidget;
 import com.kristofercastro.foodcapture.activity.Utility;
 import com.kristofercastro.foodcapture.model.FoodAdventure;
 import com.kristofercastro.foodcapture.model.Moment;
@@ -414,6 +416,10 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 			ImageView ratingIcon = (ImageView) pRatingsLayout.getChildAt(i);
 			ratingIcon.setImageResource(R.drawable.price_icon_selected);
 		}
+		TextView priceMeaningTextView = (TextView)momentRow.findViewById(R.id.price_meaning);
+		TextView qualityMeaningTextView = (TextView)momentRow.findViewById(R.id.quality_meaning);
+		priceMeaningTextView.setText(PriceWidget.getMeaning(moment.getPriceRating(), this));
+		qualityMeaningTextView.setText(QualityWidget.getMeaning(moment.getQualityRating(), this));
 	}
 	
 	private void clearRatings(Moment moment, View momentRow){

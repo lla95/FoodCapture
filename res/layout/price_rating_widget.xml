@@ -54,5 +54,12 @@
 	       android:layout_height="@dimen/price_icon_size_medium"
 	       android:src="@drawable/price_icon_default"
 	       style="@style/PriceRatingIcons"/>    
+	       
+	      <TextView android:id="@+id/price_meaning"
+	          android:layout_width="wrap_content"
+	          android:layout_height="wrap_content"
+	          android:layout_marginTop="8sp"
+	          android:textColor="#b6b6b6"
+	          android:textSize="14sp"/>
     </LinearLayout>
 </RelativeLayout>

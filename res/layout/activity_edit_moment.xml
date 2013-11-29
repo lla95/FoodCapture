@@ -180,6 +180,13 @@
 				         android:layout_height="@dimen/quality_icon_size"
 				         android:src="@drawable/quality_icon_default"
 				         style="@style/QualityRatingIcons"/>
+			         
+			         <TextView android:id="@+id/quality_meaning"
+				          android:layout_width="wrap_content"
+				          android:layout_height="wrap_content"
+				          android:layout_marginTop="12sp"
+				          android:textColor="#b6b6b6"
+				          android:textSize="18sp"/>
 		            
 		        </LinearLayout>
 		
@@ -238,7 +245,14 @@
 				         android:layout_height="@dimen/price_icon_size"
 				         android:src="@drawable/price_icon_default"
 				         style="@style/PriceRatingIcons"/>
-		            
+			         
+			         <TextView android:id="@+id/price_meaning"
+				          android:layout_width="wrap_content"
+				          android:layout_height="wrap_content"
+				          android:layout_marginTop="10sp"
+				          android:textColor="#b6b6b6"
+				          android:textSize="18sp"/>
+					            
 		        </LinearLayout>
 		
 		    </TableRow>

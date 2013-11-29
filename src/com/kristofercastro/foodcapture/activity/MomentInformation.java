@@ -133,6 +133,11 @@ public class MomentInformation extends Activity {
 			ImageView ratingIcon = (ImageView) pRatingsLayout.getChildAt(i);
 			ratingIcon.setImageResource(R.drawable.price_icon_selected);
 		}
+		
+		TextView priceMeaningTextView = (TextView)findViewById(R.id.price_meaning);
+		TextView qualityMeaningTextView = (TextView)findViewById(R.id.quality_meaning);
+		priceMeaningTextView.setText(PriceWidget.getMeaning(moment.getPriceRating(), this));
+		qualityMeaningTextView.setText(QualityWidget.getMeaning(moment.getQualityRating(), this));
 	}
 	
 	/**

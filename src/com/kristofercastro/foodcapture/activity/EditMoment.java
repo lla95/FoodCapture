@@ -132,6 +132,8 @@ public class EditMoment extends Activity{
 		priceWidget.setPriceRating(savedInstanceState.getInt("price rating"));
 		qualityWidget.updateDisplayRatings();
 		priceWidget.updateDisplayRatings();
+		qualityWidget.updateRatingMeaning();
+		priceWidget.updateRatingMeaning();
 		changeFont();  
 		
 	}
@@ -251,6 +253,8 @@ public class EditMoment extends Activity{
 		priceWidget.setPriceRating(moment.getPriceRating());
 		qualityWidget.updateDisplayRatings();
 		priceWidget.updateDisplayRatings();
+		qualityWidget.updateRatingMeaning();
+		priceWidget.updateRatingMeaning();
 		changeFont(); 
 		
 		freezeEditForAdventureFeature();

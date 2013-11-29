@@ -8,6 +8,8 @@ import com.kristofercastro.foodcapture.model.Moment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -31,7 +33,8 @@ public class QualityWidget {
 	private TextView textView;
 	private Activity activity;
 	private int qualityRating = 0;
-	
+	private TextView ratingMeaningTextView;
+
 	public QualityWidget(Activity act) {
 		this.activity = act;
 		textView = (TextView) activity.findViewById(R.id.qualityTextView);
@@ -84,6 +87,7 @@ public class QualityWidget {
 							break;
 						}
 					}
+					updateRatingMeaning();
 				}		
 			});
 		}
@@ -107,6 +111,35 @@ public class QualityWidget {
 	
 	private void changeFont(){
 		Utility.changeTypeFace(textView, activity, CustomFonts.LANE_NARROW);
+	}
+	
+	public void updateRatingMeaning(){
+		ratingMeaningTextView = (TextView) activity.findViewById(R.id.quality_meaning);	
+		ratingMeaningTextView.setText(QualityWidget.getMeaning(qualityRating, activity));
+	}
+	
+	public static String getMeaning(int rating, Activity activity){
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(activity);
+
+		if(rating == 1){
+			return settings.getString("one quality rating", null);
+		}
+		if(rating == 2){
+			return settings.getString("two quality rating", null);
+
+		}
+		if(rating == 3){
+			return settings.getString("three quality rating", null);
+
+		}
+		if(rating == 4){
+			return settings.getString("four quality rating", null);
+
+		}
+		if(rating == 5){
+			return settings.getString("five quality rating", null);
+		}
+		return null;
 	}
 	
 }
