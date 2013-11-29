@@ -52,11 +52,15 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+/**
+ * Activity for a specific food adventure and the place where you can begin reviewing places
+ * @author Kristofer Ken Castro
+ * @date 11/29/2013
+ */
 public class FoodAdventureInformation extends FragmentActivity implements FoodAdventureActivityInterface, PropertyChangeListener {
 
 	GooglePlacesWebService placesService;
@@ -90,7 +94,13 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 		markers = new HashMap<Integer,Marker>();
 		placesService = new GooglePlacesWebService(this);
 				
-		setupLocManager();
+		mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.NO_REQUIREMENT);
+		criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
+		bestProvider = mLocManager.getBestProvider(criteria, true);	
+		
+		updateLocation();
 		setupGoogleMaps();	
 		setupCurrentMenuItem();
 	}
@@ -248,15 +258,9 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 		googleMaps.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()),12));
 	}
 	
-	private void setupLocManager() {
-		mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-		criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
-		bestProvider = mLocManager.getBestProvider(criteria, true);	
+	private void updateLocation() {
 		mLocation = mLocManager.getLastKnownLocation(bestProvider);
 	}
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -291,7 +295,6 @@ public class FoodAdventureInformation extends FragmentActivity implements FoodAd
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(FoodAdventureInformation.this, "Clicked on it!", Toast.LENGTH_SHORT).show();
 				/* if moment is null go to create moment with preset inputs such as
 				 * food adventure id and restaurant name
 				 * 

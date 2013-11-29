@@ -15,6 +15,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Data Access Object for the FoodAdventure table.  Supports CRUD operations.
+ * @author Kristofer Ken Castro
+ *
+ */
 public class FoodAdventureDAO extends DataAccessObject<FoodAdventure> {
 
 	private SQLiteOpenHelper dbHelper;

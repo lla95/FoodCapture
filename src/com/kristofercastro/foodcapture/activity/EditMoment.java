@@ -74,8 +74,6 @@ public class EditMoment extends Activity{
 	Bitmap thumbImage; 
 
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-	private static final int THUMBSIZE_HEIGHT = 256;
-	private static final int THUMBSIZE_WIDTH = 256;
 	private int MEDIA_TYPE_IMAGE = 1;
 	private String imagePath;
 	
@@ -516,7 +514,6 @@ public class EditMoment extends Activity{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.i("MyCameraApp","Data: " + fileUri.getPath());
 		if ( requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE ){
 			if ( resultCode == RESULT_OK ){
 				//if ( data == null) return;
@@ -535,7 +532,7 @@ public class EditMoment extends Activity{
 	 * Display the image in the preview image view.
 	 */
 	private void handleCameraPhoto(){
-		pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(fileUri.getPath(), THUMBSIZE_WIDTH, THUMBSIZE_HEIGHT));
+		pictureImageView.setImageBitmap(Utility.decodeSampledBitmapFromFile(fileUri.getPath(), Utility.THUMBSIZE_WIDTH, Utility.THUMBSIZE_HEIGHT));
 	}
 
 	@Override

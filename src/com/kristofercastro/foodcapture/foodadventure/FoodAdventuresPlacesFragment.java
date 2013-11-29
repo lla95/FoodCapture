@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
@@ -68,6 +67,9 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 		notifyAllMyListeners();		
 	}
 
+	/**
+	 * For each place in the places list, turn it into a UI View element we can interact with
+	 */
 	private void displayPlaces(){
 		LinearLayout parent = (LinearLayout) getActivity().findViewById(R.id.adventures_list_layout);
 				
@@ -110,7 +112,7 @@ public class FoodAdventuresPlacesFragment extends Fragment {
 						
 						// make maps focus on that restaurant
 						GoogleMap maps = ((FoodAdventureActivityInterface) FoodAdventuresPlacesFragment
-								.this.getActivity()).getGoogleMaps();;
+								.this.getActivity()).getGoogleMaps();
 						try{
 							maps.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));								
 							marker.showInfoWindow();	

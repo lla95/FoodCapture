@@ -85,7 +85,7 @@ public class Utility {
 	            inSampleSize *= 2;
 	        }
 	    }
-	    Log.i("MyCameraApp", "SampleSize: " + inSampleSize);
+	    //Log.i("MyCameraApp", "SampleSize: " + inSampleSize);
 	    return inSampleSize;
 	}
 	

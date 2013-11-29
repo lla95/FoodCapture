@@ -4,7 +4,12 @@ import java.util.ArrayList;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+/**
+ * Business Object that represents the food daventure table
+ * In addition, it also contains the list of moments.
+ * @author Kristofer Castro
+ * @date 11/28/2013
+ */
 public class FoodAdventure implements Parcelable{
 	long id;
 	String name;
